@@ -1,6 +1,8 @@
 package buildrun.roadeye.domain.entity;
 
 import buildrun.roadeye.domain.enums.RoleEnum;
+import buildrun.roadeye.domain.enums.StatusEnum;
+import buildrun.roadeye.rest.dto.LoginRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,12 +33,18 @@ public class User implements UserDetails {
     private String password;
     @Column(nullable = false)
     private RoleEnum role;
-    public User(String name, String login, String password, RoleEnum role) {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.role = role;
-    }
+    @Column(nullable = false)
+    private String lastName;
+    @Column(nullable = false)
+    private String email;
+    @Column(nullable = false)
+    private String cpf;
+    @Column(nullable = false)
+    private String phone;
+    private String photo;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatusEnum statusEnum;
 
     public UUID getUserId() {
         return userId;
@@ -86,6 +95,54 @@ public class User implements UserDetails {
         );
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public StatusEnum getStatusEnum() {
+        return statusEnum;
+    }
+
+    public void setStatusEnum(StatusEnum statusEnum) {
+        this.statusEnum = statusEnum;
+    }
+
     @Override
     public String getPassword() {
         return this.password;
@@ -114,5 +171,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(loginRequest.password(), this.password);
     }
 }

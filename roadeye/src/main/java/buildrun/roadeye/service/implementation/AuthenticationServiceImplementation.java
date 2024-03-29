@@ -1,13 +1,12 @@
 package buildrun.roadeye.service.implementation;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
-import buildrun.roadeye.rest.dto.AuthDto;
+import buildrun.roadeye.rest.dto.LoginRequest;
 import buildrun.roadeye.service.AuthenticationService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,14 +24,22 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
     }
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        return userRepository.findByLogin(login);
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with login: " + login));
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getLogin())
+                .password(user.getPassword())
+                .authorities(user.getAuthorities())
+                .build();
     }
 
     @Override
-    public String getToken(AuthDto authDto) {
-        User byLogin = userRepository.findByLogin(authDto.login());
+    public String getToken(LoginRequest authDto) {
+        User byLogin = userRepository.findByLogin(authDto.login())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with login: " + authDto.login()));
         return generateToken(byLogin);
     }
+
 
     public String generateToken(User user){
         try{

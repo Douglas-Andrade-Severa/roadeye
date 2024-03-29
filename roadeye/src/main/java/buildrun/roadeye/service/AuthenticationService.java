@@ -1,10 +1,10 @@
 package buildrun.roadeye.service;
 
-import buildrun.roadeye.rest.dto.AuthDto;
+import buildrun.roadeye.rest.dto.LoginRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AuthenticationService extends UserDetailsService {
-    public String getToken(AuthDto authDto);
+    public String getToken(LoginRequest authDto);
     public String validTokenJwt(String token);
 
 }

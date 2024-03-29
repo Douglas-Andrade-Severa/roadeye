@@ -1,27 +1,43 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.rest.dto.AuthDto;
+import buildrun.roadeye.domain.entity.User;
+import buildrun.roadeye.domain.repository.UserRepository;
+import buildrun.roadeye.rest.dto.LoginRequest;
+import buildrun.roadeye.rest.dto.LoginResponse;
 import buildrun.roadeye.service.AuthenticationService;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/login")
 public class AuthenticationController {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final AuthenticationService authenticationService;
-
-    public AuthenticationController(AuthenticationManager authenticationManager, AuthenticationService authenticationService) {
+    @Autowired
+    public AuthenticationController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, AuthenticationService authenticationService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.authenticationService = authenticationService;
     }
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public String auth(@RequestBody AuthDto authDto){
-        var userAuthenticationToken = new UsernamePasswordAuthenticationToken(authDto.login(), authDto.password());
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        Optional<User> userOptional = userRepository.findByLogin(loginRequest.login());
+        if (userOptional.isEmpty() || !userOptional.get().isLoginCorrect(loginRequest, passwordEncoder)) {
+            throw new BadCredentialsException("User or password is invalid!");
+        }
+        var userAuthenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.login(), loginRequest.password());
         authenticationManager.authenticate(userAuthenticationToken);
-        return authenticationService.getToken(authDto);
+        return ResponseEntity.ok(new LoginResponse(authenticationService.getToken(loginRequest)));
     }
+
 }

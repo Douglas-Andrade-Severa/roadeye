@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -30,11 +31,15 @@ public class SecurityFilter extends OncePerRequestFilter {
         String token = extractsTokenHeader(request);
         if(token != null){
             String login = authenticationService.validTokenJwt(token);
-            User user = userRepository.findByLogin(login);
-            SecurityContextHolder.getContext().setAuthentication( new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+            Optional<User> userOptional = userRepository.findByLogin(login);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+            }
         }
         filterChain.doFilter(request,response);
     }
+
 
     public String extractsTokenHeader(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
