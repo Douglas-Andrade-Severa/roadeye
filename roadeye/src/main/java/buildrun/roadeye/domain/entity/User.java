@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -84,15 +85,20 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == RoleEnum.ADMIN){
-            return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_USER")
-            );
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if (RoleEnum.contains(this.role.getRole())) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.toString().toUpperCase()));
+            if (this.role == RoleEnum.ADMIN) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_RESPONSIBLE"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
+            }
+        } else {
+            throw new IllegalArgumentException("Role " + this.role + "is not valid.");
         }
-        return List.of(
-                new SimpleGrantedAuthority("ROLE_USER")
-        );
+        return authorities;
     }
 
     public String getLastName() {

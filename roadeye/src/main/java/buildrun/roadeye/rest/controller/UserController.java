@@ -41,6 +41,12 @@ public class UserController {
         User updatedUser = userService.updateUser(userId, updateUserDto);
         return ResponseEntity.ok(updatedUser);
     }
+
+    @PutMapping("/password/{userId}")
+    public ResponseEntity<User> updateUserPassword(@PathVariable UUID userId, @Validated @RequestBody UserDto updateUserDto) {
+        User updatedUser = userService.updateUserPassword(userId, updateUserDto);
+        return ResponseEntity.ok(updatedUser);
+    }
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable UUID userId) {
         User user = userService.getUserById(userId);

@@ -14,7 +14,6 @@ public record AddressDto(
         String complement,
         Long number,
         StatusEnum statusEnum,
-        User user,
         Double latitude,
         Double longitude
 ) {
@@ -34,7 +33,6 @@ public record AddressDto(
                 address.getComplement(),
                 address.getNumber(),
                 address.getStatusEnum(),
-                address.getUser(),
                 address.getLatitude(),
                 address.getLongitude()
         );

@@ -39,9 +39,6 @@ public class Address {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public Long getAddressId() {
         return addressId;
@@ -137,13 +134,5 @@ public class Address {
 
     public void setStatusEnum(StatusEnum statusEnum) {
         this.statusEnum = statusEnum;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

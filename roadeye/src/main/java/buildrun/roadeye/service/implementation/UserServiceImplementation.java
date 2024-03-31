@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,17 +39,7 @@ public class UserServiceImplementation implements UserService {
             User user = new User();
             setUserService(user, userDto);
             User newUser = userRepository.save(user);
-            return new UserDto(
-                    newUser.getName(),
-                    newUser.getLogin(),
-                    newUser.getPassword(),
-                    userDto.role(),
-                    newUser.getLastName(),
-                    newUser.getEmail(),
-                    newUser.getCpf(),
-                    newUser.getPhone(),
-                    newUser.getPhoto(),
-                    newUser.getStatusEnum());
+            return userDto.fromEntity(newUser);
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(ex.getStatusCode(), ex.getMessage());
         }
@@ -79,6 +70,18 @@ public class UserServiceImplementation implements UserService {
     @Transactional
     public User getUserById(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(axNotFound));
+    }
+
+    @Override
+    @Transactional
+    public User updateUserPassword(UUID userId, UserDto updateUserDto) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        User user = optionalUser.get();
+        user.setPassword(passwordEncoder.encode(updateUserDto.password()));
+        return userRepository.save(user);
     }
 
     @Transactional

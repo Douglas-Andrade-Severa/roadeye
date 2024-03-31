@@ -1,7 +1,6 @@
 package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.Address;
-import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.AddressRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.AddressDto;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 @Service
 public class AddressServiceImplementation implements AddressService {
     private final AddressRepository addressRepository;
@@ -84,12 +82,12 @@ public class AddressServiceImplementation implements AddressService {
         } else {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to obtain geolocation coordinates.");
         }
-        Optional<User> existingUser = userRepository.findById(addressDto.user().getUserId());
-        if (existingUser.isPresent()) {
-            address.setUser(existingUser.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User does not exist.");
-        }
+//        Optional<User> existingUser = userRepository.findById(addressDto.user().getUserId());
+//        if (existingUser.isPresent()) {
+//            address.setUser(existingUser.get());
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User does not exist.");
+//        }
     }
 
 }

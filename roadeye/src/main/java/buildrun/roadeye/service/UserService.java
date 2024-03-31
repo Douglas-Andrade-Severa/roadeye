@@ -16,4 +16,6 @@ public interface UserService {
     User updateUser(UUID userId, UserDto updateUserDto);
 
     User getUserById(UUID userId);
+
+    User updateUserPassword(UUID userId, UserDto updateUserDto);
 }

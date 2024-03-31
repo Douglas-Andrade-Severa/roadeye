@@ -8,9 +8,17 @@ public enum RoleEnum {
     USER("user"),
     DRIVER("driver"),
     RESPONSIBLE("responsible"),
-    STUDANT("studant");
+    STUDENT("student");
     private String role;
     RoleEnum(String role) {
         this.role = role;
+    }
+    public static boolean contains(String role) {
+        for (RoleEnum r : RoleEnum.values()) {
+            if (r.getRole().equals(role)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
