@@ -11,19 +11,39 @@
 	<groupId>buildrun</groupId>
 	<artifactId>roadeye</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>${project.packaging}</packaging>
 	<name>roadeye</name>
 	<description>Project related to the semester conclusion work of the system analysis and development course at Senac Brusque-SC college</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+	<profiles>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>development</id>
+			<properties>
+				<project.packaging>jar</project.packaging>
+				<tomcat.scope>compile</tomcat.scope>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>production</id>
+			<properties>
+				<project.packaging>war</project.packaging>
+				<tomcat.scope>provided</tomcat.scope>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
-<!--		local remover isso-->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-tomcat</artifactId>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>${tomcat.scope}</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

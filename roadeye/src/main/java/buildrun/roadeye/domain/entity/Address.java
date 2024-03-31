@@ -39,7 +39,8 @@ public class Address {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
-    @Column(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Long getAddressId() {
