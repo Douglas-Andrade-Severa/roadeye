@@ -28,7 +28,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui/**", "/javainuse-openapi/**").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -43,4 +43,12 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
 }
