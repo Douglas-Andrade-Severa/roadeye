@@ -5,6 +5,10 @@ import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.LoginRequest;
 import buildrun.roadeye.rest.dto.LoginResponse;
 import buildrun.roadeye.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping(value = "/login", produces = {"application/json"})
+@SecurityRequirement(name = "roadeyeApi")
 public class AuthenticationController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -30,6 +35,13 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     @PostMapping
+    @Operation(summary = "Get user by Login and Password", description = "Retrieves user information based on the provided Login and Password.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User ok, welcome"),
+            @ApiResponse(responseCode = "401", description = "unauthenticated user"),
+            @ApiResponse(responseCode = "403", description = "invalid username or password"),
+    })
+
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         Optional<User> userOptional = userRepository.findByLogin(loginRequest.login());
         if (userOptional.isEmpty() || !userOptional.get().isLoginCorrect(loginRequest, passwordEncoder)) {

@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +20,8 @@ import java.util.Optional;
 public class SecurityFilter extends OncePerRequestFilter {
     private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
+
+    @Autowired
     public SecurityFilter(AuthenticationService authenticationService, UserRepository userRepository) {
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
@@ -28,6 +29,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (request.getRequestURI().contains("swagger-ui")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = extractsTokenHeader(request);
         if(token != null){
             String login = authenticationService.validTokenJwt(token);
@@ -39,7 +45,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request,response);
     }
-
 
     public String extractsTokenHeader(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");

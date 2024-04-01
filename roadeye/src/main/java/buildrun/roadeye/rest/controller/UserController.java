@@ -3,6 +3,9 @@ package buildrun.roadeye.rest.controller;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +15,9 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@Slf4j
+@RequestMapping(value = "/users", produces = {"application/json"})
+@SecurityRequirement(name = "roadeyeApi")
 public class UserController {
     private final UserService userService;
 

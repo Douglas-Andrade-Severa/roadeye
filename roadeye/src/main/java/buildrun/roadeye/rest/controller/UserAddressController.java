@@ -5,6 +5,7 @@ import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.UserAddressDto;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.service.UserAddressService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/usersAddress")
+@RequestMapping(value = "/usersAddress", produces = {"application/json"})
+@SecurityRequirement(name = "roadeyeApi")
 public class UserAddressController {
     private final UserAddressService UseraddressService;
     public UserAddressController(UserAddressService UseraddressService) {
