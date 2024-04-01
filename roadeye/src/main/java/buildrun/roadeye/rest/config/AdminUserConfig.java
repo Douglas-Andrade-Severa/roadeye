@@ -1,4 +1,4 @@
-package buildrun.roadeye.config;
+package buildrun.roadeye.rest.config;
 
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.enums.RoleEnum;

@@ -10,8 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Roadeye Api", version = "1", description = "API"))
-@SecurityScheme(name = "roadeyeApi", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class RoadeyeApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(RoadeyeApplication.class, args);

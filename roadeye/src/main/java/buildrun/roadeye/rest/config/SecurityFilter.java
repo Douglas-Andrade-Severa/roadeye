@@ -1,4 +1,4 @@
-package buildrun.roadeye.config;
+package buildrun.roadeye.rest.config;
 
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
@@ -37,12 +37,10 @@ public class SecurityFilter extends OncePerRequestFilter {
                 break;
             }
         }
-
         if (isWhitelisted) {
             filterChain.doFilter(request, response);
             return;
         }
-
         String token = extractsTokenHeader(request);
         if(token != null){
             String login = authenticationService.validTokenJwt(token);

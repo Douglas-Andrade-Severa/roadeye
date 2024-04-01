@@ -38,8 +38,6 @@ public class AuthenticationController {
     @Operation(summary = "Get user by Login and Password", description = "Retrieves user information based on the provided Login and Password.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User ok, welcome"),
-            @ApiResponse(responseCode = "401", description = "unauthenticated user"),
-            @ApiResponse(responseCode = "403", description = "invalid username or password"),
     })
 
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {

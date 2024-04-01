@@ -1,4 +1,4 @@
-package buildrun.roadeye.config;
+package buildrun.roadeye.rest.config;
 
 import buildrun.roadeye.domain.repository.AddressRepository;
 import buildrun.roadeye.domain.repository.UserRepository;

@@ -1,4 +1,4 @@
-package buildrun.roadeye.config;
+package buildrun.roadeye.rest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
