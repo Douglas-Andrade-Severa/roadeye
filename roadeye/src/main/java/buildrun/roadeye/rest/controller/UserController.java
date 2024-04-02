@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,8 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequestMapping(value = "/users", produces = {"application/json"})
-@SecurityRequirement(name = "roadeyeApi")
+@Tag(name = "User")
+@SecurityRequirement(name = "bearer-key")
 public class UserController {
     private final UserService userService;
 

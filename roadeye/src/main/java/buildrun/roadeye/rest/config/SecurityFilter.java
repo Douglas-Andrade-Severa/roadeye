@@ -29,18 +29,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String requestURI = request.getRequestURI();
-        boolean isWhitelisted = false;
-        for (String path : AUTH_WHITELIST) {
-            if (requestURI.startsWith(path)) {
-                isWhitelisted = true;
-                break;
-            }
-        }
-        if (isWhitelisted) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         String token = extractsTokenHeader(request);
         if(token != null){
             String login = authenticationService.validTokenJwt(token);
@@ -53,16 +41,9 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 
-    private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**",
-            "/v3/api-docs/**",
-            "v3/api-docs.yaml",
-            "/swagger-ui/**",
-            "/swagger-ui.html"
-    };
-
     public String extractsTokenHeader(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
+        System.out.println(authHeader);
         if(authHeader == null){
             return null;
         }

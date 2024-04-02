@@ -16,8 +16,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/address", produces = {"application/json"})
-@SecurityRequirement(name = "roadeyeApi")
 @Tag(name = "Address")
+@SecurityRequirement(name = "bearer-key")
 public class AddressController {
     private final AddressService addressService;
     public AddressController(AddressService addressService) {
