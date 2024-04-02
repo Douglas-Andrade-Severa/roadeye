@@ -35,7 +35,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     @PostMapping
-    @Operation(summary = "Get user by Login and Password", description = "Retrieves user information based on the provided Login and Password.")
+    @Operation(summary = "Get user by Login and Password", description = "Retrieves user information based on the provided Login and Password.", security = { @SecurityRequirement(name = "bearer-key") })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User ok, welcome"),
     })
