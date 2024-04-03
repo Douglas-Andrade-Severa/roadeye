@@ -104,4 +104,10 @@ public class UserAddressServiceImplementation implements UserAddressService {
     public UserAddress getUserAddressById(Long userAddressId) {
         return userAddressRepository.findById(userAddressId).orElseThrow(() -> new EntityNotFoundException("UserAddress not found"));
     }
+
+    @Override
+    @Transactional
+    public List<UserAddress> findAddressesByUser_Id(UUID userId) {
+        return userAddressRepository.findByUser_Id(userId);
+    }
 }

@@ -1,9 +1,12 @@
 package buildrun.roadeye.service;
 
+import buildrun.roadeye.domain.entity.Address;
+import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.UserAddressDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserAddressService {
     UserAddressDto createUserAddress(UserAddressDto userAddressDto);
@@ -15,4 +18,6 @@ public interface UserAddressService {
     UserAddress updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto);
 
     UserAddress getUserAddressById(Long userAddressId);
+
+    List<UserAddress> findAddressesByUser_Id(UUID userId);
 }

@@ -16,8 +16,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/address", produces = {"application/json"})
-@SecurityRequirement(name = "roadeyeApi")
 @Tag(name = "Address")
+@SecurityRequirement(name = "bearer-key")
 public class AddressController {
     private final AddressService addressService;
     public AddressController(AddressService addressService) {
@@ -39,21 +39,22 @@ public class AddressController {
     public ResponseEntity<List<Address>> listAddress() {
         return ResponseEntity.ok(addressService.getAllAddress());
     }
+
+    @DeleteMapping("/{addressId}")
     @Operation(summary = "Delete Address by ID", description = "deleted address will be deleted based on id.", method = "DEL")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "address deleted successfully"),
     })
-    @DeleteMapping("/{addressId}")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) {
         addressService.deleteAddress(addressId);
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{userId}")
     @Operation(summary = "Update Address by ID", description = "The address will be updated based on the ID.", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "address updated successfully"),
     })
-    @PutMapping("/{userId}")
     public ResponseEntity<Address> updateUser(@PathVariable Long addressId, @Validated @RequestBody AddressDto addressDto) {
         Address updatedAddress = addressService.updateAddress(addressId, addressDto);
         return ResponseEntity.ok(updatedAddress);

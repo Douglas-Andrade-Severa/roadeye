@@ -1,4 +1,8 @@
 package buildrun.roadeye.rest.dto;
 
-public record LoginResponse(String accessToken) {
+import buildrun.roadeye.domain.enums.RoleEnum;
+
+import java.util.UUID;
+
+public record LoginResponse(String accessToken, UUID userId, RoleEnum roleEnum) {
 }

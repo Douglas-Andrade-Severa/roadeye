@@ -1,7 +1,6 @@
 package buildrun.roadeye.rest.dto;
 
 import buildrun.roadeye.domain.entity.Address;
-import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.enums.StatusEnum;
 public record AddressDto(
         Long addressId,
@@ -23,7 +22,7 @@ public record AddressDto(
 
     public static AddressDto fromEntity(Address address) {
         return new AddressDto(
-                address.getAddressId(),
+                address.getId(),
                 address.getPostCode(),
                 address.getStreet(),
                 address.getNeighborhood(),

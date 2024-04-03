@@ -1,7 +1,9 @@
 package buildrun.roadeye.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+@Data
 @Entity
 @Table(name = "tb_user_address")
 public class UserAddress {
@@ -17,27 +19,4 @@ public class UserAddress {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 }

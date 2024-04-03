@@ -23,6 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/login", produces = {"application/json"})
 @Tag(name = "Authentication")
+@SecurityRequirement(name = "bearer-key")
 public class AuthenticationController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,7 +37,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     @PostMapping
-    @Operation(summary = "Get user by Login and Password", description = "Retrieves user information based on the provided Login and Password.", security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(summary = "Post user by Login and Password", description = "Retrieves user information based on the provided Login and Password.")//security = { @SecurityRequirement(name = "bearer-key") }
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User ok, welcome"),
     })
@@ -48,7 +49,7 @@ public class AuthenticationController {
         }
         var userAuthenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.login(), loginRequest.password());
         authenticationManager.authenticate(userAuthenticationToken);
-        return ResponseEntity.ok(new LoginResponse(authenticationService.getToken(loginRequest)));
+        return ResponseEntity.ok(new LoginResponse(authenticationService.getToken(loginRequest), userOptional.get().getId(), userOptional.get().getRole()));
     }
 
 }
