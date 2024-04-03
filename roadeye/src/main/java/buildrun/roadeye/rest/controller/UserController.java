@@ -30,11 +30,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping
     @Operation(summary = "Create user", description = "Insert user.", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User create"),
     })
-    @PostMapping
     private UserDto createUser(@RequestBody UserDto userDto){
         return userService.createUser(userDto);
     }

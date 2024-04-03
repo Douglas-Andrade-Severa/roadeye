@@ -33,7 +33,7 @@ public class UserAddressController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User/Address found successfully"),
     })
-    public ResponseEntity<List<UserAddress>> listUsers() {
+    public ResponseEntity<List<UserAddress>> listUsersAddress() {
         return ResponseEntity.ok(userAddressService.getAllUsersAddress());
     }
 
@@ -42,7 +42,7 @@ public class UserAddressController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = " User/Address deleted successfully"),
     })
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userAddressId) {
+    public ResponseEntity<Void> deleteUserAddress(@PathVariable Long userAddressId) {
         userAddressService.deleteUserAddress(userAddressId);
         return ResponseEntity.noContent().build();
     }
@@ -61,7 +61,7 @@ public class UserAddressController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User/Address ok"),
     })
-    public ResponseEntity<UserAddress> getUserById(@PathVariable Long userAddressId) {
+    public ResponseEntity<UserAddress> getUserAddressById(@PathVariable Long userAddressId) {
         UserAddress userAddress = userAddressService.getUserAddressById(userAddressId);
         return ResponseEntity.ok(userAddress);
     }
