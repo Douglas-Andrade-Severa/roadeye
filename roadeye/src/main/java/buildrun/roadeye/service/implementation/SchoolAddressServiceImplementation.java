@@ -52,6 +52,7 @@ public class SchoolAddressServiceImplementation implements SchoolAddressService 
     }
 
     @Override
+    @Transactional
     public SchoolAddress updateSchoolAddress(Long schoolAddressId, SchoolAddressDto updateSchoolAddressDto) {
         Long schoolId = updateSchoolAddressDto.schoolId();
         Long addressId = updateSchoolAddressDto.addressId();
