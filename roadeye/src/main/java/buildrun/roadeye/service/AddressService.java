@@ -4,9 +4,10 @@ import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.rest.dto.AddressDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface AddressService {
-    public AddressDto createAddress(AddressDto addressDto);
+    public AddressDto createAddressByUser(AddressDto addressDto, UUID userId);
 
     List<Address> getAllAddress();
 
@@ -15,4 +16,6 @@ public interface AddressService {
     Address updateAddress(Long addressId, AddressDto addressDto);
 
     Address getUserById(Long addressId);
+
+    AddressDto createAddressBySchool(AddressDto addressDto, Long schoolId);
 }

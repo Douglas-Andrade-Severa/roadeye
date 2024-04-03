@@ -1,7 +1,6 @@
 package buildrun.roadeye.rest.config;
 
-import buildrun.roadeye.domain.repository.AddressRepository;
-import buildrun.roadeye.domain.repository.UserRepository;
+import buildrun.roadeye.domain.repository.*;
 import buildrun.roadeye.service.AddressService;
 import buildrun.roadeye.service.implementation.AddressServiceImplementation;
 import buildrun.roadeye.service.implementation.GoogleGeocodingService;
@@ -16,7 +15,7 @@ public class AppConfig {
     }
 
     @Bean
-    public AddressService addressService(AddressRepository addressRepository, UserRepository userRepository, GoogleGeocodingService geocodingService) {
-        return new AddressServiceImplementation(addressRepository, userRepository, geocodingService);
+    public AddressService addressService(AddressRepository addressRepository, UserRepository userRepository, GoogleGeocodingService geocodingService, UserAddressRepository userAddressRepository, SchoolAddressRepository schoolAddressRepository, SchoolRepository schoolRepository) {
+        return new AddressServiceImplementation(addressRepository, userRepository, geocodingService, userAddressRepository, schoolAddressRepository, schoolRepository);
     }
 }

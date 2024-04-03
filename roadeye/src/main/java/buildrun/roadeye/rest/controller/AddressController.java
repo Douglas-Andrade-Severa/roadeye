@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/address", produces = {"application/json"})
@@ -23,13 +24,21 @@ public class AddressController {
     public AddressController(AddressService addressService) {
         this.addressService = addressService;
     }
-    @PostMapping
-    @Operation(summary = "Create Address", description = "Insert address.", method = "POST")
+    @PostMapping("/user/{userId}")
+    @Operation(summary = "Create user address", description = "Enter address for user based on id provided", method = "POST")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Address create"),
+            @ApiResponse(responseCode = "201", description = "Address created for user"),
     })
-    private AddressDto createUser(@RequestBody AddressDto addressDto){
-        return addressService.createAddress(addressDto);
+    private AddressDto createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId){
+        return addressService.createAddressByUser(addressDto, userId);
+    }
+    @PostMapping("/school/{schoolId}")
+    @Operation(summary = "Create School address", description = "Enter address for school based on id provided.", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Address created for school"),
+    })
+    private AddressDto createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId){
+        return addressService.createAddressBySchool(addressDto, schoolId);
     }
     @GetMapping
     @Operation(summary = "Get full address", description = "Search all registered addresses", method = "GET")

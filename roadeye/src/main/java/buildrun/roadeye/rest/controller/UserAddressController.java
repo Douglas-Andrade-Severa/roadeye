@@ -28,15 +28,6 @@ public class UserAddressController {
         this.userAddressService = userAddressService;
     }
 
-    @PostMapping
-    @Operation(summary = "Insert user and Address", description = "Create a link between user and addresses", method = "POST")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User/Address create"),
-    })
-    private UserAddressDto createUserAddress(@RequestBody UserAddressDto userAddressDto){
-        return userAddressService.createUserAddress(userAddressDto);
-    }
-
     @GetMapping
     @Operation(summary = "Get full user/address", description = "Search all registered users and addresses", method = "GET")
     @ApiResponses(value = {
@@ -65,7 +56,6 @@ public class UserAddressController {
         UserAddress updatedUserAddress = userAddressService.updateUserAddress(userAddressId, updateUserAddressDto);
         return ResponseEntity.ok(updatedUserAddress);
     }
-
     @GetMapping("/{userAddressId}")
     @Operation(summary = "Get User/Address by ID", description = "Retrieve User/Address information based on the provided ID.", method = "GET")
     @ApiResponses(value = {
