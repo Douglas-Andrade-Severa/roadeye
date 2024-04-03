@@ -4,6 +4,7 @@ import buildrun.roadeye.domain.entity.School;
 import buildrun.roadeye.rest.dto.SchoolDto;
 import buildrun.roadeye.service.SchoolService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/school", produces = {"application/json"})
-@SecurityRequirement(name = "roadeyeApi")
+@Tag(name = "School")
+@SecurityRequirement(name = "bearer-key")
 public class SchoolController {
     private final SchoolService schoolService;
 
