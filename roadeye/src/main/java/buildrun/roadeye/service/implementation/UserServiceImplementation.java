@@ -97,5 +97,4 @@ public class UserServiceImplementation implements UserService {
         user.setPhoto(userDto.photo());
         user.setStatusEnum(userDto.statusEnum());
     }
-
 }

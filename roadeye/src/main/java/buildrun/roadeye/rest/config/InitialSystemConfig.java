@@ -8,9 +8,6 @@ import buildrun.roadeye.domain.enums.StatusEnum;
 import buildrun.roadeye.domain.enums.TypeVehicleEnum;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.domain.repository.VehicleRespository;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -77,7 +74,7 @@ public class InitialSystemConfig implements CommandLineRunner {
             vehicle.setBrand(brand);
             vehicle.setModel(model);
             vehicle.setLicensePlate(licensePlate);
-            vehicle.setNumberRenavam(numberRenavam);
+            vehicle.setNumberRenavan(numberRenavam);
             vehicle.setYearManufacturing(yearManufacturing);
             vehicle.setTypeVehicleEnum(typeVehicleEnum);
             vehicle.setColorEnum(colorEnum);

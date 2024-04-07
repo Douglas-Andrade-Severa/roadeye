@@ -20,7 +20,7 @@ public record VehicleDto(
                 vehicle.getBrand(),
                 vehicle.getModel(),
                 vehicle.getLicensePlate(),
-                vehicle.getNumberRenavam(),
+                vehicle.getNumberRenavan(),
                 vehicle.getYearManufacturing(),
                 vehicle.getCapacityPassengers(),
                 vehicle.getTypeVehicleEnum(),

@@ -5,8 +5,6 @@ import buildrun.roadeye.domain.enums.StatusEnum;
 import buildrun.roadeye.domain.enums.TypeVehicleEnum;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Data
 @Entity
@@ -23,7 +21,7 @@ public class Vehicle {
     @Column(nullable = false)
     private String licensePlate;
     @Column(nullable = false)
-    private String numberRenavam;
+    private String numberRenavan;
     @Column(nullable = false)
     private int yearManufacturing;
     @Column(nullable = false)
