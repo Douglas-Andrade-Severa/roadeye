@@ -111,12 +111,6 @@ public class AddressServiceImplementation implements AddressService {
         } else {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to obtain geolocation coordinates.");
         }
-//        Optional<User> existingUser = userRepository.findById(addressDto.user().getUserId());
-//        if (existingUser.isPresent()) {
-//            address.setUser(existingUser.get());
-//        } else {
-//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User does not exist.");
-//        }
     }
 
 }
