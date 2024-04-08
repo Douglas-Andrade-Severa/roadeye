@@ -21,6 +21,7 @@ public class VehicleServiceImplementation implements VehicleService {
     }
 
     @Override
+    @Transactional
     public VehicleDto createVehicle(VehicleDto vehicleDto) {
         try {
             var vehivleFromLicensePlate = vehicleRespository.findByLicensePlate(vehicleDto.licensePlate());
@@ -41,17 +42,20 @@ public class VehicleServiceImplementation implements VehicleService {
     }
 
     @Override
+    @Transactional
     public List<Vehicle> getAllVehicle() {
         return vehicleRespository.findAll();
     }
 
     @Override
+    @Transactional
     public void deleteVehicle(Long vehicleId) {
         Vehicle vehicle = vehicleRespository.findById(vehicleId).orElseThrow(() -> new EntityNotFoundException(axNotFound));
         vehicleRespository.delete(vehicle);
     }
 
     @Override
+    @Transactional
     public Vehicle updateVehicle(Long vehicleId, VehicleDto updateVehicleDto) {
         Vehicle vehicle = vehicleRespository.findById(vehicleId).orElseThrow(() -> new EntityNotFoundException(axNotFound));
         setVehicleService(vehicle, updateVehicleDto);
@@ -59,6 +63,7 @@ public class VehicleServiceImplementation implements VehicleService {
     }
 
     @Override
+    @Transactional
     public Vehicle getVehicleById(Long vehicleId) {
         return vehicleRespository.findById(vehicleId).orElseThrow(() -> new EntityNotFoundException(axNotFound));
     }

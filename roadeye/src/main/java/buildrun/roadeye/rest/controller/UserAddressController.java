@@ -79,5 +79,4 @@ public class UserAddressController {
         }
         return ResponseEntity.ok(addresses);
     }
-
 }
