@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class AddressServiceImplementation implements AddressService {
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
@@ -30,71 +31,71 @@ public class AddressServiceImplementation implements AddressService {
         this.schoolAddressRepository = schoolAddressRepository;
         this.schoolRepository = schoolRepository;
     }
-
-    @Transactional
     public AddressDto createAddressByUser(AddressDto addressDto, UUID userId) {
-        try {
-            User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-            Address address = new Address();
-            setAddressService(address, addressDto);
-            Address savedAddress = addressRepository.save(address);
-            UserAddress userAddress = new UserAddress();
-            userAddress.setUser(user);
-            userAddress.setAddress(savedAddress);
-            userAddressRepository.save(userAddress);
-            return AddressDto.fromEntity(savedAddress);
-        }catch (ResponseStatusException ex){
-            throw new ResponseStatusException(ex.getStatusCode(), ex.getMessage());
-        }
+        User user = getUserById(userId);
+        Address address = createAddress(addressDto);
+        UserAddress userAddress = new UserAddress();
+        userAddress.setUser(user);
+        userAddress.setAddress(address);
+        userAddressRepository.save(userAddress);
+        return AddressDto.fromEntity(address);
     }
 
     @Override
-    @Transactional
     public List<Address> getAllAddress() {
         return addressRepository.findAll();
     }
 
     @Override
-    @Transactional
     public void deleteAddress(Long addressId) {
-        Address address = addressRepository.findById(addressId).orElseThrow(() -> new EntityNotFoundException("Address does not exist."));
+        Address address = getAddressById(addressId);
         addressRepository.delete(address);
     }
 
     @Override
-    @Transactional
     public Address updateAddress(Long addressId, AddressDto addressDto) {
-        Address address = addressRepository.findById(addressId).orElseThrow(() -> new EntityNotFoundException("Address does not exist."));
-        setAddressService(address, addressDto);
+        Address address = getAddressById(addressId);
+        setAddressDetails(address, addressDto);
         return addressRepository.save(address);
     }
 
+    public Address getAddressById(Long addressId) {
+        return addressRepository.findById(addressId)
+                .orElseThrow(() -> new EntityNotFoundException("Address does not exist."));
+    }
+
     @Override
-    @Transactional
     public Address getUserById(Long addressId) {
         return addressRepository.findById(addressId).orElseThrow(() -> new EntityNotFoundException("Address does not exist."));
     }
-
     @Override
-    @Transactional
     public AddressDto createAddressBySchool(AddressDto addressDto, Long schoolId) {
-        try {
-            School school = schoolRepository.findById(schoolId).orElseThrow(() -> new EntityNotFoundException("School not found with id: " + schoolId));
-            Address address = new Address();
-            setAddressService(address, addressDto);
-            Address savedAddress = addressRepository.save(address);
-            SchoolAddress schoolAddress = new SchoolAddress();
-            schoolAddress.setSchool(school);
-            schoolAddress.setAddress(savedAddress);
-            schoolAddressRepository.save(schoolAddress);
-            return AddressDto.fromEntity(savedAddress);
-        }catch (ResponseStatusException ex){
-            throw new ResponseStatusException(ex.getStatusCode(), ex.getMessage());
-        }
+        School school = getSchoolById(schoolId);
+        Address address = createAddress(addressDto);
+        SchoolAddress schoolAddress = new SchoolAddress();
+        schoolAddress.setSchool(school);
+        schoolAddress.setAddress(address);
+        schoolAddressRepository.save(schoolAddress);
+        return AddressDto.fromEntity(address);
     }
 
-    @Transactional
-    private void setAddressService(Address address, AddressDto addressDto) {
+    private User getUserById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+    }
+
+    private School getSchoolById(Long schoolId) {
+        return schoolRepository.findById(schoolId)
+                .orElseThrow(() -> new EntityNotFoundException("School not found with id: " + schoolId));
+    }
+
+    private Address createAddress(AddressDto addressDto) {
+        Address address = new Address();
+        setAddressDetails(address, addressDto);
+        return addressRepository.save(address);
+    }
+
+    private void setAddressDetails(Address address, AddressDto addressDto) {
         GeolocationDto geolocation = geocodingService.getGeolocation(addressDto.getFullAddress());
         address.setPostCode(addressDto.postCode());
         address.setStreet(addressDto.street());
@@ -112,5 +113,4 @@ public class AddressServiceImplementation implements AddressService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to obtain geolocation coordinates.");
         }
     }
-
 }

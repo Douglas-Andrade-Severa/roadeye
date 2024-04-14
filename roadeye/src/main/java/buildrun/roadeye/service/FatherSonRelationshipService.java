@@ -16,4 +16,6 @@ public interface FatherSonRelationshipService {
     void deleteFatherSonRelationship(Long fatherSonRelationshipId);
 
     FatherSonRelationship updateFatherSonRelationship(Long fatherSonRelationshipId, FatherSonRelationshipDto fatherSonRelationshipDto);
+
+    FatherSonRelationship createFatherSonRelationship(FatherSonRelationshipDto fatherSonRelationship);
 }

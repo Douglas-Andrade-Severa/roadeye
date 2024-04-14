@@ -2,6 +2,7 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.domain.entity.FatherSonRelationship;
 import buildrun.roadeye.rest.dto.FatherSonRelationshipDto;
+import buildrun.roadeye.rest.dto.SchoolDto;
 import buildrun.roadeye.service.FatherSonRelationshipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +26,16 @@ public class FatherSonRelationshipController {
     public FatherSonRelationshipController(FatherSonRelationshipService fatherSonRelationshipService) {
         this.fatherSonRelationshipService = fatherSonRelationshipService;
     }
+
+    @PostMapping
+    @Operation(summary = "Create Father Son Relationship", description = "Insert fatherSonRelationship.", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Father Son Relationship create"),
+    })
+    private FatherSonRelationship fatherSonRelationshipDto(@RequestBody FatherSonRelationshipDto fatherSonRelationship){
+        return fatherSonRelationshipService.createFatherSonRelationship(fatherSonRelationship);
+    }
+
 
     @GetMapping
     @Operation(summary = "Get full responsible/student", description = "Search all registered responsible and student", method = "GET")
