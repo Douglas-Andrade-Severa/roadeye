@@ -1,17 +1,20 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.repository.*;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.GeolocationDto;
-import buildrun.roadeye.service.AddressService;
+import buildrun.roadeye.rest.dto.service.AddressService;
+import buildrun.roadeye.rest.dto.service.AddressUpdateDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,21 +50,37 @@ public class AddressServiceImplementation implements AddressService {
     }
 
     @Override
-    public void deleteAddress(Long addressId) {
-        Address address = getAddressById(addressId);
-        addressRepository.delete(address);
+    public boolean deleteAddress(Long addressId) {
+        Optional<Address> optionalAddress = addressRepository.findById(addressId);
+        if (optionalAddress.isPresent()) {
+            addressRepository.deleteById(addressId);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    @Override
+    public ResponseEntity<?> updateAddress(Long addressId, AddressUpdateDto addressUpdateDto) {
+        Optional<Address> optionalAddress = addressRepository.findById(addressId);
+        if (optionalAddress.isPresent()) {
+            Address address = optionalAddress.get();
+            setAddressDetailsUpdate(address, addressUpdateDto);
+            Address updatedAddress = addressRepository.save(address);
+            return ResponseEntity.ok(updatedAddress);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found.");
+        }
     }
 
     @Override
-    public Address updateAddress(Long addressId, AddressDto addressDto) {
-        Address address = getAddressById(addressId);
-        setAddressDetails(address, addressDto);
-        return addressRepository.save(address);
-    }
-
-    public Address getAddressById(Long addressId) {
-        return addressRepository.findById(addressId)
-                .orElseThrow(() -> new EntityNotFoundException("Address does not exist."));
+    public ResponseEntity<?> getAddressResponseById(Long addressId) {
+        Address address = addressRepository.findById(addressId).orElse(null);
+        if (address != null) {
+            return ResponseEntity.ok(address);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("Address does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override
@@ -95,8 +114,27 @@ public class AddressServiceImplementation implements AddressService {
         return addressRepository.save(address);
     }
 
+    private void setAddressDetailsUpdate(Address address, AddressUpdateDto addressUpdateDto) {
+        GeolocationDto geolocation = geocodingService.getGeolocation(getFullAddress(addressUpdateDto.street(),addressUpdateDto.number(), addressUpdateDto.neighborhood(), addressUpdateDto.city(), addressUpdateDto.state(), addressUpdateDto.postCode(), addressUpdateDto.country()));
+        address.setPostCode(addressUpdateDto.postCode());
+        address.setStreet(addressUpdateDto.street());
+        address.setNeighborhood(addressUpdateDto.neighborhood());
+        address.setCity(addressUpdateDto.city());
+        address.setState(addressUpdateDto.state());
+        address.setCountry(addressUpdateDto.country());
+        address.setComplement(addressUpdateDto.complement());
+        address.setNumber(addressUpdateDto.number());
+        address.setStatusEnum(addressUpdateDto.statusEnum());
+        if (geolocation != null) {
+            address.setLatitude(geolocation.latitude());
+            address.setLongitude(geolocation.longitude());
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to obtain geolocation coordinates.");
+        }
+    }
+
     private void setAddressDetails(Address address, AddressDto addressDto) {
-        GeolocationDto geolocation = geocodingService.getGeolocation(addressDto.getFullAddress());
+        GeolocationDto geolocation = geocodingService.getGeolocation(getFullAddress(addressDto.street(),addressDto.number(), addressDto.neighborhood(), addressDto.city(), addressDto.state(), addressDto.postCode(), addressDto.country()));
         address.setPostCode(addressDto.postCode());
         address.setStreet(addressDto.street());
         address.setNeighborhood(addressDto.neighborhood());
@@ -112,5 +150,9 @@ public class AddressServiceImplementation implements AddressService {
         } else {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to obtain geolocation coordinates.");
         }
+    }
+
+    private String getFullAddress(String street, Long number, String neighborhood, String city, String state, String postCode, String country) {
+        return street + " " + number + ", " + neighborhood + ", " + city + ", " + state + " " + postCode + ", " + country;
     }
 }

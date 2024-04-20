@@ -1,9 +1,9 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.Vehicle;
 import buildrun.roadeye.domain.repository.VehicleRespository;
 import buildrun.roadeye.rest.dto.VehicleDto;
-import buildrun.roadeye.service.VehicleService;
+import buildrun.roadeye.rest.dto.service.VehicleService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;

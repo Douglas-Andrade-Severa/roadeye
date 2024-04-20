@@ -1,8 +1,8 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.LoginRequest;
-import buildrun.roadeye.service.AuthenticationService;
+import buildrun.roadeye.rest.dto.service.AuthenticationService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;

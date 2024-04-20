@@ -3,7 +3,6 @@ package buildrun.roadeye.rest.dto;
 import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.domain.enums.StatusEnum;
 public record AddressDto(
-        Long addressId,
         String postCode,
         String street,
         String neighborhood,
@@ -16,13 +15,8 @@ public record AddressDto(
         Double latitude,
         Double longitude
 ) {
-    public String getFullAddress() {
-        return street + " " + number + ", " + neighborhood + ", " + city + ", " + state + " " + postCode + ", " + country;
-    }
-
     public static AddressDto fromEntity(Address address) {
         return new AddressDto(
-                address.getId(),
                 address.getPostCode(),
                 address.getStreet(),
                 address.getNeighborhood(),

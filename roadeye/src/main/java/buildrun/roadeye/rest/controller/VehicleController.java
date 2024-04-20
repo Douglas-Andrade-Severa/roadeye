@@ -1,10 +1,8 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.entity.Vehicle;
-import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.VehicleDto;
-import buildrun.roadeye.service.VehicleService;
+import buildrun.roadeye.rest.dto.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @Slf4j

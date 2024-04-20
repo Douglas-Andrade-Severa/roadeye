@@ -6,14 +6,16 @@ import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.SchoolAddressDto;
 import buildrun.roadeye.rest.dto.UserAddressDto;
-import buildrun.roadeye.service.AddressService;
-import buildrun.roadeye.service.SchoolAddressService;
-import buildrun.roadeye.service.UserAddressService;
+import buildrun.roadeye.rest.dto.service.AddressService;
+import buildrun.roadeye.rest.dto.service.AddressUpdateDto;
+import buildrun.roadeye.rest.dto.service.SchoolAddressService;
+import buildrun.roadeye.rest.dto.service.UserAddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -47,30 +49,37 @@ public class AddressController {
     @Operation(summary = "Delete Address by ID", description = "deleted address will be deleted based on id.", method = "DEL")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "address deleted successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "Address not found")
     })
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) {
-        addressService.deleteAddress(addressId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteAddress(@PathVariable Long addressId) {
+        boolean deleted = addressService.deleteAddress(addressId);
+        if (deleted) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Address deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found");
+        }
     }
-
-    @PutMapping("/{userId}")
+    @PutMapping("/{addressId}")
     @Operation(summary = "Update Address by ID", description = "The address will be updated based on the ID.", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "address updated successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "Address not found")
     })
-    public ResponseEntity<Address> updateUser(@PathVariable Long addressId, @Validated @RequestBody AddressDto addressDto) {
-        Address updatedAddress = addressService.updateAddress(addressId, addressDto);
-        return ResponseEntity.ok(updatedAddress);
+    public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody AddressUpdateDto addressUpdateDto) {
+        return addressService.updateAddress(addressId, addressUpdateDto);
     }
 
     @GetMapping("/{addressId}")
     @Operation(summary = "Get Address by ID", description = "Retrieve address information based on the provided ID.", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Address ok"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "Address not found")
     })
-    public ResponseEntity<Address> getUserById(@PathVariable Long addressId) {
-        Address address = addressService.getUserById(addressId);
-        return ResponseEntity.ok(address);
+    public ResponseEntity<?> getAddressById(@PathVariable Long addressId) {
+        return addressService.getAddressResponseById(addressId);
     }
 
     //User
