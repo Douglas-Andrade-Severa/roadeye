@@ -2,6 +2,7 @@ package buildrun.roadeye.rest.service;
 
 import buildrun.roadeye.domain.entity.School;
 import buildrun.roadeye.rest.dto.SchoolDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ public interface SchoolService {
 
     List<School> getAllSchool();
 
-    void deleteSchool(Long schoolId);
+    ResponseEntity<?> deleteSchool(Long schoolId);
 
-    School updateSchool(Long schoolId, SchoolDto schoolDto);
+    ResponseEntity<?> updateSchool(Long schoolId, SchoolDto schoolDto);
 
-    School getSchoolById(Long schoolId);
+    ResponseEntity<?> getSchoolById(Long schoolId);
 }

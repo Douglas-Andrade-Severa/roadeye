@@ -29,6 +29,7 @@ public class SchoolController {
     @Operation(summary = "Create school", description = "Insert school.", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "School create"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
     private SchoolDto createSchool(@RequestBody SchoolDto schoolDto){
         return schoolService.createSchool(schoolDto);
@@ -38,6 +39,7 @@ public class SchoolController {
     @Operation(summary = "Get full schools", description = "Search all registered schools", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "schools found successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
     public ResponseEntity<List<School>> listSchool() {
         return ResponseEntity.ok(schoolService.getAllSchool());
@@ -47,20 +49,22 @@ public class SchoolController {
     @Operation(summary = "Delete school by ID", description = "deleted school will be deleted based on id.", method = "DEL")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "school deleted successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "schools not found")
     })
-    public ResponseEntity<Void> deleteScholl(@PathVariable Long schoolId) {
-        schoolService.deleteSchool(schoolId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteScholl(@PathVariable Long schoolId) {
+        return schoolService.deleteSchool(schoolId);
     }
 
     @PutMapping("/{schoolId}")
     @Operation(summary = "Update school by ID", description = "The school will be updated based on the ID.", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "school updated successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "schools not found")
     })
-    public ResponseEntity<School> updateSchool(@PathVariable Long schoolId, @Validated @RequestBody SchoolDto schoolDto) {
-        School school = schoolService.updateSchool(schoolId, schoolDto);
-        return ResponseEntity.ok(school);
+    public ResponseEntity<?> updateSchool(@PathVariable Long schoolId, @Validated @RequestBody SchoolDto schoolDto) {
+        return schoolService.updateSchool(schoolId, schoolDto);
     }
 
     @GetMapping("/{schoolId}")
@@ -68,8 +72,7 @@ public class SchoolController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "school ok"),
     })
-    public ResponseEntity<School> getSchoolById(@PathVariable Long schoolId) {
-        School school = schoolService.getSchoolById(schoolId);
-        return ResponseEntity.ok(school);
+    public ResponseEntity<?> getSchoolById(@PathVariable Long schoolId) {
+        return schoolService.getSchoolById(schoolId);
     }
 }
