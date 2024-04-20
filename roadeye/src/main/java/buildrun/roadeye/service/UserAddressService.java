@@ -1,4 +1,4 @@
-package buildrun.roadeye.domain.enums.service;
+package buildrun.roadeye.service;
 
 import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.domain.entity.User;

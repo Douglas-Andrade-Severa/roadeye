@@ -1,9 +1,9 @@
-package buildrun.roadeye.domain.enums.service.implementation;
+package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.ErrorResponse;
 import buildrun.roadeye.domain.entity.Route;
 import buildrun.roadeye.domain.repository.RouteRepository;
-import buildrun.roadeye.domain.enums.service.RouteService;
+import buildrun.roadeye.service.RouteService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

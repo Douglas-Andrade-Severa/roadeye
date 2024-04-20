@@ -2,7 +2,7 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
-import buildrun.roadeye.domain.enums.service.UserService;
+import buildrun.roadeye.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

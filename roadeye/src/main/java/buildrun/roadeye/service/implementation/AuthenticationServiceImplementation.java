@@ -1,6 +1,6 @@
-package buildrun.roadeye.domain.enums.service.implementation;
+package buildrun.roadeye.service.implementation;
 import buildrun.roadeye.domain.entity.User;
-import buildrun.roadeye.domain.enums.service.AuthenticationService;
+import buildrun.roadeye.service.AuthenticationService;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.LoginRequest;
 import com.auth0.jwt.JWT;

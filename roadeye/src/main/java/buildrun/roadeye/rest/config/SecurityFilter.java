@@ -2,7 +2,7 @@ package buildrun.roadeye.rest.config;
 
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
-import buildrun.roadeye.domain.enums.service.AuthenticationService;
+import buildrun.roadeye.service.AuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

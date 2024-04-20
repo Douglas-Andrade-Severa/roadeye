@@ -1,8 +1,7 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.domain.entity.FatherSonRelationship;
 import buildrun.roadeye.rest.dto.FatherSonRelationshipDto;
-import buildrun.roadeye.domain.enums.service.FatherSonRelationshipService;
+import buildrun.roadeye.service.FatherSonRelationshipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,8 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/fatherSonRelationship", produces = {"application/json"})

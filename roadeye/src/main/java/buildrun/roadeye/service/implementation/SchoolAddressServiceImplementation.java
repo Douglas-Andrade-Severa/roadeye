@@ -1,7 +1,7 @@
-package buildrun.roadeye.domain.enums.service.implementation;
+package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
-import buildrun.roadeye.domain.enums.service.SchoolAddressService;
+import buildrun.roadeye.service.SchoolAddressService;
 import buildrun.roadeye.domain.repository.AddressRepository;
 import buildrun.roadeye.domain.repository.SchoolAddressRepository;
 import buildrun.roadeye.domain.repository.SchoolRepository;
