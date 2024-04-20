@@ -1,7 +1,6 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.domain.entity.Route;
-import buildrun.roadeye.rest.service.RouteService;
+import buildrun.roadeye.domain.enums.service.RouteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/route", produces = {"application/json"})
@@ -30,7 +27,7 @@ public class RouteController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Route found successfully"),
     })
-    public ResponseEntity<List<Route>> ListOfAllRoutes() {
+    public ResponseEntity<?> ListOfAllRoutes() {
         return ResponseEntity.ok(routeService.getAllRoutes());
     }
 }

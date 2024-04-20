@@ -1,15 +1,11 @@
-package buildrun.roadeye.rest.service.implementation;
+package buildrun.roadeye.domain.enums.service.implementation;
 
-import buildrun.roadeye.domain.entity.Address;
-import buildrun.roadeye.domain.entity.ErrorResponse;
-import buildrun.roadeye.domain.entity.User;
-import buildrun.roadeye.domain.entity.UserAddress;
+import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.repository.AddressRepository;
 import buildrun.roadeye.domain.repository.UserAddressRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.UserAddressDto;
-import buildrun.roadeye.rest.service.UserAddressService;
-import jakarta.persistence.EntityNotFoundException;
+import buildrun.roadeye.domain.enums.service.UserAddressService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,10 +52,15 @@ public class UserAddressServiceImplementation implements UserAddressService {
         UserAddress savedAddress = userAddressRepository.save(userAddress);
         return userAddressDto.fromEntity(savedAddress);
     }
-
     @Override
-    public List<UserAddress> getAllUsersAddress() {
-        return userAddressRepository.findAll();
+    public ResponseEntity<?> getAllUsersAddress() {
+        List<UserAddress> userAddresses = userAddressRepository.findAll();
+        if (!userAddresses.isEmpty()) {
+            return ResponseEntity.ok(userAddresses);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("No userAddresses found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override

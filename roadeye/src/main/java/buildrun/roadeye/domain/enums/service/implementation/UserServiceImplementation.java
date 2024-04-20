@@ -1,12 +1,11 @@
-package buildrun.roadeye.rest.service.implementation;
+package buildrun.roadeye.domain.enums.service.implementation;
 
 import buildrun.roadeye.domain.entity.ErrorResponse;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
-import buildrun.roadeye.rest.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
+import buildrun.roadeye.domain.enums.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +45,14 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        if (!users.isEmpty()) {
+            return ResponseEntity.ok(users);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("No users found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override

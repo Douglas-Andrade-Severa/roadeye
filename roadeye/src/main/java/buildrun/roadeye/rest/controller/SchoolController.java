@@ -1,8 +1,7 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.domain.entity.School;
 import buildrun.roadeye.rest.dto.SchoolDto;
-import buildrun.roadeye.rest.service.SchoolService;
+import buildrun.roadeye.domain.enums.service.SchoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,8 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/school", produces = {"application/json"})
@@ -41,7 +38,7 @@ public class SchoolController {
             @ApiResponse(responseCode = "200", description = "schools found successfully"),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    public ResponseEntity<List<School>> listSchool() {
+    public ResponseEntity<?> listSchool() {
         return ResponseEntity.ok(schoolService.getAllSchool());
     }
 

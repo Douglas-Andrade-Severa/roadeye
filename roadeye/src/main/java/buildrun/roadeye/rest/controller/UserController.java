@@ -1,9 +1,8 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
-import buildrun.roadeye.rest.service.UserService;
+import buildrun.roadeye.domain.enums.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -46,7 +44,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
             @ApiResponse(responseCode = "404", description = "user not found")
     })
-    public ResponseEntity<List<User>> listUsers() {
+    public ResponseEntity<?> listUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 

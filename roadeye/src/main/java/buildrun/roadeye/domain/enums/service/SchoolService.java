@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.service;
+package buildrun.roadeye.domain.enums.service;
 
 import buildrun.roadeye.domain.entity.School;
 import buildrun.roadeye.rest.dto.SchoolDto;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface SchoolService {
     SchoolDto createSchool(SchoolDto schoolDto);
 
-    List<School> getAllSchool();
+    ResponseEntity<?> getAllSchool();
 
     ResponseEntity<?> deleteSchool(Long schoolId);
 

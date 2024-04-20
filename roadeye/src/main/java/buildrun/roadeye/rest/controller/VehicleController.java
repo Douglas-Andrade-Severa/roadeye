@@ -1,8 +1,7 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.domain.entity.Vehicle;
 import buildrun.roadeye.rest.dto.VehicleDto;
-import buildrun.roadeye.rest.service.VehicleService;
+import buildrun.roadeye.domain.enums.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -39,7 +36,7 @@ public class VehicleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "vehicle found successfully"),
     })
-    public ResponseEntity<List<Vehicle>> listVehicle() {
+    public ResponseEntity<?>  listVehicle() {
         return ResponseEntity.ok(vehicleService.getAllVehicle());
     }
 

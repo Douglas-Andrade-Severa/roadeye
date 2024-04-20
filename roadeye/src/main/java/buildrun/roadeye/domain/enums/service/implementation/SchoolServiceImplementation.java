@@ -1,13 +1,10 @@
-package buildrun.roadeye.rest.service.implementation;
+package buildrun.roadeye.domain.enums.service.implementation;
 
 import buildrun.roadeye.domain.entity.ErrorResponse;
 import buildrun.roadeye.domain.entity.School;
-import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.SchoolRepository;
 import buildrun.roadeye.rest.dto.SchoolDto;
-import buildrun.roadeye.rest.dto.UserDto;
-import buildrun.roadeye.rest.service.SchoolService;
-import jakarta.persistence.EntityNotFoundException;
+import buildrun.roadeye.domain.enums.service.SchoolService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -41,8 +37,14 @@ public class SchoolServiceImplementation implements SchoolService {
     }
 
     @Override
-    public List<School> getAllSchool() {
-        return schoolRepository.findAll();
+    public ResponseEntity<?> getAllSchool() {
+        List<School> schools = schoolRepository.findAll();
+        if (!schools.isEmpty()) {
+            return ResponseEntity.ok(schools);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("No schools found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override

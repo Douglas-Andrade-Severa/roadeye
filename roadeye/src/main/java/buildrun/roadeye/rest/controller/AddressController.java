@@ -1,15 +1,14 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.domain.entity.SchoolAddress;
 import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.SchoolAddressDto;
 import buildrun.roadeye.rest.dto.UserAddressDto;
-import buildrun.roadeye.rest.service.AddressService;
+import buildrun.roadeye.domain.enums.service.AddressService;
 import buildrun.roadeye.rest.dto.AddressUpdateDto;
-import buildrun.roadeye.rest.service.SchoolAddressService;
-import buildrun.roadeye.rest.service.UserAddressService;
+import buildrun.roadeye.domain.enums.service.SchoolAddressService;
+import buildrun.roadeye.domain.enums.service.UserAddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -43,7 +42,7 @@ public class AddressController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "addresses found successfully"),
     })
-    public ResponseEntity<List<Address>> listAddress() {
+    public ResponseEntity<?>  listAddress() {
         return ResponseEntity.ok(addressService.getAllAddress());
     }
 
@@ -93,9 +92,10 @@ public class AddressController {
     @Operation(summary = "Get full user/address", description = "Search all registered users and addresses", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User/Address found successfully"),
-            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "User/Address not found")
     })
-    public ResponseEntity<List<UserAddress>> listUsersAddress() {
+    public ResponseEntity<?> listUsersAddress() {
         return ResponseEntity.ok(userAddressService.getAllUsersAddress());
     }
 
@@ -159,7 +159,7 @@ public class AddressController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "School/Address found successfully"),
     })
-    public ResponseEntity<List<SchoolAddress>> listSchools() {
+    public ResponseEntity<?> listSchools() {
         return ResponseEntity.ok(schoolAddressService.getAllSchoolAddress());
     }
 

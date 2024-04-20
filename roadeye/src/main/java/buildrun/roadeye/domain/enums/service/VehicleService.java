@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.service;
+package buildrun.roadeye.domain.enums.service;
 
 import buildrun.roadeye.domain.entity.Vehicle;
 import buildrun.roadeye.rest.dto.VehicleDto;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface VehicleService {
     VehicleDto createVehicle(VehicleDto vehicleDto);
 
-    List<Vehicle> getAllVehicle();
+    ResponseEntity<?> getAllVehicle();
 
     ResponseEntity<?> deleteVehicle(Long vehicleId);
 

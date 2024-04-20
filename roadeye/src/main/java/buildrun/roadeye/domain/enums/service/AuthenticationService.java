@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.service;
+package buildrun.roadeye.domain.enums.service;
 
 import buildrun.roadeye.rest.dto.LoginRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;

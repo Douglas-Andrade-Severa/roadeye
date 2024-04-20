@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.service;
+package buildrun.roadeye.domain.enums.service;
 
 import buildrun.roadeye.domain.entity.SchoolAddress;
 import buildrun.roadeye.domain.entity.UserAddress;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface SchoolAddressService {
-    List<SchoolAddress> getAllSchoolAddress();
+    ResponseEntity<?> getAllSchoolAddress();
 
     List<SchoolAddress> findAddressesBySchool_Id(Long schoolId);
 

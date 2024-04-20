@@ -1,11 +1,10 @@
-package buildrun.roadeye.rest.service.implementation;
+package buildrun.roadeye.domain.enums.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.repository.*;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.GeolocationDto;
-import buildrun.roadeye.rest.dto.UserDto;
-import buildrun.roadeye.rest.service.AddressService;
+import buildrun.roadeye.domain.enums.service.AddressService;
 import buildrun.roadeye.rest.dto.AddressUpdateDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -36,8 +35,14 @@ public class AddressServiceImplementation implements AddressService {
         this.schoolRepository = schoolRepository;
     }
     @Override
-    public List<Address> getAllAddress() {
-        return addressRepository.findAll();
+    public ResponseEntity<?> getAllAddress() {
+        List<Address> addresses = addressRepository.findAll();
+        if (!addresses.isEmpty()) {
+            return ResponseEntity.ok(addresses);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("No addresses found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override

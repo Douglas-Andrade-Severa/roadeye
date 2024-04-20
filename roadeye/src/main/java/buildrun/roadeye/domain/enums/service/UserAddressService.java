@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.service;
+package buildrun.roadeye.domain.enums.service;
 
 import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.domain.entity.User;
@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface UserAddressService {
     UserAddressDto createUserAddress(UserAddressDto userAddressDto);
 
-    List<UserAddress> getAllUsersAddress();
+    ResponseEntity<?> getAllUsersAddress();
 
     ResponseEntity<?> deleteUserAddress(Long userAddressId);
 

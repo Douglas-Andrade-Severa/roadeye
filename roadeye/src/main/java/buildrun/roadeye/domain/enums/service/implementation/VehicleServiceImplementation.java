@@ -1,13 +1,9 @@
-package buildrun.roadeye.rest.service.implementation;
+package buildrun.roadeye.domain.enums.service.implementation;
 
-import buildrun.roadeye.domain.entity.Address;
-import buildrun.roadeye.domain.entity.ErrorResponse;
-import buildrun.roadeye.domain.entity.User;
-import buildrun.roadeye.domain.entity.Vehicle;
+import buildrun.roadeye.domain.entity.*;
+import buildrun.roadeye.domain.enums.service.VehicleService;
 import buildrun.roadeye.domain.repository.VehicleRespository;
 import buildrun.roadeye.rest.dto.VehicleDto;
-import buildrun.roadeye.rest.service.VehicleService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -47,10 +42,15 @@ public class VehicleServiceImplementation implements VehicleService {
             throw new ResponseStatusException(ex.getStatusCode(), ex.getMessage());
         }
     }
-
     @Override
-    public List<Vehicle> getAllVehicle() {
-        return vehicleRespository.findAll();
+    public ResponseEntity<?> getAllVehicle() {
+        List<Vehicle> vehicles = vehicleRespository.findAll();
+        if (!vehicles.isEmpty()) {
+            return ResponseEntity.ok(vehicles);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("No vehicles found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override
