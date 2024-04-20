@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.dto.service;
+package buildrun.roadeye.rest.service;
 
 import buildrun.roadeye.rest.dto.LoginRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;

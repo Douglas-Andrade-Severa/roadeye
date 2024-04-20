@@ -1,9 +1,9 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.rest.service.implementation;
 
 import buildrun.roadeye.domain.entity.School;
 import buildrun.roadeye.domain.repository.SchoolRepository;
 import buildrun.roadeye.rest.dto.SchoolDto;
-import buildrun.roadeye.rest.dto.service.SchoolService;
+import buildrun.roadeye.rest.service.SchoolService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;

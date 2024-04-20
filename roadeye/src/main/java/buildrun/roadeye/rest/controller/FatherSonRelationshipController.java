@@ -2,7 +2,7 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.domain.entity.FatherSonRelationship;
 import buildrun.roadeye.rest.dto.FatherSonRelationshipDto;
-import buildrun.roadeye.rest.dto.service.FatherSonRelationshipService;
+import buildrun.roadeye.rest.service.FatherSonRelationshipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

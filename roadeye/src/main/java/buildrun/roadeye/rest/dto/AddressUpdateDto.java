@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.dto.service;
+package buildrun.roadeye.rest.dto;
 
 import buildrun.roadeye.domain.enums.StatusEnum;
 

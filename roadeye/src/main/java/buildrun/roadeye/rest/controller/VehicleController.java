@@ -2,7 +2,7 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.domain.entity.Vehicle;
 import buildrun.roadeye.rest.dto.VehicleDto;
-import buildrun.roadeye.rest.dto.service.VehicleService;
+import buildrun.roadeye.rest.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -48,9 +48,8 @@ public class VehicleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "vehicle deleted successfully"),
     })
-    public ResponseEntity<Void> deleteVehicle(@PathVariable Long vehicleId) {
-        vehicleService.deleteVehicle(vehicleId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteVehicle(@PathVariable Long vehicleId) {
+        return vehicleService.deleteVehicle(vehicleId);
     }
 
     @PutMapping("/{vehicleId}")
@@ -58,9 +57,8 @@ public class VehicleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "user updated successfully"),
     })
-    public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long vehicleId, @Validated @RequestBody VehicleDto updateVehicleDto) {
-        Vehicle updatedVehicle = vehicleService.updateVehicle(vehicleId, updateVehicleDto);
-        return ResponseEntity.ok(updatedVehicle);
+    public ResponseEntity<?> updateVehicle(@PathVariable Long vehicleId, @Validated @RequestBody VehicleDto updateVehicleDto) {
+        return vehicleService.updateVehicle(vehicleId, updateVehicleDto);
     }
 
     @GetMapping("/{vehicleId}")
@@ -68,8 +66,7 @@ public class VehicleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User ok"),
     })
-    public ResponseEntity<Vehicle> getUserById(@PathVariable Long vehicleId) {
-        Vehicle vehicle = vehicleService.getVehicleById(vehicleId);
-        return ResponseEntity.ok(vehicle);
+    public ResponseEntity<?> getUserById(@PathVariable Long vehicleId) {
+        return vehicleService.getVehicleById(vehicleId);
     }
 }

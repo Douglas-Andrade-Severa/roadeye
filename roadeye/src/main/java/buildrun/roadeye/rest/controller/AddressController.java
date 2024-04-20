@@ -6,15 +6,17 @@ import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.SchoolAddressDto;
 import buildrun.roadeye.rest.dto.UserAddressDto;
-import buildrun.roadeye.rest.dto.service.AddressService;
-import buildrun.roadeye.rest.dto.service.AddressUpdateDto;
-import buildrun.roadeye.rest.dto.service.SchoolAddressService;
-import buildrun.roadeye.rest.dto.service.UserAddressService;
+import buildrun.roadeye.rest.service.AddressService;
+import buildrun.roadeye.rest.dto.AddressUpdateDto;
+import buildrun.roadeye.rest.service.SchoolAddressService;
+import buildrun.roadeye.rest.service.UserAddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
+import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -52,13 +54,8 @@ public class AddressController {
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
             @ApiResponse(responseCode = "404", description = "Address not found")
     })
-    public ResponseEntity<String> deleteAddress(@PathVariable Long addressId) {
-        boolean deleted = addressService.deleteAddress(addressId);
-        if (deleted) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Address deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found");
-        }
+    public ResponseEntity<?> deleteAddress(@PathVariable Long addressId) {
+        return addressService.deleteAddress(addressId);
     }
     @PutMapping("/{addressId}")
     @Operation(summary = "Update Address by ID", description = "The address will be updated based on the ID.", method = "PUT")
@@ -82,19 +79,21 @@ public class AddressController {
         return addressService.getAddressResponseById(addressId);
     }
 
-    //User
+    // ***************************************************** User *****************************************************
     @PostMapping("/user/{userId}")
     @Operation(summary = "Create user address", description = "Enter address for user based on id provided", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Address created for user"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    private AddressDto createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId){
+    private ResponseEntity<?> createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId){
         return addressService.createAddressByUser(addressDto, userId);
     }
     @GetMapping("/user")
     @Operation(summary = "Get full user/address", description = "Search all registered users and addresses", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User/Address found successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
     public ResponseEntity<List<UserAddress>> listUsersAddress() {
         return ResponseEntity.ok(userAddressService.getAllUsersAddress());
@@ -103,11 +102,12 @@ public class AddressController {
     @DeleteMapping("/user/{userAddressId}")
     @Operation(summary = "Delete User/Address by ID", description = "deleted  User/Address will be deleted based on id.", method = "DEL")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = " User/Address deleted successfully"),
+            @ApiResponse(responseCode = "204", description = "User/Address deleted successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "User/Address not found")
     })
-    public ResponseEntity<Void> deleteUserAddress(@PathVariable Long userAddressId) {
-        userAddressService.deleteUserAddress(userAddressId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteUserAddress(@PathVariable Long userAddressId) {
+        return userAddressService.deleteUserAddress(userAddressId);
     }
 
     @PutMapping("/user/{userAddressId}")
@@ -115,41 +115,43 @@ public class AddressController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User/Address updated successfully"),
     })
-    public ResponseEntity<UserAddress> updateUserAddress(@PathVariable Long userAddressId, @Validated @RequestBody UserAddressDto updateUserAddressDto) {
-        UserAddress updatedUserAddress = userAddressService.updateUserAddress(userAddressId, updateUserAddressDto);
-        return ResponseEntity.ok(updatedUserAddress);
+    public ResponseEntity<?> updateUserAddress(@PathVariable Long userAddressId, @Validated @RequestBody UserAddressDto updateUserAddressDto) {
+        return userAddressService.updateUserAddress(userAddressId, updateUserAddressDto);
     }
     @GetMapping("/user/{userAddressId}")
     @Operation(summary = "Get User/Address by ID", description = "Retrieve User/Address information based on the provided ID.", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User/Address ok"),
     })
-    public ResponseEntity<UserAddress> getUserAddressById(@PathVariable Long userAddressId) {
-        UserAddress userAddress = userAddressService.getUserAddressById(userAddressId);
-        return ResponseEntity.ok(userAddress);
+    public ResponseEntity<?> getUserAddressById(@PathVariable Long userAddressId) {
+        return userAddressService.getUserAddressById(userAddressId);
     }
 
-    @GetMapping("/user/{userId}")
-    @Operation(summary = "Get Addresses by UserID", description = "Retrieve address information based on the provided UserID.", method = "GET")
+    @GetMapping("/users/{userId}")
+    @Operation(summary = "Get Addresses by User ID", description = "Retrieve address information based on the provided UserID. Returns a 404 error if no addresses are found.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User Addresses retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "No addresses found for the provided UserID")
     })
-    public ResponseEntity<List<UserAddress>> getUserAddressesByUserId(@PathVariable UUID userId) {
-        List<UserAddress> addresses = userAddressService.findAddressesByUser_Id(userId);
-        if(addresses.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getUserAddressesByUserId(@PathVariable UUID userId) {
+        try {
+            List<UserAddress> addresses = userAddressService.findAddressesByUser_Id(userId);
+            return ResponseEntity.ok(addresses);
+        } catch (EntityNotFoundException ex) {
+            ErrorMessage errorMessage = new ErrorMessage("No addresses found for the user with ID: " + userId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
         }
-        return ResponseEntity.ok(addresses);
     }
 
-    //School
+    // ***************************************************** School *****************************************************
     @PostMapping("/school/{schoolId}")
     @Operation(summary = "Create School address", description = "Enter address for school based on id provided.", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Address created for school"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "School/Address not found")
     })
-    private AddressDto createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId){
+    private ResponseEntity<?> createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId){
         return addressService.createAddressBySchool(addressDto, schoolId);
     }
     @GetMapping("/school")
@@ -165,43 +167,49 @@ public class AddressController {
     @Operation(summary = "Get School/Address by ID", description = "Retrieve School/Address information based on the provided ID.", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "School/Address ok"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "School/Address not found")
     })
-    public ResponseEntity<SchoolAddress> getSchoolAddressById(@PathVariable Long schoolAddressId) {
-        SchoolAddress schoolAddress = schoolAddressService.getUserAddressById(schoolAddressId);
-        return ResponseEntity.ok(schoolAddress);
+    public ResponseEntity<?> getSchoolAddressById(@PathVariable Long schoolAddressId) {
+        return schoolAddressService.getSchoolAddressById(schoolAddressId);
     }
 
-    @GetMapping("/school/{schoolId}")
+    @GetMapping("/schools/{schoolId}")
     @Operation(summary = "Get Addresses by School ID", description = "Retrieve address information based on the provided School ID.", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "School Addresses retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "No addresses found for the provided School ID")
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "School by ID not found")
     })
-    public ResponseEntity<List<SchoolAddress>> getUserAddressesBySchoolId(@PathVariable Long schoolId) {
-        List<SchoolAddress> addresses = schoolAddressService.findAddressesBySchool_Id(schoolId);
-        if(addresses.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getUserAddressesBySchoolId(@PathVariable Long schoolId) {
+        try{
+            List<SchoolAddress> addresses = schoolAddressService.findAddressesBySchool_Id(schoolId);
+            return ResponseEntity.ok(addresses);
+        } catch (EntityNotFoundException ex) {
+            ErrorMessage errorMessage = new ErrorMessage("No addresses found for the School with ID: " + schoolId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
         }
-        return ResponseEntity.ok(addresses);
     }
 
     @DeleteMapping("/school/{schoolAddressId}")
     @Operation(summary = "Delete School/Address by ID", description = "deleted  School/Address will be deleted based on id.", method = "DEL")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = " School/Address deleted successfully"),
+            @ApiResponse(responseCode = "204", description = "School/Address deleted successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "School/Address not found")
     })
-    public ResponseEntity<Void> deleteSchoolAddress(@PathVariable Long userAddressId) {
-        schoolAddressService.deleteUserAddress(userAddressId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteSchoolAddress(@PathVariable Long schoolAddressId) {
+        return schoolAddressService.deleteUserAddress(schoolAddressId);
     }
 
     @PutMapping("/school/{schoolAddressId}")
     @Operation(summary = "Update School/Address by ID", description = "The School/Address will be updated based on the ID.", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "School/Address updated successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "School/Address not found")
     })
-    public ResponseEntity<SchoolAddress> updateSchoolAddress(@PathVariable Long userAddressId, @Validated @RequestBody SchoolAddressDto updateSchoolAddressDto) {
-        SchoolAddress updateSchoolAddress = schoolAddressService.updateSchoolAddress(userAddressId, updateSchoolAddressDto);
-        return ResponseEntity.ok(updateSchoolAddress);
+    public ResponseEntity<?> updateSchoolAddress(@PathVariable Long schoolAddressId, @Validated @RequestBody SchoolAddressDto updateSchoolAddressDto) {
+        return schoolAddressService.updateSchoolAddress(schoolAddressId, updateSchoolAddressDto);
     }
 }

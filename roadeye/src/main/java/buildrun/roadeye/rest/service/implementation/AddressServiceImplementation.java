@@ -1,11 +1,12 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.rest.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.repository.*;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.GeolocationDto;
-import buildrun.roadeye.rest.dto.service.AddressService;
-import buildrun.roadeye.rest.dto.service.AddressUpdateDto;
+import buildrun.roadeye.rest.dto.UserDto;
+import buildrun.roadeye.rest.service.AddressService;
+import buildrun.roadeye.rest.dto.AddressUpdateDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -34,29 +35,21 @@ public class AddressServiceImplementation implements AddressService {
         this.schoolAddressRepository = schoolAddressRepository;
         this.schoolRepository = schoolRepository;
     }
-    public AddressDto createAddressByUser(AddressDto addressDto, UUID userId) {
-        User user = getUserById(userId);
-        Address address = createAddress(addressDto);
-        UserAddress userAddress = new UserAddress();
-        userAddress.setUser(user);
-        userAddress.setAddress(address);
-        userAddressRepository.save(userAddress);
-        return AddressDto.fromEntity(address);
-    }
-
     @Override
     public List<Address> getAllAddress() {
         return addressRepository.findAll();
     }
 
     @Override
-    public boolean deleteAddress(Long addressId) {
+    public ResponseEntity<?> deleteAddress(Long addressId) {
         Optional<Address> optionalAddress = addressRepository.findById(addressId);
         if (optionalAddress.isPresent()) {
             addressRepository.deleteById(addressId);
-            return true;
+            ErrorResponse errorResponse = new ErrorResponse("Address deleted successfully");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } else {
-            return false;
+            ErrorResponse errorResponse = new ErrorResponse("Address does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
     @Override
@@ -68,7 +61,8 @@ public class AddressServiceImplementation implements AddressService {
             Address updatedAddress = addressRepository.save(address);
             return ResponseEntity.ok(updatedAddress);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found.");
+            ErrorResponse errorResponse = new ErrorResponse("Address not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
 
@@ -81,26 +75,6 @@ public class AddressServiceImplementation implements AddressService {
             ErrorResponse errorResponse = new ErrorResponse("Address does not exist.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
-    }
-
-    @Override
-    public Address getUserById(Long addressId) {
-        return addressRepository.findById(addressId).orElseThrow(() -> new EntityNotFoundException("Address does not exist."));
-    }
-    @Override
-    public AddressDto createAddressBySchool(AddressDto addressDto, Long schoolId) {
-        School school = getSchoolById(schoolId);
-        Address address = createAddress(addressDto);
-        SchoolAddress schoolAddress = new SchoolAddress();
-        schoolAddress.setSchool(school);
-        schoolAddress.setAddress(address);
-        schoolAddressRepository.save(schoolAddress);
-        return AddressDto.fromEntity(address);
-    }
-
-    private User getUserById(UUID userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
     }
 
     private School getSchoolById(Long schoolId) {
@@ -152,6 +126,36 @@ public class AddressServiceImplementation implements AddressService {
         }
     }
 
+    public ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Address address = createAddress(addressDto);
+            UserAddress userAddress = new UserAddress();
+            userAddress.setUser(user);
+            userAddress.setAddress(address);
+            return ResponseEntity.ok(userAddressRepository.save(userAddress));
+        }else{
+            ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> createAddressBySchool(AddressDto addressDto, Long schoolId) {
+        Optional<School> optionalSchool = schoolRepository.findById(schoolId);
+        if (optionalSchool.isPresent()) {
+            School school = optionalSchool.get();
+            Address address = createAddress(addressDto);
+            SchoolAddress schoolAddress = new SchoolAddress();
+            schoolAddress.setSchool(school);
+            schoolAddress.setAddress(address);
+            return ResponseEntity.ok(schoolAddressRepository.save(schoolAddress));
+        }else{
+            ErrorResponse errorResponse = new ErrorResponse("School does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
     private String getFullAddress(String street, Long number, String neighborhood, String city, String state, String postCode, String country) {
         return street + " " + number + ", " + neighborhood + ", " + city + ", " + state + " " + postCode + ", " + country;
     }

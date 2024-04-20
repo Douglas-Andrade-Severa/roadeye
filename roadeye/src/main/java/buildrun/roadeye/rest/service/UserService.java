@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.dto.service;
+package buildrun.roadeye.rest.service;
 
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.rest.dto.UserDto;
@@ -17,7 +17,6 @@ public interface UserService {
 
     ResponseEntity<?>  updateUser(UUID userId, UserDto updateUserDto);
 
-    User getUserById(UUID userId);
     ResponseEntity<?> getUserResponseById(UUID userId);
 
     ResponseEntity<?> updateUserPassword(UUID userId, UserPasswordDto updateUserDto);

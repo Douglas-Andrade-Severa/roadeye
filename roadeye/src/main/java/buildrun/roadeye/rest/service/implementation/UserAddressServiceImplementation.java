@@ -1,16 +1,18 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.rest.service.implementation;
 
 import buildrun.roadeye.domain.entity.Address;
+import buildrun.roadeye.domain.entity.ErrorResponse;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.domain.repository.AddressRepository;
 import buildrun.roadeye.domain.repository.UserAddressRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.UserAddressDto;
-import buildrun.roadeye.rest.dto.service.UserAddressService;
+import buildrun.roadeye.rest.service.UserAddressService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -56,58 +58,63 @@ public class UserAddressServiceImplementation implements UserAddressService {
     }
 
     @Override
-    @Transactional
     public List<UserAddress> getAllUsersAddress() {
         return userAddressRepository.findAll();
     }
 
     @Override
-    @Transactional
-    public void deleteUserAddress(Long userAddressId) {
-        UserAddress userAddress = userAddressRepository.findById(userAddressId).orElseThrow(() -> new EntityNotFoundException("User or Address not found"));
-        userAddressRepository.delete(userAddress);
+    public ResponseEntity<?> deleteUserAddress(Long userAddressId) {
+        Optional<UserAddress> optionalUserAddress = userAddressRepository.findById(userAddressId);
+        if (optionalUserAddress.isPresent()) {
+            UserAddress userAddress = optionalUserAddress.get();
+            userAddressRepository.delete(userAddress);
+            ErrorResponse errorResponse = new ErrorResponse("User Address deleted successfully");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("User Address does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override
-    @Transactional
-    public UserAddress updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto) {
+    public ResponseEntity<?> updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto) {
         UUID userId = updateUserAddressDto.userId();
         Long addressId = updateUserAddressDto.addressId();
 
         Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
-
         Optional<Address> optionalAddress = addressRepository.findById(addressId);
-        if (optionalAddress.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Address not found");
-        }
-
         Optional<UserAddress> optionalUserAddress = userAddressRepository.findById(userAddressId);
         if (optionalUserAddress.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "UserAddress not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("UserAddress does not exist."));
+        }
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User does not exist."));
+        }
+        if (optionalAddress.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Address does not exist."));
         }
         User user = optionalUser.get();
         Address address = optionalAddress.get();
-
         UserAddress userAddress = optionalUserAddress.get();
         userAddress.setUser(user);
         userAddress.setAddress(address);
-
-        UserAddress savedAddress = userAddressRepository.save(userAddress);
-        return savedAddress;
+        return ResponseEntity.ok(userAddressRepository.save(userAddress));
     }
 
     @Override
-    @Transactional
-    public UserAddress getUserAddressById(Long userAddressId) {
-        return userAddressRepository.findById(userAddressId).orElseThrow(() -> new EntityNotFoundException("UserAddress not found"));
+    public ResponseEntity<?> getUserAddressById(Long userAddressId) {
+        UserAddress userAddress = userAddressRepository.findById(userAddressId).orElse(null);
+        if (userAddress != null) {
+            return ResponseEntity.ok(userAddress);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("User Address does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @Override
-    @Transactional
     public List<UserAddress> findAddressesByUser_Id(UUID userId) {
         return userAddressRepository.findByUser_Id(userId);
     }
+
 }

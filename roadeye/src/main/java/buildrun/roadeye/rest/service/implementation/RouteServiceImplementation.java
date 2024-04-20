@@ -1,8 +1,8 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.rest.service.implementation;
 
 import buildrun.roadeye.domain.entity.Route;
 import buildrun.roadeye.domain.repository.RouteRepository;
-import buildrun.roadeye.rest.dto.service.RouteService;
+import buildrun.roadeye.rest.service.RouteService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

@@ -1,13 +1,11 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.rest.service.implementation;
 
-import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.domain.entity.ErrorResponse;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
-import buildrun.roadeye.rest.dto.service.AddressUpdateDto;
-import buildrun.roadeye.rest.dto.service.UserService;
+import buildrun.roadeye.rest.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -89,11 +87,6 @@ public class UserServiceImplementation implements UserService {
             ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
-    }
-
-    @Override
-    public User getUserById(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(axNotFound));
     }
 
     @Override

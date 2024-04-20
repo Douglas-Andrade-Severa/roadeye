@@ -3,14 +3,13 @@ package buildrun.roadeye.rest.controller;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
-import buildrun.roadeye.rest.dto.service.UserService;
+import buildrun.roadeye.rest.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +65,8 @@ public class UserController {
     @Operation(summary = "Update user by ID", description = "The user will be updated based on the ID.", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "user updated successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<?> updateUser(@PathVariable UUID userId, @Validated @RequestBody UserDto updateUserDto) {
         return userService.updateUser(userId, updateUserDto);
@@ -75,6 +76,8 @@ public class UserController {
     @Operation(summary = "Update user password by ID", description = "The user password will be updated based on the user ID.", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User password has been updated successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<?> updateUserPassword(@PathVariable UUID userId, @Validated @RequestBody UserPasswordDto userPasswordDtoDto) {
         return userService.updateUserPassword(userId, userPasswordDtoDto);

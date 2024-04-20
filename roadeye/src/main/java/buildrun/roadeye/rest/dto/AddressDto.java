@@ -11,9 +11,7 @@ public record AddressDto(
         String country,
         String complement,
         Long number,
-        StatusEnum statusEnum,
-        Double latitude,
-        Double longitude
+        StatusEnum statusEnum
 ) {
     public static AddressDto fromEntity(Address address) {
         return new AddressDto(
@@ -25,9 +23,7 @@ public record AddressDto(
                 address.getCountry(),
                 address.getComplement(),
                 address.getNumber(),
-                address.getStatusEnum(),
-                address.getLatitude(),
-                address.getLongitude()
+                address.getStatusEnum()
         );
     }
 }

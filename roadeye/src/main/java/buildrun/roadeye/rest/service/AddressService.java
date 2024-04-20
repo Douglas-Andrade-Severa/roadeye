@@ -1,22 +1,22 @@
-package buildrun.roadeye.rest.dto.service;
+package buildrun.roadeye.rest.service;
 
 import buildrun.roadeye.domain.entity.Address;
+import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.AddressDto;
+import buildrun.roadeye.rest.dto.AddressUpdateDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface AddressService {
-    public AddressDto createAddressByUser(AddressDto addressDto, UUID userId);
+    public ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId);
 
     List<Address> getAllAddress();
 
-    boolean deleteAddress(Long addressId);
+    ResponseEntity<?> deleteAddress(Long addressId);
 
-    Address getUserById(Long addressId);
-
-    AddressDto createAddressBySchool(AddressDto addressDto, Long schoolId);
+    ResponseEntity<?> createAddressBySchool(AddressDto addressDto, Long schoolId);
 
     ResponseEntity<?> getAddressResponseById(Long addressId);
 

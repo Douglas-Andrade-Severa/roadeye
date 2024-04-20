@@ -1,9 +1,9 @@
 package buildrun.roadeye.rest.config;
 
 import buildrun.roadeye.domain.repository.*;
-import buildrun.roadeye.rest.dto.service.AddressService;
-import buildrun.roadeye.rest.dto.service.implementation.AddressServiceImplementation;
-import buildrun.roadeye.rest.dto.service.implementation.GoogleGeocodingService;
+import buildrun.roadeye.rest.service.AddressService;
+import buildrun.roadeye.rest.service.implementation.AddressServiceImplementation;
+import buildrun.roadeye.rest.service.implementation.GoogleGeocodingService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;

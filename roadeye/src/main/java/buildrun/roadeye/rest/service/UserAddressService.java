@@ -1,9 +1,10 @@
-package buildrun.roadeye.rest.dto.service;
+package buildrun.roadeye.rest.service;
 
 import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.UserAddressDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,11 +14,11 @@ public interface UserAddressService {
 
     List<UserAddress> getAllUsersAddress();
 
-    void deleteUserAddress(Long userAddressId);
+    ResponseEntity<?> deleteUserAddress(Long userAddressId);
 
-    UserAddress updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto);
+    ResponseEntity<?> updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto);
 
-    UserAddress getUserAddressById(Long userAddressId);
+    ResponseEntity<?> getUserAddressById(Long userAddressId);
 
     List<UserAddress> findAddressesByUser_Id(UUID userId);
 }

@@ -2,7 +2,7 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.domain.entity.School;
 import buildrun.roadeye.rest.dto.SchoolDto;
-import buildrun.roadeye.rest.dto.service.SchoolService;
+import buildrun.roadeye.rest.service.SchoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

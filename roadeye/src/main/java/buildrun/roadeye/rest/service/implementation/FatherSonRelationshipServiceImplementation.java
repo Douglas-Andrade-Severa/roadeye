@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.rest.service.implementation;
 
 import buildrun.roadeye.domain.entity.FatherSonRelationship;
 import buildrun.roadeye.domain.entity.User;
@@ -6,7 +6,7 @@ import buildrun.roadeye.domain.enums.RoleEnum;
 import buildrun.roadeye.domain.repository.FatherSonRelationshipRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.FatherSonRelationshipDto;
-import buildrun.roadeye.rest.dto.service.FatherSonRelationshipService;
+import buildrun.roadeye.rest.service.FatherSonRelationshipService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

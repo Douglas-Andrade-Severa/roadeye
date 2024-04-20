@@ -1,8 +1,9 @@
-package buildrun.roadeye.rest.dto.service;
+package buildrun.roadeye.rest.service;
 
 import buildrun.roadeye.domain.entity.SchoolAddress;
 import buildrun.roadeye.domain.entity.UserAddress;
 import buildrun.roadeye.rest.dto.SchoolAddressDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface SchoolAddressService {
 
     List<SchoolAddress> findAddressesBySchool_Id(Long schoolId);
 
-    void deleteUserAddress(Long userAddressId);
+    ResponseEntity<?> deleteUserAddress(Long userAddressId);
 
-    SchoolAddress getUserAddressById(Long schoolAddressId);
+    ResponseEntity<?> updateSchoolAddress(Long schoolAddressId, SchoolAddressDto updateSchoolAddressDto);
 
-    SchoolAddress updateSchoolAddress(Long schoolAddressId, SchoolAddressDto updateSchoolAddressDto);
+    ResponseEntity<?> getSchoolAddressById(Long schoolAddressId);
 }
