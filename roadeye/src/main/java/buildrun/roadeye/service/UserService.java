@@ -3,6 +3,7 @@ package buildrun.roadeye.service;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
+import buildrun.roadeye.rest.dto.UserUpdateDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface UserService {
 
     ResponseEntity<?>  deleteUser(UUID userId);
 
-    ResponseEntity<?>  updateUser(UUID userId, UserDto updateUserDto);
+    ResponseEntity<?>  updateUser(UUID userId, UserUpdateDto updateUserDto);
 
     ResponseEntity<?> getUserResponseById(UUID userId);
 

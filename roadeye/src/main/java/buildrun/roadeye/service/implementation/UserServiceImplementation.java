@@ -5,6 +5,7 @@ import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
+import buildrun.roadeye.rest.dto.UserUpdateDto;
 import buildrun.roadeye.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -69,11 +70,11 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updateUser(UUID userId, UserDto updateUserDto) {
+    public ResponseEntity<?> updateUser(UUID userId, UserUpdateDto updateUserDto) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            setUserService(user, updateUserDto);
+            setUserUpdateService(user, updateUserDto);
             return ResponseEntity.ok(userRepository.save(user));
         } else {
             ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
@@ -103,6 +104,13 @@ public class UserServiceImplementation implements UserService {
             ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+    }
+
+    private void setUserUpdateService(User user, UserUpdateDto userDto) {
+        user.setName(userDto.name());
+        user.setEmail(userDto.email());
+        user.setCpf(userDto.cpf());
+        user.setPhone(userDto.phone());
     }
 
     private void setUserService(User user, UserDto userDto) {

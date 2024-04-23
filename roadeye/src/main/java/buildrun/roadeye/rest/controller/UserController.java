@@ -2,6 +2,7 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
+import buildrun.roadeye.rest.dto.UserUpdateDto;
 import buildrun.roadeye.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -66,7 +67,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<?> updateUser(@PathVariable UUID userId, @Validated @RequestBody UserDto updateUserDto) {
+    public ResponseEntity<?> updateUser(@PathVariable UUID userId, @Validated @RequestBody UserUpdateDto updateUserDto) {
         return userService.updateUser(userId, updateUserDto);
     }
 
