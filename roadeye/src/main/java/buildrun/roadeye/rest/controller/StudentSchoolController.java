@@ -1,6 +1,5 @@
 package buildrun.roadeye.rest.controller;
 
-import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.StudentSchoolDto;
 import buildrun.roadeye.service.StudentSchoolService;
 import io.swagger.v3.oas.annotations.Operation;
