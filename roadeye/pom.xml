@@ -27,9 +27,9 @@
 			<properties>
 				<project.packaging>jar</project.packaging>
 				<tomcat.scope>compile</tomcat.scope>
-				<db.url>jdbc:mysql://database-roadeye.c70gcoy6kgyw.us-east-1.rds.amazonaws.com/roadeye</db.url>
+				<db.url>jdbc:mysql://localhost:3307/dbsistema</db.url>
 				<db.username>root</db.username>
-				<db.password>TMZAkDwDXIO5jOebbRpO</db.password>
+				<db.password>root</db.password>
 			</properties>
 		</profile>
 
