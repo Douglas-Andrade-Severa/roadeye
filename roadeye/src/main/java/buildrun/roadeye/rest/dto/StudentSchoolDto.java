@@ -1,4 +1,6 @@
 package buildrun.roadeye.rest.dto;
 
-public record StudentSchoolDto(Long school) {
+import java.util.UUID;
+
+public record StudentSchoolDto(UUID student, Long school) {
 }

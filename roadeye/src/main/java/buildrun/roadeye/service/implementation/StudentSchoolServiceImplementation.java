@@ -72,4 +72,57 @@ public class StudentSchoolServiceImplementation implements StudentSchoolService 
             throw new ResponseStatusException(ex.getStatusCode(), ex.getMessage());
         }
     }
+
+    @Override
+    public List<StudentSchool> findSchoolByUser_Id(UUID userId) {
+        return studentSchoolRepository.findByUser_Id(userId);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteStudentSchool(Long studentSchoolId) {
+        Optional<StudentSchool> optionalStudentSchool = studentSchoolRepository.findById(studentSchoolId);
+        if (optionalStudentSchool.isPresent()) {
+            studentSchoolRepository.deleteById(studentSchoolId);
+            ErrorResponse errorResponse = new ErrorResponse("School/Student deleted successfully");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("School/Student does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> updateStudentSchool(Long studentSchoolId, StudentSchoolDto schoolDto) {
+        Optional<StudentSchool> optionalStudentSchool = studentSchoolRepository.findById(studentSchoolId);
+        if (optionalStudentSchool.isPresent()) {
+            StudentSchool studentSchool = optionalStudentSchool.get();
+            User student = new User();
+            School school = new School();
+
+            Optional<User> userStudent = userRepository.findById(schoolDto.student());
+            Optional<School> schools = schoolRepository.findById(schoolDto.school());
+
+            if(userStudent.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User responsible not found."));
+            }else{
+                student = userStudent.get();
+                if (student.getRole() != RoleEnum.STUDENT) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User is not a " + RoleEnum.STUDENT.toString().toLowerCase()));
+                }
+            }
+
+            if(schools.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("School responsible not found."));
+            }else{
+                school = schools.get();
+            }
+
+            studentSchool.setUser(student);
+            studentSchool.setSchool(school);
+            return ResponseEntity.ok(studentSchoolRepository.save(studentSchool));
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse("Student/School not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
 }
