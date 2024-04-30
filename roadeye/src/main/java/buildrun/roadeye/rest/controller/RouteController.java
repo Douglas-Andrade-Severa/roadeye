@@ -1,33 +1,30 @@
 package buildrun.roadeye.rest.controller;
 
+import buildrun.roadeye.domain.entity.RouteRequest;
 import buildrun.roadeye.service.RouteService;
+import buildrun.roadeye.service.implementation.GoogleMapsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/route", produces = {"application/json"})
+@RequestMapping(value = "/routes", produces = {"application/json"})
 @Tag(name = "Route")
 @SecurityRequirement(name = "bearer-key")
 public class RouteController {
-    private final RouteService routeService;
+    private final GoogleMapsService googleMapsService;
 
-    public RouteController(RouteService routeService) {
-        this.routeService = routeService;
+    public RouteController(GoogleMapsService googleMapsService) {
+        this.googleMapsService = googleMapsService;
     }
 
-    @GetMapping
-    @Operation(summary = "Get full route", description = "Search all registered Routes", method = "GET")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Route found successfully"),
-    })
-    public ResponseEntity<?> ListOfAllRoutes() {
-        return ResponseEntity.ok(routeService.getAllRoutes());
+    @PostMapping
+    public ResponseEntity<String> computeRoutes(@RequestBody RouteRequest request) {
+        ResponseEntity<String> response = googleMapsService.computeRoutes(request);
+        return response;
     }
 }
