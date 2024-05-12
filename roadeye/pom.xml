@@ -27,9 +27,9 @@
 			<properties>
 				<project.packaging>jar</project.packaging>
 				<tomcat.scope>compile</tomcat.scope>
-				<db.url>jdbc:mysql://database-roadeye.c34wscewyoz7.sa-east-1.rds.amazonaws.com/roadeye</db.url>
+				<db.url>jdbc:mysql://localhost:3307/dbsistema</db.url>
 				<db.username>root</db.username>
-				<db.password>qmiYLcZ6weC3oMHb9iXR</db.password>
+				<db.password>root</db.password>
 			</properties>
 		</profile>
 
@@ -105,8 +105,14 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.1.0</version>
+            <scope>compile</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
