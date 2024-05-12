@@ -7,7 +7,7 @@ public enum StudentStatus {
     IWONTGO("Não irei"),           //Não irei
     ONEWAYONLY("Somente ida"),     //Somente ida
     ONLYAROUND("Somente a volta"), //Somente volta
-    ROUNDTRIP("Ida e volta");      //Ida e volta
+    ROUNDTRIP("Ida e volta");      //Ida e voltar
 
     private String routeStatus;
     StudentStatus(String routeStatus) {
