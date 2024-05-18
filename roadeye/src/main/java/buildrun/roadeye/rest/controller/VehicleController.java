@@ -1,7 +1,7 @@
 package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.rest.dto.VehicleDto;
-import buildrun.roadeye.service.VehicleService;
+import buildrun.roadeye.rest.dto.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

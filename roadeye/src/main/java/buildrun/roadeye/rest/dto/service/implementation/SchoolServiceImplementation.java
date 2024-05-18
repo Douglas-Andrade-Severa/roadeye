@@ -1,10 +1,10 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.ErrorResponse;
 import buildrun.roadeye.domain.entity.School;
 import buildrun.roadeye.domain.repository.SchoolRepository;
 import buildrun.roadeye.rest.dto.SchoolDto;
-import buildrun.roadeye.service.SchoolService;
+import buildrun.roadeye.rest.dto.service.SchoolService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

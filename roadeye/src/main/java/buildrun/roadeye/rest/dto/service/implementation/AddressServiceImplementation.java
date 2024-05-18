@@ -1,10 +1,10 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.repository.*;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.GeolocationDto;
-import buildrun.roadeye.service.AddressService;
+import buildrun.roadeye.rest.dto.service.AddressService;
 import buildrun.roadeye.rest.dto.AddressUpdateDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;

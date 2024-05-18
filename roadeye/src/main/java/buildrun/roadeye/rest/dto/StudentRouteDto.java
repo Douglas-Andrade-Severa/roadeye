@@ -1,8 +1,10 @@
 package buildrun.roadeye.rest.dto;
 
-import buildrun.roadeye.domain.enums.ConfimationStudentEnum;
-import buildrun.roadeye.domain.enums.StudentStatus;
-import buildrun.roadeye.domain.enums.StatusEnum;
+import buildrun.roadeye.domain.enums.PeriodEnum;
+import buildrun.roadeye.domain.enums.StudentStatusEnum;
 
-public record StudentRouteDto(Long school, StudentStatus studentStatus) {
+import java.time.LocalDate;
+import java.util.Date;
+
+public record StudentRouteDto(Long school, StudentStatusEnum studentStatusEnum, PeriodEnum periodEnum, LocalDate localDate) {
 }

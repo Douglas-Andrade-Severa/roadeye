@@ -1,8 +1,9 @@
 package buildrun.roadeye.domain.entity;
 
 import buildrun.roadeye.domain.enums.ConfimationStudentEnum;
-import buildrun.roadeye.domain.enums.StatusRoute;
-import buildrun.roadeye.domain.enums.StudentStatus;
+import buildrun.roadeye.domain.enums.PeriodEnum;
+import buildrun.roadeye.domain.enums.StatusRouteEnum;
+import buildrun.roadeye.domain.enums.StudentStatusEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,15 +32,19 @@ public class StudentRoute {
 
     @Column(nullable = false, name = "status_student")
     @Enumerated(EnumType.STRING)
-    private StudentStatus studentStatus;
+    private StudentStatusEnum studentStatusEnum;
 
     @Column(nullable = false, name = "status_route")
     @Enumerated(EnumType.STRING)
-    private StatusRoute statusRoute;
+    private StatusRouteEnum statusRouteEnum;
 
     @Column(nullable = false, name = "status_confirmation_student")
     @Enumerated(EnumType.STRING)
     private ConfimationStudentEnum confimationStudentEnum;
+
+    @Column(nullable = false, name = "period")
+    @Enumerated(EnumType.STRING)
+    private PeriodEnum periodEnum;
 
     @Column(name = "image_data", columnDefinition = "LONGBLOB")
     private byte[] imageData;

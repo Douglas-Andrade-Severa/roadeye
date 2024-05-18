@@ -1,4 +1,4 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.enums.*;
@@ -7,7 +7,7 @@ import buildrun.roadeye.domain.repository.StudentRouteRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
-import buildrun.roadeye.service.StudentRouteService;
+import buildrun.roadeye.rest.dto.service.StudentRouteService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,27 +68,32 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
             }
             school = schools.get();
 
-//            // Verificar se já existe uma associação entre o usuário e a escola
-//            boolean alreadyExists = studentSchoolRepository.existsByUserAndSchool(student, school);
-//            if (alreadyExists) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User is already associated with the school."));
-//            }
+            //Verificar se o enum existe
+            if (StudentStatusEnum.isStudentStatusValid(routeDto.studentStatusEnum()) == false) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("The student status entered is invalid."));
+            }
 
             //Verificar se o enum existe
-            if (StudentStatus.isStudentStatusValid(routeDto.studentStatus()) == false) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("The student status entered is invalid."));
+            if (PeriodEnum.isPeriodValid(routeDto.periodEnum()) == false) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("The period entered is invalid."));
+            }
+
+            //Verificar se a data foi informada
+            if (routeDto.localDate() == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("The date entered is invalid."));
             }
 
             // Criar e salvar a associação entre o usuário e a escola
             StudentRoute studentRoute = new StudentRoute();
             studentRoute.setUser(student);
             studentRoute.setSchool(school);
-            studentRoute.setLocalDate(LocalDate.now());
-            studentRoute.setStudentStatus(routeDto.studentStatus());
-            studentRoute.setStatusRoute(StatusRoute.WAITINGTOSTART);
+            studentRoute.setLocalDate(routeDto.localDate());
+            studentRoute.setPeriodEnum(routeDto.periodEnum());
+            studentRoute.setStudentStatusEnum(routeDto.studentStatusEnum());
+            studentRoute.setStatusRouteEnum(StatusRouteEnum.WAITINGTOSTART);
             studentRoute.setConfimationStudentEnum(ConfimationStudentEnum.ABSENT);
-            if(studentRoute.getStudentStatus() == StudentStatus.IWONTGO){
-                studentRoute.setStatusRoute(StatusRoute.ROUTEFINISHED);
+            if(studentRoute.getStudentStatusEnum() == StudentStatusEnum.IWONTGO){
+                studentRoute.setStatusRouteEnum(StatusRouteEnum.ROUTEFINISHED);
                 studentRoute.setConfimationStudentEnum(ConfimationStudentEnum.CANCEL);
             }
             return ResponseEntity.ok(studentRouteRepository.save(studentRoute));
@@ -186,5 +191,10 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
             ErrorResponse errorResponse = new ErrorResponse("Student/Route not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+    }
+
+    @Override
+    public List<StudentRoute> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate) {
+        return studentRouteRepository.findByPeriodEnumAndLocalDateAndConfimationStudentEnumAndStudentStatusEnumNot(periodEnum, localDate, ConfimationStudentEnum.ABSENT, StudentStatusEnum.IWONTGO);
     }
 }

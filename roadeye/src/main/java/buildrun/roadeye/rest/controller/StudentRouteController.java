@@ -1,24 +1,24 @@
 package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.domain.entity.StudentRoute;
+import buildrun.roadeye.domain.enums.PeriodEnum;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
-import buildrun.roadeye.rest.dto.StudentRouteImagemUpateDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
-import buildrun.roadeye.service.StudentRouteService;
+import buildrun.roadeye.rest.dto.service.StudentRouteService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import org.springdoc.api.ErrorMessage;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -114,5 +114,21 @@ public class StudentRouteController {
     })
     private ResponseEntity<?> updateImage(@RequestParam("file") MultipartFile file, @PathVariable Long routeId){
         return studentRouteService.updateStudentRouteImagem(file, routeId);
+    }
+
+    @GetMapping("/routeByPeriodAndDate")
+    @Operation(summary = "Get Route by period and date", description = "It will return everything that will go in the period and date informed and ConfimationStudentEnum = ABSENT (User waiting for the bus.) and StudentStatusEnum != IWONTGO(I will not go).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Route retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "No route found for the provided SchoolID")
+    })
+    public ResponseEntity<?> getRouteByPeriodAndDate(@RequestParam PeriodEnum periodEnum, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate) {
+        try {
+            List<StudentRoute> studentRoutes = studentRouteService.getStudentRoutesByPeriodAndDate(periodEnum, localDate);
+            return ResponseEntity.ok(studentRoutes);
+        } catch (EntityNotFoundException ex) {
+            ErrorMessage errorMessage = new ErrorMessage("No route found for the period and date: " + periodEnum +","+localDate);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        }
     }
 }

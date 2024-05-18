@@ -1,7 +1,7 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
-import buildrun.roadeye.service.VehicleService;
+import buildrun.roadeye.rest.dto.service.VehicleService;
 import buildrun.roadeye.domain.repository.VehicleRespository;
 import buildrun.roadeye.rest.dto.VehicleDto;
 import jakarta.transaction.Transactional;
