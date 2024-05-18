@@ -68,7 +68,7 @@ public class AddressController {
     }
 
     @GetMapping("/{addressId}")
-    @Operation(summary = "Get Address by ID", description = "Retrieve address information based on the provided ID.", method = "GET")
+    @Operation(summary = "Get Address by ID", description = "Retrieve address information based on the provided ID...", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Address ok"),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
