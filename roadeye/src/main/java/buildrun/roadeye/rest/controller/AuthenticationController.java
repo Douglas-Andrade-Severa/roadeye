@@ -4,7 +4,7 @@ import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.LoginRequest;
 import buildrun.roadeye.rest.dto.LoginResponse;
-import buildrun.roadeye.rest.dto.service.AuthenticationService;
+import buildrun.roadeye.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

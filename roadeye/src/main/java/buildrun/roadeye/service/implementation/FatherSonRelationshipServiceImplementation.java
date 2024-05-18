@@ -1,8 +1,8 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.enums.RoleEnum;
-import buildrun.roadeye.rest.dto.service.FatherSonRelationshipService;
+import buildrun.roadeye.service.FatherSonRelationshipService;
 import buildrun.roadeye.domain.repository.FatherSonRelationshipRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.FatherSonRelationshipDto;

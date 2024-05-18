@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.enums.*;
@@ -7,7 +7,7 @@ import buildrun.roadeye.domain.repository.StudentRouteRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
-import buildrun.roadeye.rest.dto.service.StudentRouteService;
+import buildrun.roadeye.service.StudentRouteService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

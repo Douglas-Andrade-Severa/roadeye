@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.RouteRequest;
 import org.springframework.beans.factory.annotation.Value;
