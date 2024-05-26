@@ -7,6 +7,7 @@ import buildrun.roadeye.domain.repository.StudentRouteRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
+import buildrun.roadeye.rest.dto.StudentRouteWithAddresses;
 import buildrun.roadeye.service.StudentRouteService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -194,7 +195,84 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
     }
 
     @Override
-    public List<StudentRoute> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate) {
-        return studentRouteRepository.findByPeriodEnumAndLocalDateAndConfimationStudentEnumAndStudentStatusEnumNot(periodEnum, localDate, ConfimationStudentEnum.ABSENT, StudentStatusEnum.IWONTGO);
+    public List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate) {
+        List<Object[]> results = studentRouteRepository.findWithAddressesByPeriodEnumAndLocalDateAndConfimationStudentEnumAndStudentStatusEnumNot(
+                periodEnum.name(), localDate, ConfimationStudentEnum.ABSENT.name(), StudentStatusEnum.IWONTGO.name());
+
+        List<StudentRouteWithAddresses> studentRoutesWithAddresses = new ArrayList<>();
+
+        for (Object[] result : results) {
+            StudentRoute studentRoute = mapToStudentRoute(result);
+            Address schoolAddress = mapToAddress(result, false);
+            Address userAddress = mapToAddress(result, true);
+            studentRoutesWithAddresses.add(new StudentRouteWithAddresses(studentRoute, schoolAddress, userAddress));
+        }
+
+        return studentRoutesWithAddresses;
+    }
+
+    private StudentRoute mapToStudentRoute(Object[] result) {
+        StudentRoute studentRoute = new StudentRoute();
+        studentRoute.setId((Long) result[0]);
+        studentRoute.setConfimationStudentEnum(ConfimationStudentEnum.valueOf((String) result[1]));
+        studentRoute.setImageData((byte[]) result[2]);
+        studentRoute.setLocalDate(((java.sql.Date) result[3]).toLocalDate());
+        studentRoute.setStatusRouteEnum(StatusRouteEnum.valueOf((String) result[4]));
+        studentRoute.setStudentStatusEnum(StudentStatusEnum.valueOf((String) result[5]));
+        studentRoute.setSchool(mapToSchool((Long) result[6]));
+        System.out.println("Tipo de objeto no resultado: " + result[7]);
+        byte[] byteArray = (byte[]) result[7];
+        ByteBuffer byteBuffer = ByteBuffer.wrap(byteArray);
+        long mostSigBits = byteBuffer.getLong();
+        long leastSigBits = byteBuffer.getLong();
+        UUID userId = new UUID(mostSigBits, leastSigBits);
+//        UUID userId = UUID.nameUUIDFromBytes(byteArray);
+        System.out.println(userId);
+        studentRoute.setUser(mapToUser(userId));
+        studentRoute.setPeriodEnum(PeriodEnum.valueOf((String) result[8]));
+        return studentRoute;
+    }
+
+    private Address mapToAddress(Object[] result, boolean user) {
+        Address address = new Address();
+        if(!user){
+            address.setStreet((String) result[9]);
+            address.setCity((String) result[10]);
+            address.setState((String) result[11]);
+            address.setPostCode((String) result[12]);
+            address.setLatitude((Double) result[13]);
+            address.setLongitude((Double) result[14]);
+            address.setId((Long) result[15]);
+            address.setNeighborhood((String) result[16]);
+            address.setCountry((String) result[17]);
+            address.setComplement((String) result[18]);
+            address.setNumber((Long) result[19]);
+            address.setStatusEnum(StatusEnum.valueOf((String) result[20]));
+        }else{
+            address.setStreet((String) result[21]);
+            address.setCity((String) result[22]);
+            address.setState((String) result[23]);
+            address.setPostCode((String) result[24]);
+            address.setLatitude((Double) result[25]);
+            address.setLongitude((Double) result[26]);
+            address.setId((Long) result[27]);
+            address.setNeighborhood((String) result[28]);
+            address.setCountry((String) result[29]);
+            address.setComplement((String) result[30]);
+            address.setNumber((Long) result[31]);
+            address.setStatusEnum(StatusEnum.valueOf((String) result[32]));
+        }
+        return address;
+    }
+
+    private User mapToUser(UUID userId) {
+        System.out.println(userId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+        return optionalUser.get();
+    }
+
+    private School mapToSchool(Long schoolId) {
+        Optional<School> optionalSchool = schoolRepository.findById(schoolId);
+        return optionalSchool.get();
     }
 }

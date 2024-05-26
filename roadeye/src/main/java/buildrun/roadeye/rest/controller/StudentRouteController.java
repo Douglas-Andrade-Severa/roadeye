@@ -4,6 +4,7 @@ import buildrun.roadeye.domain.entity.StudentRoute;
 import buildrun.roadeye.domain.enums.PeriodEnum;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
+import buildrun.roadeye.rest.dto.StudentRouteWithAddresses;
 import buildrun.roadeye.service.StudentRouteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -122,12 +123,13 @@ public class StudentRouteController {
             @ApiResponse(responseCode = "200", description = "Route retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "No route found for the provided SchoolID")
     })
-    public ResponseEntity<?> getRouteByPeriodAndDate(@RequestParam PeriodEnum periodEnum, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate) {
+    public ResponseEntity<?> getRouteByPeriodAndDate(@RequestParam PeriodEnum periodEnum,
+                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate) {
         try {
-            List<StudentRoute> studentRoutes = studentRouteService.getStudentRoutesByPeriodAndDate(periodEnum, localDate);
+            List<StudentRouteWithAddresses> studentRoutes = studentRouteService.getStudentRoutesByPeriodAndDate(periodEnum, localDate);
             return ResponseEntity.ok(studentRoutes);
         } catch (EntityNotFoundException ex) {
-            ErrorMessage errorMessage = new ErrorMessage("No route found for the period and date: " + periodEnum +","+localDate);
+            ErrorMessage errorMessage = new ErrorMessage("No route found for the period and date: " + periodEnum + "," + localDate);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
         }
     }
