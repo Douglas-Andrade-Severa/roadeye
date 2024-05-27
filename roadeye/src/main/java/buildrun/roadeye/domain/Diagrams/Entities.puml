@@ -1,0 +1,111 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+
+enum ColorEnum {
+    WHITE
+    BLACK
+    RED
+    BLUE
+    YELLOW
+    GREEN
+    SILVER
+    GRAY
+    ORANGE
+    PINK
+    BROWN
+    PURPLE
+    - value
+    + voidColorEnum(String value)
+    + String getValue()
+}
+enum ConfimationStudentEnum {
+    CONFIRM
+    CANCEL
+    ABSENT
+    NOTENTER
+    - String confimationStudent;
+    + boolean ConfimationStudentEnum(String confimationStudent)
+}
+
+enum PeriodEnum {
+    MORNING
+    EVENING
+    NIGHT
+    - String periodEnum;
+    + void PeriodEnum(String PeriodEnum)
+    + boolean isPeriodValid(this periodEnum)
+}
+
+enum RoleEnum {
+    ADMIN
+    USER
+    DRIVER
+    RESPONSIBLE
+    STUDENT
+    - String role;
+    + void RoleEnum(String role)
+    + boolean contains(String role)
+}
+
+enum StatusEnum {
+    ACTIVATE
+    DISABLED
+    - String status;
+    + void StatusEnum(String status)
+    + String getStatus()
+}
+
+enum StatusRouteEnum {
+    WAITINGTOSTART
+    ROUTESTARTED
+    ROUTEFINISHED
+    - String routeStatus;
+    + void StatusRouteEnum(String routeStatus)
+    + boolean isRouteStatusValid(this statusRouteEnum)
+}
+
+enum StudentStatusEnum {
+    IWONTGO
+    ONEWAYONLY
+    ONLYAROUND
+    ROUNDTRIP
+    + String routeStatus;
+    + void StudentStatusEnum(String routeStatus)
+    + boolean isStudentStatusValid(this studentStatusEnum)
+}
+
+enum TypeVehicleEnum {
+    URBANBUS
+    BUSRODOVIARIO
+    MICROBUS
+    VAN
+    PASSING_CAR
+    TRUCK
+    MOTORCYCLE
+    BICYCLE
+    TRACTOR
+    OTHER
+    - int maximumCapacity;
+    + void TypeVehicleEnum(int maximumCapacity)
+    + int getMaximumCapacity()
+}
+
+@enduml
