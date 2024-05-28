@@ -40,7 +40,7 @@ public class StudentRouteController {
             @ApiResponse(responseCode = "201", description = "Relationship between route and student created successfully"),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    private ResponseEntity<?> createStudentRoute(@RequestBody StudentRouteDto routeDtoDto, @PathVariable UUID userId){
+    public ResponseEntity<?> createStudentRoute(@RequestBody StudentRouteDto routeDtoDto, @PathVariable UUID userId){
         return studentRouteService.createStudentRoute(routeDtoDto, userId);
     }
 
@@ -113,7 +113,7 @@ public class StudentRouteController {
             @ApiResponse(responseCode = "201", description = "Student image was saved successfully."),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    private ResponseEntity<?> updateImage(@RequestParam("file") MultipartFile file, @PathVariable Long routeId){
+    public ResponseEntity<?> updateImage(@RequestParam("file") MultipartFile file, @PathVariable Long routeId){
         return studentRouteService.updateStudentRouteImagem(file, routeId);
     }
 

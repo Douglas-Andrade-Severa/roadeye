@@ -27,7 +27,7 @@ public class VehicleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Vehicle create"),
     })
-    private VehicleDto createVehicle(@RequestBody VehicleDto vehicleDto){
+    public VehicleDto createVehicle(@RequestBody VehicleDto vehicleDto){
         return vehicleService.createVehicle(vehicleDto);
     }
 

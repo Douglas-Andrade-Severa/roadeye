@@ -27,7 +27,7 @@ public class FatherSonRelationshipController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Father Son Relationship create"),
     })
-    private ResponseEntity<?> fatherSonRelationshipDto(@RequestBody FatherSonRelationshipDto fatherSonRelationship){
+    public ResponseEntity<?> fatherSonRelationshipDto(@RequestBody FatherSonRelationshipDto fatherSonRelationship){
         return fatherSonRelationshipService.createFatherSonRelationship(fatherSonRelationship);
     }
 

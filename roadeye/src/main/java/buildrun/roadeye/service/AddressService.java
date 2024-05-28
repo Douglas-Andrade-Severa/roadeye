@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AddressService {
-    public ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId);
+    ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId);
 
     ResponseEntity<?>  getAllAddress();
 

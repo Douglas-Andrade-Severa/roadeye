@@ -18,7 +18,579 @@ Object[] elementData
 size()
 }
 
+class SchoolServiceImplementation implements SchoolService {
+    - final SchoolRepository schoolRepository;
+    + SchoolServiceImplementation(SchoolRepository schoolRepository)
+    + SchoolDto createSchool(SchoolDto schoolDto)
+    + ResponseEntity<?> getAllSchool()
+    + ResponseEntity<?> deleteSchool(Long schoolId)
+    + ResponseEntity<?> updateSchool(Long schoolId, SchoolDto schoolDto)
+    + ResponseEntity<?> getSchoolById(Long schoolId)
+}
 
+class SchoolAddressServiceImplementation implements SchoolAddressService {
+    - final SchoolAddressRepository schoolAddressRepository;
+    - final SchoolRepository schoolRepository;
+    - final AddressRepository addressRepository;
+    + SchoolAddressServiceImplementation(SchoolAddressRepository schoolAddressRepository, SchoolRepository schoolRepository, AddressRepository addressRepository)
+    + ResponseEntity<?> getAllSchoolAddress()
+    + List<SchoolAddress> findAddressesBySchool_Id(Long schoolId)
+    + ResponseEntity<?> deleteUserAddress(Long userAddressId)
+    + ResponseEntity<?> updateSchoolAddress(Long schoolAddressId, SchoolAddressDto updateSchoolAddressDto)
+    + ResponseEntity<?> getSchoolAddressById(Long schoolAddressId)
+}
+
+class GoogleMapsService {
+    - String apiKey;
+    + ResponseEntity<String> computeRoutes(RouteRequest request)
+}
+class GoogleGeocodingService {
+    - String apiKey;
+    - final RestTemplate restTemplate;
+    + GoogleGeocodingService(RestTemplate restTemplate)
+    + GeolocationDto getGeolocation(String address)
+}
+class FatherSonRelationshipServiceImplementation implements FatherSonRelationshipService {
+    - final FatherSonRelationshipRepository fatherSonRelationshipRepository;
+    - final UserRepository userRepository;
+    + FatherSonRelationshipServiceImplementation(FatherSonRelationshipRepository fatherSonRelationshipRepository, UserRepository userRepository)
+    + ResponseEntity<?> getAllFatherSonRelationship()
+    + ResponseEntity<?> findFatherSonRelationshipByUserId(FatherSonRelationshipDto fatherSonRelationshipDto)
+    + ResponseEntity<?> getFatherSonRelationshipById(Long fatherSonRelationshipId)
+    + ResponseEntity<?> deleteFatherSonRelationship(Long fatherSonRelationshipId)
+    + ResponseEntity<?> updateFatherSonRelationship(Long fatherSonRelationshipId, FatherSonRelationshipDto fatherSonRelationshipDto)
+    + ResponseEntity<?> createFatherSonRelationship(FatherSonRelationshipDto fatherSonRelationshipDto)
+}
+
+
+class AuthenticationServiceImplementation implements AuthenticationService {
+    - final UserRepository userRepository;
+    + AuthenticationServiceImplementation(UserRepository userRepository)
+    + UserDetails loadUserByUsername(String login)
+    + String getToken(LoginRequest authDto)
+    + String generateToken(User user)
+    + String validTokenJwt(String token)
+    - Instant generateExpiryDate()
+}
+
+class AddressServiceImplementation implements AddressService {
+    - final AddressRepository addressRepository;
+    - final UserRepository userRepository;
+    - final GoogleGeocodingService geocodingService;
+    - final UserAddressRepository userAddressRepository;
+    - final SchoolAddressRepository schoolAddressRepository;
+    - final SchoolRepository schoolRepository;
+    + AddressServiceImplementation(AddressRepository addressRepository, UserRepository userRepository, GoogleGeocodingService geocodingService, UserAddressRepository userAddressRepository, SchoolAddressRepository schoolAddressRepository, SchoolRepository schoolRepository)
+    + ResponseEntity<?> getAllAddress()
+    + ResponseEntity<?> deleteAddress(Long addressId)
+    + ResponseEntity<?> updateAddress(Long addressId, AddressUpdateDto addressUpdateDto)
+    + ResponseEntity<?> getAddressResponseById(Long addressId)
+    - School getSchoolById(Long schoolId)
+    - Address createAddress(AddressDto addressDto)
+    - void setAddressDetailsUpdate(Address address, AddressUpdateDto addressUpdateDto)
+    - void setAddressDetails(Address address, AddressDto addressDto)
+    + ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId)
+    + ResponseEntity<?> createAddressBySchool(AddressDto addressDto, Long schoolId)
+    + String getFullAddress(String street, Long number, String neighborhood, String city, String state, String postCode, String country)
+}
+
+
+interface VehicleService {
+    VehicleDto createVehicle(VehicleDto vehicleDto);
+    ResponseEntity<?> getAllVehicle();
+    ResponseEntity<?> deleteVehicle(Long vehicleId);
+    ResponseEntity<?> updateVehicle(Long vehicleId, VehicleDto updateVehicleDto);
+    ResponseEntity<?> getVehicleById(Long vehicleId);
+}
+
+interface UserService {
+    UserDto createUser(UserDto userDto);
+    ResponseEntity<?> getAllUsers();
+    ResponseEntity<?>  deleteUser(UUID userId);
+    ResponseEntity<?>  updateUser(UUID userId, UserUpdateDto updateUserDto);
+    ResponseEntity<?> getUserResponseById(UUID userId);
+    ResponseEntity<?> updateUserPassword(UUID userId, UserPasswordDto updateUserDto);
+}
+
+interface UserAddressService {
+    UserAddressDto createUserAddress(UserAddressDto userAddressDto);
+    ResponseEntity<?> getAllUsersAddress();
+    ResponseEntity<?> deleteUserAddress(Long userAddressId);
+    ResponseEntity<?> updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto);
+    ResponseEntity<?> getUserAddressById(Long userAddressId);
+    List<UserAddress> findAddressesByUser_Id(UUID userId);
+}
+
+interface StudentRouteService {
+    ResponseEntity<?> getAllStudentRoute();
+    ResponseEntity<?> createStudentRoute(StudentRouteDto schoolDto, UUID userId);
+    List<StudentRoute> findSchoolByUser_Id(UUID userId);
+    ResponseEntity<?> deleteStudentRoute(Long studentSchoolId);
+    ResponseEntity<?> updateStudentRoute(Long studentSchoolId, StudentRouteUpdateDto schoolDto);
+    List<StudentRoute> findSchoolBySchool_Id(Long schoolId);
+    ResponseEntity<?> updateStudentRouteImagem(MultipartFile file, Long routeId);
+    List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate);
+}
+
+interface SchoolService {
+    SchoolDto createSchool(SchoolDto schoolDto);
+    ResponseEntity<?> getAllSchool();
+    ResponseEntity<?> deleteSchool(Long schoolId);
+    ResponseEntity<?> updateSchool(Long schoolId, SchoolDto schoolDto);
+    ResponseEntity<?> getSchoolById(Long schoolId);
+}
+
+interface SchoolAddressService {
+    ResponseEntity<?> getAllSchoolAddress();
+    List<SchoolAddress> findAddressesBySchool_Id(Long schoolId);
+    ResponseEntity<?> deleteUserAddress(Long userAddressId);
+    ResponseEntity<?> updateSchoolAddress(Long schoolAddressId, SchoolAddressDto updateSchoolAddressDto);
+    ResponseEntity<?> getSchoolAddressById(Long schoolAddressId);
+}
+
+interface FatherSonRelationshipService {
+    ResponseEntity<?> getAllFatherSonRelationship();
+    ResponseEntity<?> getFatherSonRelationshipById(Long fatherSonRelationshipId);
+    ResponseEntity<?> findFatherSonRelationshipByUserId(FatherSonRelationshipDto fatherSonRelationshipDto);
+    ResponseEntity<?> deleteFatherSonRelationship(Long fatherSonRelationshipId);
+    ResponseEntity<?> updateFatherSonRelationship(Long fatherSonRelationshipId, FatherSonRelationshipDto fatherSonRelationshipDto);
+    ResponseEntity<?> createFatherSonRelationship(FatherSonRelationshipDto fatherSonRelationship);
+}
+interface AuthenticationService extends UserDetailsService {
+    String getToken(LoginRequest authDto);
+    String validTokenJwt(String token);
+}
+
+interface AddressService {
+    ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId);
+    ResponseEntity<?>  getAllAddress();
+    ResponseEntity<?> deleteAddress(Long addressId);
+    ResponseEntity<?> createAddressBySchool(AddressDto addressDto, Long schoolId);
+    ResponseEntity<?> getAddressResponseById(Long addressId);
+    ResponseEntity<?> updateAddress(Long addressId, AddressUpdateDto addressUpdateDto);
+}
+
+
+
+class SwaggerConfig {
+    + OpenAPI openAPI()
+}
+class SecurityFilter extends OncePerRequestFilter {
+    - final AuthenticationService authenticationService;
+    - final UserRepository userRepository;
+    + SecurityFilter(AuthenticationService authenticationService, UserRepository userRepository)
+    # void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    + String extractsTokenHeader(HttpServletRequest request)
+}
+class SecurityConfiguration {
+    - final SecurityFilter securityFilter;
+    + SecurityConfiguration(SecurityFilter securityFilter)
+    + SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
+    + PasswordEncoder passwordEncoder()
+    + AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+    - static final String[] AUTH_WHITELIST
+}
+class InitialSystemConfig implements CommandLineRunner {
+    - final UserRepository userRepository;
+    - final VehicleRespository vehicleRespository;
+    - final PasswordEncoder passwordEncoder;
+    + InitialSystemConfig(UserRepository userRepository, VehicleRespository vehicleRespository, PasswordEncoder passwordEncoder)
+    + void run(String... args) throws Exception
+    - User createUserIfNotExist(String login, String name, String password, RoleEnum role, String lastName, String email, String cpf, String phone, String photo, StatusEnum status)
+    - void createVehicleIfNotExist(Long id, String brand, String model, String licensePlate, String numberRenavam, int yearManufacturing, TypeVehicleEnum typeVehicleEnum, ColorEnum colorEnum, StatusEnum statusEnum)
+}
+class CorsConfig implements WebMvcConfigurer {
+    + void addCorsMappings(CorsRegistry registry)
+}
+class AppConfig {
+    + RestTemplate restTemplate()
+    + AddressService addressService(AddressRepository addressRepository, UserRepository userRepository, GoogleGeocodingService geocodingService, UserAddressRepository userAddressRepository, SchoolAddressRepository schoolAddressRepository, SchoolRepository schoolRepository)
+}
+
+class VehicleDto() {
+    String brand,
+    String model,
+    String licensePlate,
+    String numberRenavam,
+    int yearManufacturing,
+    int capacityPassengers,
+    TypeVehicleEnum typeVehicleEnum,
+    ColorEnum colorEnum,
+    StatusEnum statusEnum
+    + static VehicleDto fromEntity(Vehicle vehicle)
+}
+
+
+class LoginRequest() {
+ String login,
+ String password
+}
+
+class UserUpdateDto() {
+    String name,
+    String email,
+    String phone,
+    String cpf
+}
+
+class UserPasswordDto() {
+    String password
+}
+
+class UserDto() {
+    String name,
+    String login,
+    String password,
+    RoleEnum role,
+    String lastName,
+    String email,
+    String cpf,
+    String phone,
+    String photo,
+    StatusEnum statusEnum
+    + static UserDto fromEntity(User user)
+}
+
+class UserAddressDto() {
+    UUID userId,
+    Long addressId
+    + static UserAddressDto fromEntity(UserAddress savedAddress)
+}
+
+class StudentRouteWithAddresses(){
+       StudentRoute studentRoute,
+       Address schoolAddress,
+       Address userAddress
+}
+class StudentRouteUpdateDto() {
+    UUID student,
+    Long school
+}
+
+class StudentRouteImagemUpateDto() {
+    MultipartFile image
+}
+
+class StudentRouteDto() {
+    Long school,
+    StudentStatusEnum studentStatusEnum,
+    PeriodEnum periodEnum,
+    LocalDate localDate
+}
+
+class SchoolDto() {
+    String name,
+    StatusEnum statusEnum
+    + static SchoolDto fromEntity(School school)
+}
+
+class SchoolAddressDto() {
+    Long schoolId, Long addressId
+    + static SchoolAddressDto fromEntity(SchoolAddress savedAddress)
+}
+class LoginResponse() {
+    String accessToken,
+    UUID userId,
+    RoleEnum roleEnum
+}
+
+class GeolocationDto() {
+    double latitude,
+    double longitude
+}
+
+class FatherSonRelationshipDto() {
+    UUID responsible, UUID student
+}
+
+class AddressUpdateDto() {
+    String postCode,
+    String street,
+    String neighborhood,
+    String city,
+    String state,
+    String country,
+    String complement,
+    Long number,
+    StatusEnum statusEnum
+}
+class AddressDto() {
+    String postCode,
+    String street,
+    String neighborhood,
+    String city,
+    String state,
+    String country,
+    String complement,
+    Long number,
+    StatusEnum statusEnum
+    + static AddressDto fromEntity(Address address)
+}
+
+class VehicleController {
+    - final VehicleService vehicleService;
+    + VehicleController(VehicleService vehicleService)
+    + VehicleDto createVehicle(@RequestBody VehicleDto vehicleDto)
+    + ResponseEntity<?>  listVehicle()
+    + ResponseEntity<?> deleteVehicle(@PathVariable Long vehicleId)
+    + ResponseEntity<?> updateVehicle(@PathVariable Long vehicleId, @Validated @RequestBody VehicleDto updateVehicleDto)
+    + ResponseEntity<?> getUserById(@PathVariable Long vehicleId)
+}
+
+
+class UserController {
+    - final UserService userService;
+    + UserController(UserService userService)
+    + UserDto createUser(@RequestBody UserDto userDto)
+    + ResponseEntity<?> listUsers()
+    + ResponseEntity<?> deleteUser(@PathVariable UUID userId)
+    + ResponseEntity<?> updateUser(@PathVariable UUID userId, @Validated @RequestBody UserUpdateDto updateUserDto)
+    + ResponseEntity<?> updateUserPassword(@PathVariable UUID userId, @Validated @RequestBody UserPasswordDto userPasswordDtoDto)
+    + ResponseEntity<?> getUserById(@PathVariable UUID userId)
+}
+
+class StudentRouteController {
+    - final StudentRouteService studentRouteService;
+    + StudentRouteController(StudentRouteService studentRouteService)
+    + ResponseEntity<?> createStudentRoute(@RequestBody StudentRouteDto routeDtoDto, @PathVariable UUID userId)
+    + ResponseEntity<?> listStudentRoute()
+    + ResponseEntity<?> getUserAddressesByUserId(@PathVariable UUID userId)
+    + ResponseEntity<?> deleteAddress(@PathVariable Long studentRouteId)
+    + ResponseEntity<?> updateStudentRoute(@PathVariable Long studentRouteId, @RequestBody StudentRouteUpdateDto routeDto)
+    + ResponseEntity<?> getRouteBySchool(@PathVariable Long schoolId)
+    + ResponseEntity<?> updateImage(@RequestParam("file") MultipartFile file, @PathVariable Long routeId)
+    + ResponseEntity<?> getRouteByPeriodAndDate(@RequestParam PeriodEnum periodEnum, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate)
+}
+class SchoolController {
+    - final SchoolService schoolService;
+    + SchoolController(SchoolService schoolService)
+    + SchoolDto createSchool(@RequestBody SchoolDto schoolDto)
+    + ResponseEntity<?> listSchool()
+    + ResponseEntity<?> deleteScholl(@PathVariable Long schoolId)
+    + ResponseEntity<?> updateSchool(@PathVariable Long schoolId, @Validated @RequestBody SchoolDto schoolDto)
+    + ResponseEntity<?> getSchoolById(@PathVariable Long schoolId)
+}
+
+class FatherSonRelationshipController {
+    - final FatherSonRelationshipService fatherSonRelationshipService;
+    + FatherSonRelationshipController(FatherSonRelationshipService fatherSonRelationshipService)
+    + ResponseEntity<?> fatherSonRelationshipDto(@RequestBody FatherSonRelationshipDto fatherSonRelationship)
+    + ResponseEntity<?> listFatherSonRelationship()
+    + ResponseEntity<?> getFatherSonRelationshipById(@PathVariable Long fatherSonRelationshipId)
+    + ResponseEntity<?> getFatherSonRelationshipByUserId(@Validated @RequestBody FatherSonRelationshipDto fatherSonRelationshipDto)
+    + ResponseEntity<?> deleteFatherSonRelationship(@PathVariable Long fatherSonRelationshipId)
+    + ResponseEntity<?> FatherSonRelationship(@PathVariable Long fatherSonRelationshipId, @Validated @RequestBody FatherSonRelationshipDto fatherSonRelationshipDto)
+}
+
+class AuthenticationController {
+    - final UserRepository userRepository;
+    - final PasswordEncoder passwordEncoder;
+    - final AuthenticationManager authenticationManager;
+    - final AuthenticationService authenticationService;
+    + AuthenticationController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, AuthenticationService authenticationService)
+    + ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest)
+}
+class AddressController {
+    - final AddressService addressService;
+    - final UserAddressService userAddressService;
+    - final SchoolAddressService schoolAddressService;
+    + AddressController(AddressService addressService, UserAddressService userAddressService, SchoolAddressService schoolAddressService)
+    + ResponseEntity<?> listAddress()
+    + ResponseEntity<?> deleteAddress(@PathVariable Long addressId)
+    + ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody AddressUpdateDto addressUpdateDto)
+    + ResponseEntity<?> getAddressById(@PathVariable Long addressId)
+    + ResponseEntity<?> createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId)
+    + ResponseEntity<?> listUsersAddress()
+    + ResponseEntity<?> deleteUserAddress(@PathVariable Long userAddressId)
+    + ResponseEntity<?> updateUserAddress(@PathVariable Long userAddressId, @Validated @RequestBody UserAddressDto updateUserAddressDto)
+    + ResponseEntity<?> getUserAddressById(@PathVariable Long userAddressId)
+    + ResponseEntity<?> getUserAddressesByUserId(@PathVariable UUID userId)
+    + ResponseEntity<?> createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId)
+    + ResponseEntity<?> listSchools()
+    + ResponseEntity<?> getSchoolAddressById(@PathVariable Long schoolAddressId)
+    + ResponseEntity<?> getUserAddressesBySchoolId(@PathVariable Long schoolId)
+    + ResponseEntity<?> deleteSchoolAddress(@PathVariable Long schoolAddressId)
+    + ResponseEntity<?> updateSchoolAddress(@PathVariable Long schoolAddressId, @Validated @RequestBody SchoolAddressDto updateSchoolAddressDto)
+}
+
+interface AddressRepository extends JpaRepository<Address, Long> {
+}
+
+interface SchoolAddressRepository extends JpaRepository<SchoolAddress, Long> {
+    List<SchoolAddress> findBySchool_Id(Long schoolId);
+}
+interface FatherSonRelationshipRepository extends JpaRepository<FatherSonRelationship, Long> {
+    List<FatherSonRelationship> findByResponsible_IdOrStudent_Id(UUID responsibleId, UUID studentId);
+}
+interface SchoolRepository extends JpaRepository<School, Long> {
+    Optional<School> findByName(String name);
+}
+
+interface StudentRouteRepository extends JpaRepository<StudentRoute, Long> {
+    List<StudentRoute> findByUser_Id(UUID userId);
+    List<StudentRoute> findBySchool_Id(Long school);
+    List<StudentRoute> findByPeriodEnumAndLocalDate(PeriodEnum periodEnum, LocalDate localDate);
+    List<Object[]> findWithAddressesByPeriodEnumAndLocalDateAndConfimationStudentEnumAndStudentStatusEnumNot(
+            @Param("periodEnum") String periodEnum,
+            @Param("localDate") LocalDate localDate,
+            @Param("confimationStudentEnum") String confimationStudentEnum,
+            @Param("studentStatusEnum") String studentStatusEnum);
+}
+interface UserAddressRepository extends JpaRepository<UserAddress, Long> {
+    List<UserAddress> findByUser_Id(UUID userId);
+}
+interface UserRepository extends JpaRepository<User, UUID> {
+    Optional<User> findByLogin(String login);
+    Optional<User> findByCpf(String cpf);
+}
+interface VehicleRespository extends JpaRepository<Vehicle, Long> {
+    Optional<Vehicle> findByNumberRenavan(String numberRenavan);
+    Optional<Vehicle> findByLicensePlate(String licensePlate);
+}
+
+class Vehicle {
+    - Long id;
+    - String brand;
+    - String model;
+    - String licensePlate;
+    - String numberRenavan;
+    - int yearManufacturing;
+    - int capacityPassengers;
+    - TypeVehicleEnum typeVehicleEnum;
+    - ColorEnum colorEnum;
+    - StatusEnum statusEnum;
+    + void setTypeVehicleEnum(TypeVehicleEnum typeVehicleEnum)
+    + Vehicle get()
+    + void set()
+}
+class UserAddress {
+    - Long id;
+    - User user;
+    - Address address;
+    + UserAddress get()
+    + void set()
+}
+
+
+class User implements UserDetails {
+    - UUID id;
+    - String name;
+    - String login;
+    - String password;
+    - RoleEnum role;
+    - String lastName;
+    - String email;
+    - String cpf;
+    - String phone;
+    - String photo;
+    - StatusEnum statusEnum;
+    + Collection<? extends GrantedAuthority> getAuthorities()
+    + String getUsername()
+    + boolean isAccountNonExpired()
+    + boolean isAccountNonLocked()
+    + boolean isCredentialsNonExpired()
+    + boolean isEnabled()
+    + boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder)
+}
+
+
+class StudentRoute {
+    - Long id;
+    - User user;
+    - School school;
+    - LocalDate localDate;
+    - StudentStatusEnum studentStatusEnum;
+    - StatusRouteEnum statusRouteEnum;
+    - ConfimationStudentEnum confimationStudentEnum;
+    - PeriodEnum periodEnum;
+    - byte[] imageData;
+    + StudentRoute get()
+    + void set()
+}
+
+
+class SchoolAddress {
+    - Long id;
+    - School school;
+    - Address address;
+    + SchoolAddress get()
+    + void set()
+}
+
+class School {
+    - Long id;
+    - String name;
+    - StatusEnum statusEnum;
+    + School get()
+    + void set()
+}
+class Location {
+    - String address;
+    + String get()
+    + void set()
+}
+class GeolocationResponse {
+    - String status;
+    - List<Result> results;
+    + String getStatus()
+    + void setStatus(String status)
+    + List<Result> getResults()
+    + void setResults(List<Result> results)
+}
+class Result {
+    - Geometry geometry;
+    + Geometry getGeometry()
+    + void setGeometry(Geometry geometry)
+}
+
+class Geometry {
+    - Location location;
+    + Location getLocation()
+    + void setLocation(Location location)
+}
+
+
+class Location {
+    - double lat;
+    - double lng;
+    + double getLat()
+    + void setLat(double lat)
+    + double getLng()
+    + void setLng(double lng)
+}
+
+class Address {
+    - Long id;
+    - String postCode;
+    - String street;
+    - String neighborhood;
+    - String city;
+    - String state;
+    - String country;
+    - String complement;
+    - Long number;
+    - Double latitude;
+    - Double longitude;
+    - StatusEnum statusEnum;
+    + Address get()
+    + void set()
+}
+
+class ErrorResponse{
+    - String message;
+    + ErrorResponse(String message)
+    + String getMessage()
+    + void setMessage(String message)
+}
+
+class FatherSonRelationship {
+    - Long id;
+    - User responsible;
+    - User student;
+
+    + FatherSonRelationship get()
+    + void set()
+}
 enum ColorEnum {
     WHITE
     BLACK

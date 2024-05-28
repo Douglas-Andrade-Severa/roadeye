@@ -28,7 +28,7 @@ public class SchoolController {
             @ApiResponse(responseCode = "201", description = "School create"),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    private SchoolDto createSchool(@RequestBody SchoolDto schoolDto){
+    public SchoolDto createSchool(@RequestBody SchoolDto schoolDto){
         return schoolService.createSchool(schoolDto);
     }
 

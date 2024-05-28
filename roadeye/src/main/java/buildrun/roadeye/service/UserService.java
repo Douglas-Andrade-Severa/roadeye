@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    public UserDto createUser(UserDto userDto);
+    UserDto createUser(UserDto userDto);
 
     ResponseEntity<?> getAllUsers();
 

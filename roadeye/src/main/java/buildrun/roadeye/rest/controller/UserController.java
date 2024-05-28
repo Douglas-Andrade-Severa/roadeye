@@ -34,7 +34,7 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "User create"),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    private UserDto createUser(@RequestBody UserDto userDto){
+    public UserDto createUser(@RequestBody UserDto userDto){
         return userService.createUser(userDto);
     }
 

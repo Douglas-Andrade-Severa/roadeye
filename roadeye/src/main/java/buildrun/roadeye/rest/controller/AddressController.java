@@ -85,7 +85,7 @@ public class AddressController {
             @ApiResponse(responseCode = "201", description = "Address created for user"),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    private ResponseEntity<?> createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId){
+    public ResponseEntity<?> createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId){
         return addressService.createAddressByUser(addressDto, userId);
     }
     @GetMapping("/user")
@@ -151,7 +151,7 @@ public class AddressController {
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
             @ApiResponse(responseCode = "404", description = "School/Address not found")
     })
-    private ResponseEntity<?> createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId){
+    public ResponseEntity<?> createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId){
         return addressService.createAddressBySchool(addressDto, schoolId);
     }
     @GetMapping("/school")
