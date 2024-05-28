@@ -29,11 +29,9 @@ import java.util.UUID;
 @SecurityRequirement(name = "bearer-key")
 public class StudentRouteController {
     private final StudentRouteService studentRouteService;
-
     public StudentRouteController(StudentRouteService studentRouteService) {
         this.studentRouteService = studentRouteService;
     }
-
     @PostMapping("/{userId}")
     @Operation(summary = "Create Student Route", description = "Enter the route related as user, based on the user ID.", method = "POST")
     @ApiResponses(value = {
