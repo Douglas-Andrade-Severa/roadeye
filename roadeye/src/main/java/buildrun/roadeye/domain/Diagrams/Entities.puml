@@ -1,23 +1,6 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-    Object[] elementData
-    size()
-}
-
 VehicleServiceImplementation <|-- VehicleRespository
 VehicleServiceImplementation <|-- VehicleDto
 VehicleServiceImplementation <|-- Vehicle
@@ -205,6 +188,7 @@ interface VehicleService {
 
 UserService <|-- UserDto
 UserService <|-- UserPasswordDto
+UserService <|-- UserUpdateDto
 interface UserService {
     UserDto createUser(UserDto userDto);
     ResponseEntity<?> getAllUsers();
@@ -350,141 +334,142 @@ class AppConfig {
 VehicleDto <|-- TypeVehicleEnum
 VehicleDto <|-- ColorEnum
 VehicleDto <|-- StatusEnum
-class VehicleDto() {
-    String brand,
-    String model,
-    String licensePlate,
-    String numberRenavam,
-    int yearManufacturing,
-    int capacityPassengers,
-    TypeVehicleEnum typeVehicleEnum,
-    ColorEnum colorEnum,
+class VehicleDto {
+    String brand
+    String model
+    String licensePlate
+    String numberRenavam
+    int yearManufacturing
+    int capacityPassengers
+    TypeVehicleEnum typeVehicleEnum
+    ColorEnum colorEnum
     StatusEnum statusEnum
     + static VehicleDto fromEntity(Vehicle vehicle)
 }
 
 
-class LoginRequest() {
- String login,
+class LoginRequest {
+ String login
  String password
 }
 
-class UserUpdateDto() {
-    String name,
-    String email,
-    String phone,
+class UserUpdateDto {
+    String name
+    String email
+    String phone
     String cpf
 }
 
-class UserPasswordDto() {
+class UserPasswordDto {
     String password
 }
 
 UserDto <|-- RoleEnum
 UserDto <|-- StatusEnum
 UserDto <|-- UserDto
-class UserDto() {
-    String name,
-    String login,
-    String password,
-    RoleEnum role,
-    String lastName,
-    String email,
-    String cpf,
-    String phone,
-    String photo,
+class UserDto {
+    String name
+    String login
+    String password
+    RoleEnum role
+    String lastName
+    String email
+    String cpf
+    String phone
+    String photo
     StatusEnum statusEnum
     + static UserDto fromEntity(User user)
 }
 
 UserAddressDto <|-- UserAddressDto
-class UserAddressDto() {
-    UUID userId,
+class UserAddressDto {
+    UUID userId
     Long addressId
     + static UserAddressDto fromEntity(UserAddress savedAddress)
 }
 
 StudentRouteWithAddresses <|-- StudentRoute
 StudentRouteWithAddresses <|-- Address
-class StudentRouteWithAddresses(){
-       StudentRoute studentRoute,
-       Address schoolAddress,
+class StudentRouteWithAddresses {
+       StudentRoute studentRoute
+       Address schoolAddress
        Address userAddress
 }
 
-class StudentRouteUpdateDto() {
-    UUID student,
+class StudentRouteUpdateDto {
+    UUID student
     Long school
 }
 
-class StudentRouteImagemUpateDto() {
+class StudentRouteImagemUpateDto {
     MultipartFile image
 }
 
 StudentRouteDto <|-- StudentStatusEnum
 StudentRouteDto <|-- PeriodEnum
-class StudentRouteDto() {
-    Long school,
-    StudentStatusEnum studentStatusEnum,
-    PeriodEnum periodEnum,
+class StudentRouteDto {
+    Long school
+    StudentStatusEnum studentStatusEnum
+    PeriodEnum periodEnum
     LocalDate localDate
 }
 
 SchoolDto <|-- StatusEnum
 SchoolDto <|-- SchoolDto
-class SchoolDto() {
-    String name,
+class SchoolDto {
+    String name
     StatusEnum statusEnum
     + static SchoolDto fromEntity(School school)
 }
 
 SchoolAddressDto <|-- SchoolAddressDto
-class SchoolAddressDto() {
-    Long schoolId, Long addressId
+class SchoolAddressDto {
+    Long schoolId
+    Long addressId
     + static SchoolAddressDto fromEntity(SchoolAddress savedAddress)
 }
 
 LoginResponse <|-- RoleEnum
-class LoginResponse() {
-    String accessToken,
-    UUID userId,
+class LoginResponse {
+    String accessToken
+    UUID userId
     RoleEnum roleEnum
 }
 
-class GeolocationDto() {
-    double latitude,
+class GeolocationDto {
+    double latitude
     double longitude
 }
 
-class FatherSonRelationshipDto() {
-    UUID responsible,
+class FatherSonRelationshipDto {
+    UUID responsible
     UUID student
 }
 
 AddressUpdateDto <|-- StatusEnum
-class AddressUpdateDto() {
-    String postCode,
-    String street,
-    String neighborhood,
-    String city,
-    String state,
-    String country,
-    String complement,
-    Long number,
+class AddressUpdateDto {
+    String postCode
+    String street
+    String neighborhood
+    String city
+    String state
+    String country
+    String complement
+    Long number
     StatusEnum statusEnum
 }
 
 AddressDto <|-- StatusEnum
 AddressDto <|-- AddressDto
-class AddressDto() {
-    String postCode,
-    String street,
-    String neighborhood,
-    String city,
-    String state,
-    String country,
-    String complement,
-    Long number,
+class AddressDto {
+    String postCode
+    String street
+    String neighborhood
+    String city
+    String state
+    String country
+    String complement
+    Long number
     StatusEnum statusEnum
     + static AddressDto fromEntity(Address address)
 }
