@@ -14,10 +14,87 @@ AbstractCollection <|- AbstractList
 AbstractList <|-- ArrayList
 
 class ArrayList {
-Object[] elementData
-size()
+    Object[] elementData
+    size()
 }
 
+VehicleServiceImplementation <|-- VehicleRespository
+VehicleServiceImplementation <|-- VehicleDto
+VehicleServiceImplementation <|-- Vehicle
+class VehicleServiceImplementation implements VehicleService {
+    - static final String axNotFound = "Vehicle not found";
+    - final VehicleRespository vehicleRespository;
+    + VehicleServiceImplementation(VehicleRespository vehicleRespository)
+    + VehicleDto createVehicle(VehicleDto vehicleDto)
+    + ResponseEntity<?> getAllVehicle()
+    + ResponseEntity<?> deleteVehicle(Long vehicleId)
+    + ResponseEntity<?> updateVehicle(Long vehicleId, VehicleDto updateVehicleDto)
+    + ResponseEntity<?> getVehicleById(Long vehicleId)
+    - void setVehicleService(Vehicle vehicle, VehicleDto vehicleDto)
+}
+
+UserServiceImplementation <|-- UserRepository
+UserServiceImplementation <|-- PasswordEncoder
+UserServiceImplementation <|-- UserDto
+class UserServiceImplementation implements UserService {
+    - final UserRepository userRepository;
+    - final PasswordEncoder passwordEncoder;
+    - static final String axNotFound = "User not found";
+    + UserServiceImplementation(UserRepository userRepository, PasswordEncoder passwordEncoder)
+    + UserDto createUser(UserDto userDto)
+    + ResponseEntity<?> getAllUsers()
+    + ResponseEntity<?> deleteUser(UUID userId)
+    + ResponseEntity<?> updateUser(UUID userId, UserUpdateDto updateUserDto)
+    + ResponseEntity<?> updateUserPassword(UUID userId, UserPasswordDto updateUserDto)
+    + ResponseEntity<?> getUserResponseById(UUID userId)
+    - void setUserUpdateService(User user, UserUpdateDto userDto)
+    - void setUserService(User user, UserDto userDto)
+}
+
+UserAddressServiceImplementation <|-- UserAddressRepository
+UserAddressServiceImplementation <|-- UserRepository
+UserAddressServiceImplementation <|-- AddressRepository
+UserAddressServiceImplementation <|-- UserAddressDto
+class UserAddressServiceImplementation implements UserAddressService {
+    - final UserAddressRepository userAddressRepository;
+    - final UserRepository userRepository;
+    - final AddressRepository addressRepository;
+    + UserAddressServiceImplementation(UserAddressRepository userAddressRepository, UserRepository userRepository, AddressRepository addressRepository)
+    + UserAddressDto createUserAddress(UserAddressDto userAddressDto)
+    + ResponseEntity<?> getAllUsersAddress()
+    + ResponseEntity<?> deleteUserAddress(Long userAddressId)
+    + ResponseEntity<?> updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto)
+    + ResponseEntity<?> getUserAddressById(Long userAddressId)
+    + List<UserAddress> findAddressesByUser_Id(UUID userId)
+}
+
+StudentRouteServiceImplementation <|-- StudentRouteRepository
+StudentRouteServiceImplementation <|-- UserRepository
+StudentRouteServiceImplementation <|-- SchoolRepository
+StudentRouteServiceImplementation <|-- StudentRouteDto
+StudentRouteServiceImplementation <|-- StudentRouteUpdateDto
+StudentRouteServiceImplementation <|-- PeriodEnum
+class StudentRouteServiceImplementation implements StudentRouteService {
+    - final StudentRouteRepository studentRouteRepository;
+    - final UserRepository userRepository;
+    - final SchoolRepository schoolRepository;
+    + StudentRouteServiceImplementation(StudentRouteRepository studentRouteRepository, UserRepository userRepository, SchoolRepository schoolRepository)
+    + ResponseEntity<?> getAllStudentRoute()
+    + ResponseEntity<?> createStudentRoute(StudentRouteDto routeDto, UUID userId)
+    + List<StudentRoute> findSchoolByUser_Id(UUID userId)
+    + ResponseEntity<?> deleteStudentRoute(Long studentSchoolId)
+    + ResponseEntity<?> updateStudentRoute(Long studentSchoolId, StudentRouteUpdateDto schoolDto)
+    + List<StudentRoute> findSchoolBySchool_Id(Long schoolId)
+    + ResponseEntity<?> updateStudentRouteImagem(MultipartFile file, Long routeId)
+    + List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate)
+    - StudentRoute mapToStudentRoute(Object[] result)
+    - Address mapToAddress(Object[] result, boolean user)
+    - User mapToUser(UUID userId)
+    - School mapToSchool(Long schoolId)
+}
+
+SchoolServiceImplementation <|-- SchoolRepository
+SchoolServiceImplementation <|-- SchoolDto
 class SchoolServiceImplementation implements SchoolService {
     - final SchoolRepository schoolRepository;
     + SchoolServiceImplementation(SchoolRepository schoolRepository)
@@ -28,6 +105,10 @@ class SchoolServiceImplementation implements SchoolService {
     + ResponseEntity<?> getSchoolById(Long schoolId)
 }
 
+SchoolAddressServiceImplementation <|-- SchoolAddressRepository
+SchoolAddressServiceImplementation <|-- SchoolRepository
+SchoolAddressServiceImplementation <|-- AddressRepository
+SchoolAddressServiceImplementation <|-- SchoolAddressDto
 class SchoolAddressServiceImplementation implements SchoolAddressService {
     - final SchoolAddressRepository schoolAddressRepository;
     - final SchoolRepository schoolRepository;
@@ -40,16 +121,23 @@ class SchoolAddressServiceImplementation implements SchoolAddressService {
     + ResponseEntity<?> getSchoolAddressById(Long schoolAddressId)
 }
 
+GoogleMapsService <|-- RouteRequest
 class GoogleMapsService {
     - String apiKey;
     + ResponseEntity<String> computeRoutes(RouteRequest request)
 }
+GoogleGeocodingService <|-- RestTemplate
+GoogleGeocodingService <|-- GeolocationDto
 class GoogleGeocodingService {
     - String apiKey;
     - final RestTemplate restTemplate;
     + GoogleGeocodingService(RestTemplate restTemplate)
     + GeolocationDto getGeolocation(String address)
 }
+
+FatherSonRelationshipServiceImplementation <|-- FatherSonRelationshipRepository
+FatherSonRelationshipServiceImplementation <|-- UserRepository
+FatherSonRelationshipServiceImplementation <|-- FatherSonRelationshipDto
 class FatherSonRelationshipServiceImplementation implements FatherSonRelationshipService {
     - final FatherSonRelationshipRepository fatherSonRelationshipRepository;
     - final UserRepository userRepository;
@@ -62,7 +150,10 @@ class FatherSonRelationshipServiceImplementation implements FatherSonRelationshi
     + ResponseEntity<?> createFatherSonRelationship(FatherSonRelationshipDto fatherSonRelationshipDto)
 }
 
-
+AuthenticationServiceImplementation <|-- UserRepository
+AuthenticationServiceImplementation <|-- UserDetails
+AuthenticationServiceImplementation <|-- LoginRequest
+AuthenticationServiceImplementation <|-- User
 class AuthenticationServiceImplementation implements AuthenticationService {
     - final UserRepository userRepository;
     + AuthenticationServiceImplementation(UserRepository userRepository)
@@ -73,6 +164,15 @@ class AuthenticationServiceImplementation implements AuthenticationService {
     - Instant generateExpiryDate()
 }
 
+AddressServiceImplementation <|-- AddressRepository
+AddressServiceImplementation <|-- UserRepository
+AddressServiceImplementation <|-- GoogleGeocodingService
+AddressServiceImplementation <|-- UserAddressRepository
+AddressServiceImplementation <|-- SchoolAddressRepository
+AddressServiceImplementation <|-- SchoolRepository
+AddressServiceImplementation <|-- AddressUpdateDto
+AddressServiceImplementation <|-- AddressDto
+AddressServiceImplementation <|-- Address
 class AddressServiceImplementation implements AddressService {
     - final AddressRepository addressRepository;
     - final UserRepository userRepository;
@@ -94,7 +194,7 @@ class AddressServiceImplementation implements AddressService {
     + String getFullAddress(String street, Long number, String neighborhood, String city, String state, String postCode, String country)
 }
 
-
+VehicleService <|-- VehicleDto
 interface VehicleService {
     VehicleDto createVehicle(VehicleDto vehicleDto);
     ResponseEntity<?> getAllVehicle();
@@ -103,6 +203,8 @@ interface VehicleService {
     ResponseEntity<?> getVehicleById(Long vehicleId);
 }
 
+UserService <|-- UserDto
+UserService <|-- UserPasswordDto
 interface UserService {
     UserDto createUser(UserDto userDto);
     ResponseEntity<?> getAllUsers();
@@ -112,6 +214,7 @@ interface UserService {
     ResponseEntity<?> updateUserPassword(UUID userId, UserPasswordDto updateUserDto);
 }
 
+UserAddressService <|-- UserAddressDto
 interface UserAddressService {
     UserAddressDto createUserAddress(UserAddressDto userAddressDto);
     ResponseEntity<?> getAllUsersAddress();
@@ -121,6 +224,9 @@ interface UserAddressService {
     List<UserAddress> findAddressesByUser_Id(UUID userId);
 }
 
+StudentRouteService <|-- StudentRouteDto
+StudentRouteService <|-- StudentRouteUpdateDto
+StudentRouteService <|-- PeriodEnum
 interface StudentRouteService {
     ResponseEntity<?> getAllStudentRoute();
     ResponseEntity<?> createStudentRoute(StudentRouteDto schoolDto, UUID userId);
@@ -132,6 +238,7 @@ interface StudentRouteService {
     List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate);
 }
 
+SchoolService <|-- SchoolDto
 interface SchoolService {
     SchoolDto createSchool(SchoolDto schoolDto);
     ResponseEntity<?> getAllSchool();
@@ -140,6 +247,7 @@ interface SchoolService {
     ResponseEntity<?> getSchoolById(Long schoolId);
 }
 
+SchoolAddressService <|-- SchoolAddressDto
 interface SchoolAddressService {
     ResponseEntity<?> getAllSchoolAddress();
     List<SchoolAddress> findAddressesBySchool_Id(Long schoolId);
@@ -148,6 +256,7 @@ interface SchoolAddressService {
     ResponseEntity<?> getSchoolAddressById(Long schoolAddressId);
 }
 
+FatherSonRelationshipService <|-- FatherSonRelationshipDto
 interface FatherSonRelationshipService {
     ResponseEntity<?> getAllFatherSonRelationship();
     ResponseEntity<?> getFatherSonRelationshipById(Long fatherSonRelationshipId);
@@ -156,11 +265,15 @@ interface FatherSonRelationshipService {
     ResponseEntity<?> updateFatherSonRelationship(Long fatherSonRelationshipId, FatherSonRelationshipDto fatherSonRelationshipDto);
     ResponseEntity<?> createFatherSonRelationship(FatherSonRelationshipDto fatherSonRelationship);
 }
+
+AuthenticationService <|-- LoginRequest
 interface AuthenticationService extends UserDetailsService {
     String getToken(LoginRequest authDto);
     String validTokenJwt(String token);
 }
 
+AddressService <|-- AddressDto
+AddressService <|-- AddressUpdateDto
 interface AddressService {
     ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId);
     ResponseEntity<?>  getAllAddress();
@@ -170,11 +283,16 @@ interface AddressService {
     ResponseEntity<?> updateAddress(Long addressId, AddressUpdateDto addressUpdateDto);
 }
 
-
-
+SwaggerConfig <|-- OpenAPI
 class SwaggerConfig {
     + OpenAPI openAPI()
 }
+
+SecurityFilter <|-- AuthenticationService
+SecurityFilter <|-- UserRepository
+SecurityFilter <|-- HttpServletRequest
+SecurityFilter <|-- HttpServletResponse
+SecurityFilter <|-- FilterChain
 class SecurityFilter extends OncePerRequestFilter {
     - final AuthenticationService authenticationService;
     - final UserRepository userRepository;
@@ -182,6 +300,13 @@ class SecurityFilter extends OncePerRequestFilter {
     # void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     + String extractsTokenHeader(HttpServletRequest request)
 }
+
+SecurityConfiguration <|-- SecurityFilter
+SecurityConfiguration <|-- SecurityFilterChain
+SecurityConfiguration <|-- HttpSecurity
+SecurityConfiguration <|-- PasswordEncoder
+SecurityConfiguration <|-- AuthenticationManager
+SecurityConfiguration <|-- AuthenticationConfiguration
 class SecurityConfiguration {
     - final SecurityFilter securityFilter;
     + SecurityConfiguration(SecurityFilter securityFilter)
@@ -190,6 +315,10 @@ class SecurityConfiguration {
     + AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
     - static final String[] AUTH_WHITELIST
 }
+
+InitialSystemConfig <|-- UserRepository
+InitialSystemConfig <|-- VehicleRespository
+InitialSystemConfig <|-- PasswordEncoder
 class InitialSystemConfig implements CommandLineRunner {
     - final UserRepository userRepository;
     - final VehicleRespository vehicleRespository;
@@ -199,14 +328,28 @@ class InitialSystemConfig implements CommandLineRunner {
     - User createUserIfNotExist(String login, String name, String password, RoleEnum role, String lastName, String email, String cpf, String phone, String photo, StatusEnum status)
     - void createVehicleIfNotExist(Long id, String brand, String model, String licensePlate, String numberRenavam, int yearManufacturing, TypeVehicleEnum typeVehicleEnum, ColorEnum colorEnum, StatusEnum statusEnum)
 }
+
+CorsConfig <|-- CorsRegistry
 class CorsConfig implements WebMvcConfigurer {
     + void addCorsMappings(CorsRegistry registry)
 }
+
+AppConfig <|-- RestTemplate
+AppConfig <|-- AddressService
+AppConfig <|-- AddressRepository
+AppConfig <|-- UserRepository
+AppConfig <|-- GoogleGeocodingService
+AppConfig <|-- UserAddressRepository
+AppConfig <|-- SchoolAddressRepository
+AppConfig <|-- SchoolRepository
 class AppConfig {
     + RestTemplate restTemplate()
     + AddressService addressService(AddressRepository addressRepository, UserRepository userRepository, GoogleGeocodingService geocodingService, UserAddressRepository userAddressRepository, SchoolAddressRepository schoolAddressRepository, SchoolRepository schoolRepository)
 }
 
+VehicleDto <|-- TypeVehicleEnum
+VehicleDto <|-- ColorEnum
+VehicleDto <|-- StatusEnum
 class VehicleDto() {
     String brand,
     String model,
@@ -237,6 +380,9 @@ class UserPasswordDto() {
     String password
 }
 
+UserDto <|-- RoleEnum
+UserDto <|-- StatusEnum
+UserDto <|-- UserDto
 class UserDto() {
     String name,
     String login,
@@ -251,17 +397,21 @@ class UserDto() {
     + static UserDto fromEntity(User user)
 }
 
+UserAddressDto <|-- UserAddressDto
 class UserAddressDto() {
     UUID userId,
     Long addressId
     + static UserAddressDto fromEntity(UserAddress savedAddress)
 }
 
+StudentRouteWithAddresses <|-- StudentRoute
+StudentRouteWithAddresses <|-- Address
 class StudentRouteWithAddresses(){
        StudentRoute studentRoute,
        Address schoolAddress,
        Address userAddress
 }
+
 class StudentRouteUpdateDto() {
     UUID student,
     Long school
@@ -271,6 +421,8 @@ class StudentRouteImagemUpateDto() {
     MultipartFile image
 }
 
+StudentRouteDto <|-- StudentStatusEnum
+StudentRouteDto <|-- PeriodEnum
 class StudentRouteDto() {
     Long school,
     StudentStatusEnum studentStatusEnum,
@@ -278,16 +430,21 @@ class StudentRouteDto() {
     LocalDate localDate
 }
 
+SchoolDto <|-- StatusEnum
+SchoolDto <|-- SchoolDto
 class SchoolDto() {
     String name,
     StatusEnum statusEnum
     + static SchoolDto fromEntity(School school)
 }
 
+SchoolAddressDto <|-- SchoolAddressDto
 class SchoolAddressDto() {
     Long schoolId, Long addressId
     + static SchoolAddressDto fromEntity(SchoolAddress savedAddress)
 }
+
+LoginResponse <|-- RoleEnum
 class LoginResponse() {
     String accessToken,
     UUID userId,
@@ -300,9 +457,11 @@ class GeolocationDto() {
 }
 
 class FatherSonRelationshipDto() {
-    UUID responsible, UUID student
+    UUID responsible,
+    UUID student
 }
 
+AddressUpdateDto <|-- StatusEnum
 class AddressUpdateDto() {
     String postCode,
     String street,
@@ -314,6 +473,9 @@ class AddressUpdateDto() {
     Long number,
     StatusEnum statusEnum
 }
+
+AddressDto <|-- StatusEnum
+AddressDto <|-- AddressDto
 class AddressDto() {
     String postCode,
     String street,
@@ -327,6 +489,8 @@ class AddressDto() {
     + static AddressDto fromEntity(Address address)
 }
 
+VehicleController <|-- VehicleService
+VehicleController <|-- VehicleDto
 class VehicleController {
     - final VehicleService vehicleService;
     + VehicleController(VehicleService vehicleService)
@@ -337,7 +501,9 @@ class VehicleController {
     + ResponseEntity<?> getUserById(@PathVariable Long vehicleId)
 }
 
-
+UserController <|-- userService
+UserController <|-- UserDto
+UserController <|-- UserPasswordDto
 class UserController {
     - final UserService userService;
     + UserController(UserService userService)
@@ -349,6 +515,9 @@ class UserController {
     + ResponseEntity<?> getUserById(@PathVariable UUID userId)
 }
 
+StudentRouteController <|-- StudentRouteService
+StudentRouteController <|-- StudentRouteDto
+StudentRouteController <|-- PeriodEnum
 class StudentRouteController {
     - final StudentRouteService studentRouteService;
     + StudentRouteController(StudentRouteService studentRouteService)
@@ -361,6 +530,9 @@ class StudentRouteController {
     + ResponseEntity<?> updateImage(@RequestParam("file") MultipartFile file, @PathVariable Long routeId)
     + ResponseEntity<?> getRouteByPeriodAndDate(@RequestParam PeriodEnum periodEnum, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate)
 }
+
+SchoolController <|-- SchoolService
+SchoolController <|-- SchoolDto
 class SchoolController {
     - final SchoolService schoolService;
     + SchoolController(SchoolService schoolService)
@@ -371,6 +543,8 @@ class SchoolController {
     + ResponseEntity<?> getSchoolById(@PathVariable Long schoolId)
 }
 
+FatherSonRelationshipController <|-- FatherSonRelationshipService
+FatherSonRelationshipController <|-- FatherSonRelationshipDto
 class FatherSonRelationshipController {
     - final FatherSonRelationshipService fatherSonRelationshipService;
     + FatherSonRelationshipController(FatherSonRelationshipService fatherSonRelationshipService)
@@ -382,6 +556,11 @@ class FatherSonRelationshipController {
     + ResponseEntity<?> FatherSonRelationship(@PathVariable Long fatherSonRelationshipId, @Validated @RequestBody FatherSonRelationshipDto fatherSonRelationshipDto)
 }
 
+AuthenticationController <|-- UserRepository
+AuthenticationController <|-- PasswordEncoder
+AuthenticationController <|-- AuthenticationManager
+AuthenticationController <|-- AuthenticationService
+AuthenticationController <|-- LoginRequest
 class AuthenticationController {
     - final UserRepository userRepository;
     - final PasswordEncoder passwordEncoder;
@@ -390,6 +569,14 @@ class AuthenticationController {
     + AuthenticationController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, AuthenticationService authenticationService)
     + ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest)
 }
+
+AddressController <|-- AddressService
+AddressController <|-- UserAddressService
+AddressController <|-- SchoolAddressService
+AddressController <|-- AddressUpdateDto
+AddressController <|-- AddressDto
+AddressController <|-- UserAddressDto
+AddressController <|-- SchoolAddressDto
 class AddressController {
     - final AddressService addressService;
     - final UserAddressService userAddressService;
@@ -416,16 +603,23 @@ class AddressController {
 interface AddressRepository extends JpaRepository<Address, Long> {
 }
 
+SchoolAddressRepository <|-- SchoolAddress
 interface SchoolAddressRepository extends JpaRepository<SchoolAddress, Long> {
     List<SchoolAddress> findBySchool_Id(Long schoolId);
 }
+
+FatherSonRelationshipRepository <|-- FatherSonRelationship
 interface FatherSonRelationshipRepository extends JpaRepository<FatherSonRelationship, Long> {
     List<FatherSonRelationship> findByResponsible_IdOrStudent_Id(UUID responsibleId, UUID studentId);
 }
+
+SchoolRepository <|-- School
 interface SchoolRepository extends JpaRepository<School, Long> {
     Optional<School> findByName(String name);
 }
 
+StudentRouteRepository <|-- StudentRoute
+StudentRouteRepository <|-- PeriodEnum
 interface StudentRouteRepository extends JpaRepository<StudentRoute, Long> {
     List<StudentRoute> findByUser_Id(UUID userId);
     List<StudentRoute> findBySchool_Id(Long school);
@@ -436,18 +630,28 @@ interface StudentRouteRepository extends JpaRepository<StudentRoute, Long> {
             @Param("confimationStudentEnum") String confimationStudentEnum,
             @Param("studentStatusEnum") String studentStatusEnum);
 }
+
+UserAddressRepository <|-- UserAddress
 interface UserAddressRepository extends JpaRepository<UserAddress, Long> {
     List<UserAddress> findByUser_Id(UUID userId);
 }
+
+UserRepository <|-- User
 interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByLogin(String login);
     Optional<User> findByCpf(String cpf);
 }
+
+VehicleRespository <|-- Vehicle
 interface VehicleRespository extends JpaRepository<Vehicle, Long> {
     Optional<Vehicle> findByNumberRenavan(String numberRenavan);
     Optional<Vehicle> findByLicensePlate(String licensePlate);
 }
 
+
+Vehicle <|-- TypeVehicleEnum
+Vehicle <|-- ColorEnum
+Vehicle <|-- StatusEnum
 class Vehicle {
     - Long id;
     - String brand;
@@ -463,6 +667,9 @@ class Vehicle {
     + Vehicle get()
     + void set()
 }
+
+UserAddress <|-- User
+UserAddress <|-- Address
 class UserAddress {
     - Long id;
     - User user;
@@ -471,7 +678,8 @@ class UserAddress {
     + void set()
 }
 
-
+User <|-- RoleEnum
+User <|-- StatusEnum
 class User implements UserDetails {
     - UUID id;
     - String name;
@@ -493,7 +701,13 @@ class User implements UserDetails {
     + boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder)
 }
 
-
+StudentRoute <|-- LocalDate
+StudentRoute <|-- StudentStatusEnum
+StudentRoute <|-- User
+StudentRoute <|-- School
+StudentRoute <|-- StatusRouteEnum
+StudentRoute <|-- ConfimationStudentEnum
+StudentRoute <|-- PeriodEnum
 class StudentRoute {
     - Long id;
     - User user;
@@ -508,7 +722,8 @@ class StudentRoute {
     + void set()
 }
 
-
+SchoolAddress <|-- School
+SchoolAddress <|-- Address
 class SchoolAddress {
     - Long id;
     - School school;
@@ -517,6 +732,7 @@ class SchoolAddress {
     + void set()
 }
 
+School <|-- StatusEnum
 class School {
     - Long id;
     - String name;
@@ -524,11 +740,14 @@ class School {
     + School get()
     + void set()
 }
+
 class Location {
     - String address;
     + String get()
     + void set()
 }
+
+GeolocationResponse <|-- Result
 class GeolocationResponse {
     - String status;
     - List<Result> results;
@@ -537,18 +756,19 @@ class GeolocationResponse {
     + List<Result> getResults()
     + void setResults(List<Result> results)
 }
+
+Result <|-- Geometry
 class Result {
     - Geometry geometry;
     + Geometry getGeometry()
     + void setGeometry(Geometry geometry)
 }
-
+Geometry <|-- Location
 class Geometry {
     - Location location;
     + Location getLocation()
     + void setLocation(Location location)
 }
-
 
 class Location {
     - double lat;
@@ -559,6 +779,7 @@ class Location {
     + void setLng(double lng)
 }
 
+Address <|-- StatusEnum
 class Address {
     - Long id;
     - String postCode;
@@ -583,6 +804,7 @@ class ErrorResponse{
     + void setMessage(String message)
 }
 
+FatherSonRelationship <|-- User
 class FatherSonRelationship {
     - Long id;
     - User responsible;
