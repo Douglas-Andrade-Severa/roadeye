@@ -2,11 +2,8 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.domain.entity.SchoolAddress;
 import buildrun.roadeye.domain.entity.UserAddress;
-import buildrun.roadeye.rest.dto.AddressDto;
-import buildrun.roadeye.rest.dto.SchoolAddressDto;
-import buildrun.roadeye.rest.dto.UserAddressDto;
+import buildrun.roadeye.rest.dto.*;
 import buildrun.roadeye.service.AddressService;
-import buildrun.roadeye.rest.dto.AddressUpdateDto;
 import buildrun.roadeye.service.SchoolAddressService;
 import buildrun.roadeye.service.UserAddressService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -118,6 +115,8 @@ public class AddressController {
     public ResponseEntity<?> updateUserAddress(@PathVariable Long userAddressId, @Validated @RequestBody UserAddressDto updateUserAddressDto) {
         return userAddressService.updateUserAddress(userAddressId, updateUserAddressDto);
     }
+
+
     @GetMapping("/user/{userAddressId}")
     @Operation(summary = "Get User/Address by ID", description = "Retrieve User/Address information based on the provided ID.", method = "GET")
     @ApiResponses(value = {
@@ -142,6 +141,17 @@ public class AddressController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
         }
     }
+
+    @PutMapping("/user/activateDisableAddress/{userId}")
+    @Operation(summary = "Enable or disable addresses", description = "Enter the address id and user id.", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Address created for user"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
+    })
+    public ResponseEntity<?> activateDisableAddressByUser(@RequestBody AddressActivateDisable activateDisable, @PathVariable UUID userId){
+        return addressService.updateActivateDisableAddressByUser(activateDisable, userId);
+    }
+
 
     // ***************************************************** School *****************************************************
     @PostMapping("/school/{schoolId}")

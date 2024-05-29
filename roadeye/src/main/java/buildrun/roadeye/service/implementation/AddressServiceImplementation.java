@@ -1,7 +1,9 @@
 package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
+import buildrun.roadeye.domain.enums.StatusEnum;
 import buildrun.roadeye.domain.repository.*;
+import buildrun.roadeye.rest.dto.AddressActivateDisable;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.GeolocationDto;
 import buildrun.roadeye.service.AddressService;
@@ -135,6 +137,14 @@ public class AddressServiceImplementation implements AddressService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            // Verifica se já existe algum endereço cadastrado para o usuário
+            Optional<UserAddress> existingUserAddress = userAddressRepository.findByUser(user);
+            // Se já existir, desativa o endereço atual
+            existingUserAddress.ifPresent(userAddress -> {
+                Address address = userAddress.getAddress();
+                address.setStatusEnum(StatusEnum.DISABLED);
+                addressRepository.save(address);
+            });
             Address address = createAddress(addressDto);
             UserAddress userAddress = new UserAddress();
             userAddress.setUser(user);
@@ -145,6 +155,43 @@ public class AddressServiceImplementation implements AddressService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
+
+    @Override
+    public ResponseEntity<?> updateActivateDisableAddressByUser(AddressActivateDisable activateDisable, UUID userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            Optional<UserAddress> optionalUserAddress = userAddressRepository.findByAddressIdAndUserId(activateDisable.idAddress(), userId);
+            if (!optionalUserAddress.isPresent()) {
+                ErrorResponse errorResponse = new ErrorResponse("Address not related to the user informed.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            }
+
+            List<UserAddress> existingUserAddresses = userAddressRepository.findAllByUser(user);
+            existingUserAddresses.forEach(userAddress -> {
+                Address address = userAddress.getAddress();
+                address.setStatusEnum(StatusEnum.DISABLED);
+                addressRepository.save(address);
+            });
+
+
+            Optional<Address> optionalAddress = addressRepository.findById(activateDisable.idAddress());
+            if (optionalAddress.isPresent()) {
+                Address address = optionalAddress.get();
+                address.setStatusEnum(StatusEnum.ACTIVATE);
+                Address updatedAddress = addressRepository.save(address);
+                return ResponseEntity.ok(updatedAddress);
+            } else {
+                ErrorResponse errorResponse = new ErrorResponse("Address not found.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            }
+        }else{
+            ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
 
     @Override
     public ResponseEntity<?> createAddressBySchool(AddressDto addressDto, Long schoolId) {
