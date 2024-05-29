@@ -26,7 +26,7 @@ public interface StudentRouteRepository extends JpaRepository<StudentRoute, Long
             "INNER JOIN tb_school_address sa ON sa.school_id = sr.school_id " +
             "INNER JOIN tb_address aschool ON aschool.address_id = sa.address_id " +
             "INNER JOIN tb_user_address ua ON ua.user_id = sr.user_id " +
-            "INNER JOIN tb_address asuser ON asuser.address_id = ua.address_id " +
+            "INNER JOIN tb_address asuser ON asuser.address_id = ua.address_id AND asuser.status = 'ACTIVATE' " +
             "INNER JOIN tb_users userid on userid.user_id = sr.user_id "+
             "WHERE sr.period = :periodEnum " +
             "AND sr.local_date = :localDate " +
