@@ -1,6 +1,7 @@
 package buildrun.roadeye.service;
 
 import buildrun.roadeye.rest.dto.AddressActivateDisableDto;
+import buildrun.roadeye.rest.dto.AddressCoordinatesDto;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.AddressUpdateDto;
 import org.springframework.http.ResponseEntity;
@@ -21,4 +22,6 @@ public interface AddressService {
     ResponseEntity<?> updateAddress(Long addressId, AddressUpdateDto addressUpdateDto);
 
     ResponseEntity<?> updateActivateDisableAddressByUser(AddressActivateDisableDto activateDisable, UUID userId);
+
+    ResponseEntity<?> createAddressByUserByCoordinates(AddressCoordinatesDto coodinatesDto, UUID userId);
 }

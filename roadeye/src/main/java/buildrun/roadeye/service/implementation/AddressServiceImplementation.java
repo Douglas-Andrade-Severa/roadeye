@@ -3,11 +3,8 @@ package buildrun.roadeye.service.implementation;
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.enums.StatusEnum;
 import buildrun.roadeye.domain.repository.*;
-import buildrun.roadeye.rest.dto.AddressActivateDisableDto;
-import buildrun.roadeye.rest.dto.AddressDto;
-import buildrun.roadeye.rest.dto.GeolocationDto;
+import buildrun.roadeye.rest.dto.*;
 import buildrun.roadeye.service.AddressService;
-import buildrun.roadeye.rest.dto.AddressUpdateDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -137,10 +134,8 @@ public class AddressServiceImplementation implements AddressService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            // Verifica se já existe algum endereço cadastrado para o usuário
-            Optional<UserAddress> existingUserAddress = userAddressRepository.findByUser(user);
-            // Se já existir, desativa o endereço atual
-            existingUserAddress.ifPresent(userAddress -> {
+            List<UserAddress> existingUserAddresses = userAddressRepository.findAllByUser(user);
+            existingUserAddresses.forEach(userAddress -> {
                 Address address = userAddress.getAddress();
                 address.setStatusEnum(StatusEnum.DISABLED);
                 addressRepository.save(address);
@@ -186,6 +181,34 @@ public class AddressServiceImplementation implements AddressService {
                 ErrorResponse errorResponse = new ErrorResponse("Address not found.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
+        }else{
+            ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> createAddressByUserByCoordinates(AddressCoordinatesDto coordinatesDto, UUID userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            List<UserAddress> existingUserAddresses = userAddressRepository.findAllByUser(user);
+            existingUserAddresses.forEach(userAddress -> {
+                Address address = userAddress.getAddress();
+                address.setStatusEnum(StatusEnum.DISABLED);
+                addressRepository.save(address);
+            });
+            Address address = new Address();
+            try {
+                address = geocodingService.getAddressFromCoordinates(coordinatesDto.latitude(), coordinatesDto.longitude());
+            } catch (Exception e) {
+                return new ResponseEntity<>("Não foi possível obter o endereço.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            addressRepository.save(address);
+            UserAddress userAddress = new UserAddress();
+            userAddress.setUser(user);
+            userAddress.setAddress(address);
+            return ResponseEntity.ok(userAddressRepository.save(userAddress));
         }else{
             ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);

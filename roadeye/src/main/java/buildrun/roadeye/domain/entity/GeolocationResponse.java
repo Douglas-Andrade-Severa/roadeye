@@ -1,5 +1,8 @@
 package buildrun.roadeye.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.transform.Result;
 import java.util.List;
 
@@ -23,29 +26,30 @@ public class GeolocationResponse {
         this.results = results;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Result {
         private Geometry geometry;
-
-        // Getters e Setters
-
+        @JsonProperty("address_components")
+        private List<AddressComponent> addressComponents;
         public Geometry getGeometry() {
             return geometry;
         }
-
         public void setGeometry(Geometry geometry) {
             this.geometry = geometry;
+        }
+        public List<AddressComponent> getAddressComponents() {
+            return addressComponents;
+        }
+        public void setAddressComponents(List<AddressComponent> addressComponents) {
+            this.addressComponents = addressComponents;
         }
     }
 
     public static class Geometry {
         private Location location;
-
-        // Getters e Setters
-
         public Location getLocation() {
             return location;
         }
-
         public void setLocation(Location location) {
             this.location = location;
         }
@@ -55,8 +59,6 @@ public class GeolocationResponse {
     public static class Location {
         private double lat;
         private double lng;
-
-        // Getters e Setters
 
         public double getLat() {
             return lat;
@@ -72,6 +74,40 @@ public class GeolocationResponse {
 
         public void setLng(double lng) {
             this.lng = lng;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class AddressComponent {
+        @JsonProperty("long_name")
+        private String longName;
+        @JsonProperty("short_name")
+        private String shortName;
+        private List<String> types;
+
+        // Getters e setters
+        public String getLongName() {
+            return longName;
+        }
+
+        public void setLongName(String longName) {
+            this.longName = longName;
+        }
+
+        public String getShortName() {
+            return shortName;
+        }
+
+        public void setShortName(String shortName) {
+            this.shortName = shortName;
+        }
+
+        public List<String> getTypes() {
+            return types;
+        }
+
+        public void setTypes(List<String> types) {
+            this.types = types;
         }
     }
 }

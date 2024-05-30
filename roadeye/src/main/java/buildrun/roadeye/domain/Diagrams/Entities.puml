@@ -4,6 +4,7 @@
 VehicleServiceImplementation <|-- VehicleRespository
 VehicleServiceImplementation <|-- VehicleDto
 VehicleServiceImplementation <|-- Vehicle
+VehicleServiceImplementation <|-- ErrorResponse
 class VehicleServiceImplementation implements VehicleService {
     - static final String axNotFound = "Vehicle not found";
     - final VehicleRespository vehicleRespository;
@@ -19,6 +20,7 @@ class VehicleServiceImplementation implements VehicleService {
 UserServiceImplementation <|-- UserRepository
 UserServiceImplementation <|-- PasswordEncoder
 UserServiceImplementation <|-- UserDto
+UserServiceImplementation <|-- ErrorResponse
 class UserServiceImplementation implements UserService {
     - final UserRepository userRepository;
     - final PasswordEncoder passwordEncoder;
@@ -38,6 +40,7 @@ UserAddressServiceImplementation <|-- UserAddressRepository
 UserAddressServiceImplementation <|-- UserRepository
 UserAddressServiceImplementation <|-- AddressRepository
 UserAddressServiceImplementation <|-- UserAddressDto
+UserAddressServiceImplementation <|-- ErrorResponse
 class UserAddressServiceImplementation implements UserAddressService {
     - final UserAddressRepository userAddressRepository;
     - final UserRepository userRepository;
@@ -57,6 +60,7 @@ StudentRouteServiceImplementation <|-- SchoolRepository
 StudentRouteServiceImplementation <|-- StudentRouteDto
 StudentRouteServiceImplementation <|-- StudentRouteUpdateDto
 StudentRouteServiceImplementation <|-- PeriodEnum
+StudentRouteServiceImplementation <|-- ErrorResponse
 class StudentRouteServiceImplementation implements StudentRouteService {
     - final StudentRouteRepository studentRouteRepository;
     - final UserRepository userRepository;
@@ -78,6 +82,7 @@ class StudentRouteServiceImplementation implements StudentRouteService {
 
 SchoolServiceImplementation <|-- SchoolRepository
 SchoolServiceImplementation <|-- SchoolDto
+SchoolServiceImplementation <|-- ErrorResponse
 class SchoolServiceImplementation implements SchoolService {
     - final SchoolRepository schoolRepository;
     + SchoolServiceImplementation(SchoolRepository schoolRepository)
@@ -92,6 +97,7 @@ SchoolAddressServiceImplementation <|-- SchoolAddressRepository
 SchoolAddressServiceImplementation <|-- SchoolRepository
 SchoolAddressServiceImplementation <|-- AddressRepository
 SchoolAddressServiceImplementation <|-- SchoolAddressDto
+SchoolAddressServiceImplementation <|-- ErrorResponse
 class SchoolAddressServiceImplementation implements SchoolAddressService {
     - final SchoolAddressRepository schoolAddressRepository;
     - final SchoolRepository schoolRepository;
@@ -105,22 +111,29 @@ class SchoolAddressServiceImplementation implements SchoolAddressService {
 }
 
 GoogleMapsService <|-- RouteRequest
+GoogleMapsService <|-- ErrorResponse
 class GoogleMapsService {
     - String apiKey;
     + ResponseEntity<String> computeRoutes(RouteRequest request)
 }
 GoogleGeocodingService <|-- RestTemplate
 GoogleGeocodingService <|-- GeolocationDto
+GoogleGeocodingService <|-- GeolocationResponse
+GoogleGeocodingService <|-- ErrorResponse
 class GoogleGeocodingService {
     - String apiKey;
+    - static final String GOOGLE_API_URL;
     - final RestTemplate restTemplate;
     + GoogleGeocodingService(RestTemplate restTemplate)
     + GeolocationDto getGeolocation(String address)
+    + getAddressFromCoordinates(double latitude, double longitude)
+    - Address mapToAddress(List<GeolocationResponse.AddressComponent> addressComponents, double latitude, double longitude)
 }
 
 FatherSonRelationshipServiceImplementation <|-- FatherSonRelationshipRepository
 FatherSonRelationshipServiceImplementation <|-- UserRepository
 FatherSonRelationshipServiceImplementation <|-- FatherSonRelationshipDto
+FatherSonRelationshipServiceImplementation <|-- ErrorResponse
 class FatherSonRelationshipServiceImplementation implements FatherSonRelationshipService {
     - final FatherSonRelationshipRepository fatherSonRelationshipRepository;
     - final UserRepository userRepository;
@@ -137,6 +150,7 @@ AuthenticationServiceImplementation <|-- UserRepository
 AuthenticationServiceImplementation <|-- UserDetails
 AuthenticationServiceImplementation <|-- LoginRequest
 AuthenticationServiceImplementation <|-- User
+AuthenticationServiceImplementation <|-- ErrorResponse
 class AuthenticationServiceImplementation implements AuthenticationService {
     - final UserRepository userRepository;
     + AuthenticationServiceImplementation(UserRepository userRepository)
@@ -156,6 +170,7 @@ AddressServiceImplementation <|-- SchoolRepository
 AddressServiceImplementation <|-- AddressUpdateDto
 AddressServiceImplementation <|-- AddressDto
 AddressServiceImplementation <|-- Address
+AddressServiceImplementation <|-- ErrorResponse
 class AddressServiceImplementation implements AddressService {
     - final AddressRepository addressRepository;
     - final UserRepository userRepository;
@@ -175,6 +190,7 @@ class AddressServiceImplementation implements AddressService {
     + ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId)
     + ResponseEntity<?> createAddressBySchool(AddressDto addressDto, Long schoolId)
     + String getFullAddress(String street, Long number, String neighborhood, String city, String state, String postCode, String country)
+    + ResponseEntity<?> createAddressByUserByCoordinates(AddressCoordinatesDto coordinatesDto, UUID userId)
 }
 
 VehicleService <|-- VehicleDto
@@ -206,6 +222,7 @@ interface UserAddressService {
     ResponseEntity<?> updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto);
     ResponseEntity<?> getUserAddressById(Long userAddressId);
     List<UserAddress> findAddressesByUser_Id(UUID userId);
+    ResponseEntity<?> createAddressByUserByCoordinates(AddressCoordinatesDto coordinatesDto, UUID userId)
 }
 
 StudentRouteService <|-- StudentRouteDto
@@ -583,6 +600,7 @@ class AddressController {
     + ResponseEntity<?> getUserAddressById(@PathVariable Long userAddressId)
     + ResponseEntity<?> getUserAddressesByUserId(@PathVariable UUID userId)
     + ResponseEntity<?> activateDisableAddressByUser(@RequestBody AddressActivateDisableDto activateDisable, @PathVariable UUID userId)
+    + ResponseEntity<?> createAddressByUserByCoordinates(@RequestBody AddressCoordinatesDto coordinatesDto, @PathVariable UUID userId)
     + ResponseEntity<?> createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId)
     + ResponseEntity<?> listSchools()
     + ResponseEntity<?> getSchoolAddressById(@PathVariable Long schoolAddressId)

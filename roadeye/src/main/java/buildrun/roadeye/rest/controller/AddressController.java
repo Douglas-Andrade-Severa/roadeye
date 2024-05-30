@@ -85,6 +85,18 @@ public class AddressController {
     public ResponseEntity<?> createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId){
         return addressService.createAddressByUser(addressDto, userId);
     }
+
+    @PostMapping("/user/coordinates/{userId}")
+    @Operation(summary = "Create user address by coordinates", description = "Creates address for user based on coordinates, latitude and longitude", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Address created for user"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
+    })
+    public ResponseEntity<?> createAddressByUserByCoordinates(@RequestBody AddressCoordinatesDto coordinatesDto, @PathVariable UUID userId){
+        return addressService.createAddressByUserByCoordinates(coordinatesDto, userId);
+    }
+
+
     @GetMapping("/user")
     @Operation(summary = "Get full user/address", description = "Search all registered users and addresses", method = "GET")
     @ApiResponses(value = {
