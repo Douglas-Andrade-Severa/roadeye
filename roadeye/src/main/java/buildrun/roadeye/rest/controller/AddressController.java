@@ -148,7 +148,7 @@ public class AddressController {
             @ApiResponse(responseCode = "201", description = "Address created for user"),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    public ResponseEntity<?> activateDisableAddressByUser(@RequestBody AddressActivateDisable activateDisable, @PathVariable UUID userId){
+    public ResponseEntity<?> activateDisableAddressByUser(@RequestBody AddressActivateDisableDto activateDisable, @PathVariable UUID userId){
         return addressService.updateActivateDisableAddressByUser(activateDisable, userId);
     }
 

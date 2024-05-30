@@ -364,6 +364,10 @@ class UserPasswordDto {
     String password
 }
 
+class AddressActivateDisableDto {
+    Long idAddress
+}
+
 UserDto <|-- RoleEnum
 UserDto <|-- StatusEnum
 UserDto <|-- UserDto
@@ -562,6 +566,7 @@ AddressController <|-- AddressUpdateDto
 AddressController <|-- AddressDto
 AddressController <|-- UserAddressDto
 AddressController <|-- SchoolAddressDto
+AddressController <|-- AddressActivateDisableDto
 class AddressController {
     - final AddressService addressService;
     - final UserAddressService userAddressService;
@@ -577,6 +582,7 @@ class AddressController {
     + ResponseEntity<?> updateUserAddress(@PathVariable Long userAddressId, @Validated @RequestBody UserAddressDto updateUserAddressDto)
     + ResponseEntity<?> getUserAddressById(@PathVariable Long userAddressId)
     + ResponseEntity<?> getUserAddressesByUserId(@PathVariable UUID userId)
+    + ResponseEntity<?> activateDisableAddressByUser(@RequestBody AddressActivateDisableDto activateDisable, @PathVariable UUID userId)
     + ResponseEntity<?> createAddressBySchool(@RequestBody AddressDto addressDto, @PathVariable Long schoolId)
     + ResponseEntity<?> listSchools()
     + ResponseEntity<?> getSchoolAddressById(@PathVariable Long schoolAddressId)

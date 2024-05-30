@@ -3,7 +3,7 @@ package buildrun.roadeye.service.implementation;
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.enums.StatusEnum;
 import buildrun.roadeye.domain.repository.*;
-import buildrun.roadeye.rest.dto.AddressActivateDisable;
+import buildrun.roadeye.rest.dto.AddressActivateDisableDto;
 import buildrun.roadeye.rest.dto.AddressDto;
 import buildrun.roadeye.rest.dto.GeolocationDto;
 import buildrun.roadeye.service.AddressService;
@@ -157,7 +157,7 @@ public class AddressServiceImplementation implements AddressService {
     }
 
     @Override
-    public ResponseEntity<?> updateActivateDisableAddressByUser(AddressActivateDisable activateDisable, UUID userId) {
+    public ResponseEntity<?> updateActivateDisableAddressByUser(AddressActivateDisableDto activateDisable, UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
