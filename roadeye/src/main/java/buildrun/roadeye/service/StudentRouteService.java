@@ -2,6 +2,7 @@ package buildrun.roadeye.service;
 
 import buildrun.roadeye.domain.entity.StudentRoute;
 import buildrun.roadeye.domain.enums.PeriodEnum;
+import buildrun.roadeye.domain.enums.StudentStatusEnum;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
 import buildrun.roadeye.rest.dto.StudentRouteWithAddresses;
@@ -27,5 +28,5 @@ public interface StudentRouteService {
 
     ResponseEntity<?> updateStudentRouteImagem(MultipartFile file, Long routeId);
 
-    List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate);
+    List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate, StudentStatusEnum studentStatusEnum);
 }

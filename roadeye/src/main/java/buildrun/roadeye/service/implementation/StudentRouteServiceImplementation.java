@@ -49,37 +49,34 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
     @Override
     public ResponseEntity<?> createStudentRoute(StudentRouteDto routeDto, UUID userId) {
         try {
-            User student = new User();
-            School school = new School();
-
             // Verificar se o usuário existe e se é um estudante
             Optional<User> userStudent = userRepository.findById(userId);
-            if(userStudent.isEmpty()){
+            if (userStudent.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User responsible not found."));
             }
-            student = userStudent.get();
+            User student = userStudent.get();
             if (student.getRole() != RoleEnum.STUDENT) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User is not a " + RoleEnum.STUDENT.toString().toLowerCase()));
             }
 
             // Verificar se a escola existe
-            Optional<School> schools = schoolRepository.findById(routeDto.school());
-            if(schools.isEmpty()){
+            Optional<School> schoolOpt = schoolRepository.findById(routeDto.school());
+            if (schoolOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("School responsible not found."));
             }
-            school = schools.get();
+            School school = schoolOpt.get();
 
-            //Verificar se o enum existe
-            if (StudentStatusEnum.isStudentStatusValid(routeDto.studentStatusEnum()) == false) {
+            // Verificar se o enum de status do estudante é válido
+            if (!StudentStatusEnum.isStudentStatusValid(routeDto.studentStatusEnum())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("The student status entered is invalid."));
             }
 
-            //Verificar se o enum existe
-            if (PeriodEnum.isPeriodValid(routeDto.periodEnum()) == false) {
+            // Verificar se o enum de período é válido
+            if (!PeriodEnum.isPeriodValid(routeDto.periodEnum())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("The period entered is invalid."));
             }
 
-            //Verificar se a data foi informada
+            // Verificar se a data foi informada
             if (routeDto.localDate() == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("The date entered is invalid."));
             }
@@ -90,14 +87,45 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
             studentRoute.setSchool(school);
             studentRoute.setLocalDate(routeDto.localDate());
             studentRoute.setPeriodEnum(routeDto.periodEnum());
-            studentRoute.setStudentStatusEnum(routeDto.studentStatusEnum());
             studentRoute.setStatusRouteEnum(StatusRouteEnum.WAITINGTOSTART);
             studentRoute.setConfimationStudentEnum(ConfimationStudentEnum.ABSENT);
-            if(studentRoute.getStudentStatusEnum() == StudentStatusEnum.IWONTGO){
+
+            // Ajustar status e confirmação baseado no status do estudante
+            if (routeDto.studentStatusEnum() == StudentStatusEnum.IWONTGO) {
                 studentRoute.setStatusRouteEnum(StatusRouteEnum.ROUTEFINISHED);
                 studentRoute.setConfimationStudentEnum(ConfimationStudentEnum.CANCEL);
             }
-            return ResponseEntity.ok(studentRouteRepository.save(studentRoute));
+
+            // Tratamento especial para ROUNDTRIP
+            if (routeDto.studentStatusEnum() == StudentStatusEnum.ROUNDTRIP) {
+                // Primeira instância para ONEWAYONLY
+                StudentRoute oneWayRoute = new StudentRoute();
+                oneWayRoute.setUser(student);
+                oneWayRoute.setSchool(school);
+                oneWayRoute.setLocalDate(routeDto.localDate());
+                oneWayRoute.setPeriodEnum(routeDto.periodEnum());
+                oneWayRoute.setStatusRouteEnum(StatusRouteEnum.WAITINGTOSTART);
+                oneWayRoute.setConfimationStudentEnum(ConfimationStudentEnum.ABSENT);
+                oneWayRoute.setStudentStatusEnum(StudentStatusEnum.ONEWAYONLY);
+                studentRouteRepository.save(oneWayRoute);
+
+                // Segunda instância para ONLYAROUND
+                StudentRoute returnRoute = new StudentRoute();
+                returnRoute.setUser(student);
+                returnRoute.setSchool(school);
+                returnRoute.setLocalDate(routeDto.localDate());
+                returnRoute.setPeriodEnum(routeDto.periodEnum());
+                returnRoute.setStatusRouteEnum(StatusRouteEnum.WAITINGTOSTART);
+                returnRoute.setConfimationStudentEnum(ConfimationStudentEnum.ABSENT);
+                returnRoute.setStudentStatusEnum(StudentStatusEnum.ONLYAROUND);
+                studentRouteRepository.save(returnRoute);
+
+                return ResponseEntity.ok().build();  // Retorna uma resposta de sucesso vazia
+            } else {
+                studentRoute.setStudentStatusEnum(routeDto.studentStatusEnum());
+                studentRouteRepository.save(studentRoute);
+                return ResponseEntity.ok(studentRoute);  // Retorna a rota salva
+            }
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(ex.getStatusCode(), ex.getMessage());
         }
@@ -195,10 +223,9 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
     }
 
     @Override
-    public List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate) {
+    public List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate, StudentStatusEnum studentStatusEnum) {
         List<Object[]> results = studentRouteRepository.findWithAddressesByPeriodEnumAndLocalDateAndConfimationStudentEnumAndStudentStatusEnumNot(
-                periodEnum.name(), localDate, ConfimationStudentEnum.ABSENT.name(), StudentStatusEnum.IWONTGO.name());
-
+                periodEnum.name(), localDate, ConfimationStudentEnum.ABSENT.name(), studentStatusEnum.name());
         List<StudentRouteWithAddresses> studentRoutesWithAddresses = new ArrayList<>();
 
         for (Object[] result : results) {
@@ -226,7 +253,6 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
         long mostSigBits = byteBuffer.getLong();
         long leastSigBits = byteBuffer.getLong();
         UUID userId = new UUID(mostSigBits, leastSigBits);
-//        UUID userId = UUID.nameUUIDFromBytes(byteArray);
         System.out.println(userId);
         studentRoute.setUser(mapToUser(userId));
         studentRoute.setPeriodEnum(PeriodEnum.valueOf((String) result[8]));

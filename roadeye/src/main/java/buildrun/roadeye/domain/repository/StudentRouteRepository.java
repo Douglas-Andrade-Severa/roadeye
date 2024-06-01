@@ -30,12 +30,12 @@ public interface StudentRouteRepository extends JpaRepository<StudentRoute, Long
             "INNER JOIN tb_users userid on userid.user_id = sr.user_id "+
             "WHERE sr.period = :periodEnum " +
             "AND sr.local_date = :localDate " +
-            "AND sr.status_confirmation_student = :confimationStudentEnum " +
-            "AND sr.status_student <> :studentStatusEnum",
+            "AND sr.status_confirmation_student = :confirmationStudentEnum " +
+            "AND sr.status_student = :studentStatusEnum",
             nativeQuery = true)
     List<Object[]> findWithAddressesByPeriodEnumAndLocalDateAndConfimationStudentEnumAndStudentStatusEnumNot(
             @Param("periodEnum") String periodEnum,
             @Param("localDate") LocalDate localDate,
-            @Param("confimationStudentEnum") String confimationStudentEnum,
+            @Param("confirmationStudentEnum") String confirmationStudentEnum,
             @Param("studentStatusEnum") String studentStatusEnum);
 }
