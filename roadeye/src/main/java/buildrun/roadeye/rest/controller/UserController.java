@@ -2,6 +2,7 @@ package buildrun.roadeye.rest.controller;
 
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
+import buildrun.roadeye.rest.dto.UserTokenPushDto;
 import buildrun.roadeye.rest.dto.UserUpdateDto;
 import buildrun.roadeye.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,5 +91,16 @@ public class UserController {
     })
     public ResponseEntity<?> getUserById(@PathVariable UUID userId) {
         return userService.getUserResponseById(userId);
+    }
+
+    @PutMapping("/tokenPush/{userId}")
+    @Operation(summary = "Update user token push by ID", description = "The user token push will be updated based on the user ID.", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User token push has been updated successfully"),
+            @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    public ResponseEntity<?> updateUserTokenPush(@PathVariable UUID userId, @Validated @RequestBody UserTokenPushDto tokenPushDto) {
+        return userService.updateUserTokenPush(userId, tokenPushDto);
     }
 }

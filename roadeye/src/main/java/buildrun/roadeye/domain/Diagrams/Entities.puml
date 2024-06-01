@@ -21,6 +21,7 @@ UserServiceImplementation <|-- UserRepository
 UserServiceImplementation <|-- PasswordEncoder
 UserServiceImplementation <|-- UserDto
 UserServiceImplementation <|-- ErrorResponse
+UserServiceImplementation <|-- UserTokenPushDto
 class UserServiceImplementation implements UserService {
     - final UserRepository userRepository;
     - final PasswordEncoder passwordEncoder;
@@ -32,6 +33,7 @@ class UserServiceImplementation implements UserService {
     + ResponseEntity<?> updateUser(UUID userId, UserUpdateDto updateUserDto)
     + ResponseEntity<?> updateUserPassword(UUID userId, UserPasswordDto updateUserDto)
     + ResponseEntity<?> getUserResponseById(UUID userId)
+    + ResponseEntity<?> updateUserTokenPush(UUID userId, UserTokenPushDto tokenPushDto)
     - void setUserUpdateService(User user, UserUpdateDto userDto)
     - void setUserService(User user, UserDto userDto)
 }
@@ -380,6 +382,9 @@ class UserUpdateDto {
 class UserPasswordDto {
     String password
 }
+class UserTokenPushDto {
+    String password
+}
 
 class AddressActivateDisableDto {
     Long idAddress
@@ -519,6 +524,7 @@ class UserController {
     + ResponseEntity<?> updateUser(@PathVariable UUID userId, @Validated @RequestBody UserUpdateDto updateUserDto)
     + ResponseEntity<?> updateUserPassword(@PathVariable UUID userId, @Validated @RequestBody UserPasswordDto userPasswordDtoDto)
     + ResponseEntity<?> getUserById(@PathVariable UUID userId)
+    + ResponseEntity<?> updateUserTokenPush(@PathVariable UUID userId, @Validated @RequestBody UserTokenPushDto tokenPushDto)
 }
 
 StudentRouteController <|-- StudentRouteService
@@ -700,6 +706,7 @@ class User implements UserDetails {
     - String cpf;
     - String phone;
     - String photo;
+    - String tokenPush
     - StatusEnum statusEnum;
     + Collection<? extends GrantedAuthority> getAuthorities()
     + String getUsername()

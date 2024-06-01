@@ -41,6 +41,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String phone;
     private String photo;
+    @Column(name = "tokenPush", unique = true)
+    private String tokenPush;
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;

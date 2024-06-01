@@ -5,6 +5,7 @@ import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
+import buildrun.roadeye.rest.dto.UserTokenPushDto;
 import buildrun.roadeye.rest.dto.UserUpdateDto;
 import buildrun.roadeye.service.UserService;
 import jakarta.transaction.Transactional;
@@ -88,6 +89,19 @@ public class UserServiceImplementation implements UserService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setPassword(passwordEncoder.encode(updateUserDto.password()));
+            return ResponseEntity.ok(userRepository.save(user));
+        }else{
+            ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> updateUserTokenPush(UUID userId, UserTokenPushDto tokenPushDto) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setTokenPush(tokenPushDto.tokenPush());
             return ResponseEntity.ok(userRepository.save(user));
         }else{
             ErrorResponse errorResponse = new ErrorResponse("User does not exist.");
