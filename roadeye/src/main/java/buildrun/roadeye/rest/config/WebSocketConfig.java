@@ -10,7 +10,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/canal");//Canal
+        config.enableSimpleBroker("/topic");//Canal
         config.setApplicationDestinationPrefixes("/app");//Mapear o ambiente
     }
 

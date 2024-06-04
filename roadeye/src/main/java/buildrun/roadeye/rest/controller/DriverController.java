@@ -21,8 +21,9 @@ public class DriverController {
         this.coordinatesService = coordinatesService;
     }
 
-    @MessageMapping("/driverCoordinates")
-    public void sendCoordinates(AddressCoordinatesDto coordinates) {
-        coordinatesService.processCoordinates(coordinates);
+    @MessageMapping("/connect")
+    @SendTo("/topic/messages")
+    public AddressCoordinatesDto sendCoordinates(AddressCoordinatesDto coordinates) {
+        return new AddressCoordinatesDto(coordinates.latitude(), coordinates.latitude());
     }
 }
