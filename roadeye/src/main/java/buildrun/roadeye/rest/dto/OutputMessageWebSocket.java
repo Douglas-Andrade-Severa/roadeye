@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class OutputMessageWebSocket {
-    private final String latitude;
-    private final String longitude;
+    private final double latitude;
+    private final double longitude;
     private final LocalDateTime date;
 }

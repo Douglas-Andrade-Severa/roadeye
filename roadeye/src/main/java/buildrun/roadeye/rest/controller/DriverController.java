@@ -20,7 +20,7 @@ import java.util.UUID;
 public class DriverController {
     @MessageMapping("/connect")
     @SendTo("/topic/messages")
-    public OutputMessageWebSocket StudentWebSocketController(MessageWebSocketDto webSocketDto) {
+    public OutputMessageWebSocket handleDriverConnect(MessageWebSocketDto webSocketDto) {
         return new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
     }
 }

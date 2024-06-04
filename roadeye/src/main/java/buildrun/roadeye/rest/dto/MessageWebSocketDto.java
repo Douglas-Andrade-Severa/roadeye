@@ -1,11 +1,13 @@
 package buildrun.roadeye.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageWebSocketDto {
-    private final String latitude;
-    private final String longitude;
+    private final double latitude;
+    private final double longitude;
 }
