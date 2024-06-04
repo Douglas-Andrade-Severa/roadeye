@@ -3,6 +3,7 @@ package buildrun.roadeye.rest.controller;
 import buildrun.roadeye.domain.entity.StudentRoute;
 import buildrun.roadeye.domain.enums.PeriodEnum;
 import buildrun.roadeye.domain.enums.StudentStatusEnum;
+import buildrun.roadeye.rest.dto.ImageUpdateRequestDto;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
 import buildrun.roadeye.rest.dto.StudentRouteWithAddresses;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -113,8 +115,9 @@ public class StudentRouteController {
             @ApiResponse(responseCode = "201", description = "Student image was saved successfully."),
             @ApiResponse(responseCode = "403", description = "The client is authenticated, but does not have permission to access the requested resource")
     })
-    public ResponseEntity<?> updateImage(@RequestParam("file") MultipartFile file, @PathVariable Long routeId){
-        return studentRouteService.updateStudentRouteImagem(file, routeId);
+    public ResponseEntity<?> updateImage(@RequestBody ImageUpdateRequestDto imageUpdateRequest, @PathVariable Long routeId){
+        byte[] imageBytes = Base64.getDecoder().decode(imageUpdateRequest.imageUpdateRequest());
+        return studentRouteService.updateStudentRouteImagem(imageBytes, routeId);
     }
 
     @GetMapping("/routeByPeriodAndDate")

@@ -191,36 +191,34 @@ public class StudentRouteServiceImplementation implements StudentRouteService {
     }
 
     @Override
-    public ResponseEntity<?> updateStudentRouteImagem(MultipartFile file, Long routeId) {
-        System.out.println("Imagem name: "+ file);
-        if(file == null){
-            ErrorResponse errorResponse = new ErrorResponse("The image cannot be null.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    public ResponseEntity<?> updateStudentRouteImagem(byte[] imageBytes, Long routeId) {
+        if (imageBytes == null || imageBytes.length == 0) {
+            ErrorResponse errorResponse = new ErrorResponse("The image cannot be null or empty.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-        StudentRoute studentRoute = new StudentRoute();
+
         // Verifica se a rota existe
         Optional<StudentRoute> optionalStudentRoute = studentRouteRepository.findById(routeId);
         if (optionalStudentRoute.isPresent()) {
-            studentRoute = optionalStudentRoute.get();
+            StudentRoute studentRoute = optionalStudentRoute.get();
             try {
-                // Converte a imagem para um array de bytes
-                byte[] imageData = file.getBytes();
                 // Define a imagem e a data de upload na rota
-                studentRoute.setImageData(imageData);
+                studentRoute.setImageData(imageBytes);
                 studentRoute.setConfimationStudentEnum(ConfimationStudentEnum.CONFIRM);
                 // Atualiza a rota no banco de dados
                 studentRouteRepository.save(studentRoute);
 
                 return ResponseEntity.ok("Student image updated successfully.");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 ErrorResponse errorResponse = new ErrorResponse("Error processing the image.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
             }
         } else {
             ErrorResponse errorResponse = new ErrorResponse("Student/Route not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
+
 
     @Override
     public List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate, StudentStatusEnum studentStatusEnum) {

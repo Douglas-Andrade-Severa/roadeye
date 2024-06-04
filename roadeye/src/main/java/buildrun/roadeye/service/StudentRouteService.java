@@ -26,7 +26,7 @@ public interface StudentRouteService {
 
     List<StudentRoute> findSchoolBySchool_Id(Long schoolId);
 
-    ResponseEntity<?> updateStudentRouteImagem(MultipartFile file, Long routeId);
+    ResponseEntity<?> updateStudentRouteImagem(byte[] imageBytes, Long routeId);
 
     List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate, StudentStatusEnum studentStatusEnum);
 }
