@@ -50,6 +50,7 @@ class UserUpdateDto {
 
 UserDto <|-- StatusEnum
 UserDto <|-- User
+UserDto <|-- UserDto
 class UserDto{
     String name;
     String login;

@@ -1,0 +1,146 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+UserAddressDto <|-- UserAddressDto
+UserAddressDto <|-- UserAddress
+class UserAddressDto {
+    UUID userId;
+    Long addressId;
+    public static UserAddressDto fromEntity(UserAddress savedAddress);
+}
+
+UserAddressRepository <|-- UserAddress
+UserAddressRepository <|-- User
+interface UserAddressRepository extends JpaRepository<UserAddress, Long> {
+    List<UserAddress> findByUser_Id(UUID userId);
+    Optional<UserAddress> findByUser(User user);
+    List<UserAddress> findAllByUser(User user);
+    Optional<UserAddress> findByAddressIdAndUserId(Long addressId, UUID userId);
+}
+
+UserRepository <|-- User
+interface UserRepository extends JpaRepository<User, UUID> {
+    Optional<User> findByLogin(String login);
+    Optional<User> findByCpf(String cpf);
+}
+
+UserRepository <|-- Address
+interface AddressRepository extends JpaRepository<Address, Long> {
+}
+
+UserAddressServiceImplementation <|-- UserAddressRepository
+UserAddressServiceImplementation <|-- UserRepository
+UserAddressServiceImplementation <|-- AddressRepository
+UserAddressServiceImplementation <|-- UserAddressDto
+class UserAddressServiceImplementation implements UserAddressService {
+    - final UserAddressRepository userAddressRepository;
+    - final UserRepository userRepository;
+    - final AddressRepository addressRepository;
+
+    + UserAddressServiceImplementation(UserAddressRepository userAddressRepository, UserRepository userRepository, AddressRepository addressRepository)
+    + UserAddressDto createUserAddress(UserAddressDto userAddressDto);
+    + ResponseEntity<?> getAllUsersAddress();
+    + ResponseEntity<?> deleteUserAddress(Long userAddressId);
+    + ResponseEntity<?> updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto);
+    + ResponseEntity<?> getUserAddressById(Long userAddressId);
+    + List<UserAddress> findAddressesByUser_Id(UUID userId);
+}
+
+UserAddressService <|-- UserAddressDto
+interface UserAddressService {
+    UserAddressDto createUserAddress(UserAddressDto userAddressDto);
+    ResponseEntity<?> getAllUsersAddress();
+    ResponseEntity<?> deleteUserAddress(Long userAddressId);
+    ResponseEntity<?> updateUserAddress(Long userAddressId, UserAddressDto updateUserAddressDto);
+    ResponseEntity<?> getUserAddressById(Long userAddressId);
+    List<UserAddress> findAddressesByUser_Id(UUID userId);
+}
+
+class AddressCoordinatesDto {
+    double latitude;
+    double longitude;
+}
+
+class AddressActivateDisableDto{
+    Long idAddress;
+}
+
+
+AddressController <|-- UserAddressService
+AddressController <|-- AddressCoordinatesDto
+AddressController <|-- UserAddressDto
+AddressController <|-- AddressActivateDisableDto
+class AddressController {
+    - final UserAddressService userAddressService;
+    + AddressController(UserAddressService userAddressService);
+    + ResponseEntity<?> createAddressByUser(@RequestBody AddressDto addressDto, @PathVariable UUID userId);
+    + ResponseEntity<?> createAddressByUserByCoordinates(@RequestBody AddressCoordinatesDto coordinatesDto, @PathVariable UUID userId);
+    + ResponseEntity<?> listUsersAddress();
+    + ResponseEntity<?> deleteUserAddress(@PathVariable Long userAddressId);
+    + ResponseEntity<?> updateUserAddress(@PathVariable Long userAddressId, @Validated @RequestBody UserAddressDto updateUserAddressDto);
+    + ResponseEntity<?> getUserAddressById(@PathVariable Long userAddressId);
+    + ResponseEntity<?> getUserAddressesByUserId(@PathVariable UUID userId);
+    + ResponseEntity<?> activateDisableAddressByUser(@RequestBody AddressActivateDisableDto activateDisable, @PathVariable UUID userId);
+}
+
+enum StatusEnum {
+    ACTIVATE("activate"),
+    DISABLED("disabled");
+    - final String status;
+    StatusEnum(String status);
+    + String getStatus();
+}
+
+UserAddress <|-- Address
+UserAddress <|-- User
+class UserAddress {
+    - Long id;
+    - User user;
+    - Address address;
+    + UserAddress gets()
+    + void sets()
+}
+
+Address <|-- StatusEnum
+class Address {
+    private Long id;
+    private String postCode;
+    private String street;
+    private String neighborhood;
+    private String city;
+    private String state;
+    private String country;
+    private String complement;
+    private Long number;
+    private Double latitude;
+    private Double longitude;
+    private StatusEnum statusEnum;
+    + Address gets()
+    + void sets()
+}
+
+User <|-- StatusEnum
+class User implements UserDetails {
+    - UUID id;
+    - String name;
+    - String login;
+    - String password;
+    - RoleEnum role;
+    - String lastName;
+    - String email;
+    - String cpf;
+    - String phone;
+    - String photo;
+    - String tokenPush;
+    - StatusEnum statusEnum;
+    + User gets()
+    + void sets()
+    + Collection<? extends GrantedAuthority> getAuthorities()
+    + String getUsername()
+    + boolean isAccountNonExpired()
+    + boolean isAccountNonLocked()
+    + boolean isCredentialsNonExpired()
+    + boolean isEnabled()
+    + boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder)
+}
+@enduml
