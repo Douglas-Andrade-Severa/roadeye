@@ -18,6 +18,8 @@ class School {
 
     + School gets();
     + void sets();
+
+
 }
 
 enum StatusEnum {
