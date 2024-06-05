@@ -6,6 +6,8 @@ import buildrun.roadeye.rest.dto.OutputMessageWebSocket;
 import buildrun.roadeye.service.CoordinatesService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -18,9 +20,12 @@ import java.util.UUID;
 @Tag(name = "Driver location")
 @SecurityRequirement(name = "bearer-key")
 public class DriverController {
-    @MessageMapping("/connect")
+    private static final Logger logger = LoggerFactory.getLogger(DriverController.class);
+
+    @MessageMapping("/location")
     @SendTo("/topic/messages")
-    public OutputMessageWebSocket handleDriverConnect(MessageWebSocketDto webSocketDto) {
+    public OutputMessageWebSocket handleDriverLocation(MessageWebSocketDto webSocketDto) {
+        logger.info("Received WebSocket message: latitude={}, longitude={}", webSocketDto.getLatitude(), webSocketDto.getLongitude());
         return new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
     }
 }

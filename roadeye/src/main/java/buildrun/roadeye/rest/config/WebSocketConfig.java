@@ -15,7 +15,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker("/topic");//Canal
         config.setApplicationDestinationPrefixes("/app");//Mapear o ambiente
     }
-
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/connect");
         registry.addEndpoint("/connect").withSockJS();
