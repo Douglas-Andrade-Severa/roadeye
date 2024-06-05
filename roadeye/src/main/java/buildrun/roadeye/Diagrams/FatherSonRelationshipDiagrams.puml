@@ -1,0 +1,56 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class FatherSonRelationshipDto {
+    UUID responsible;
+    UUID student;
+}
+
+FatherSonRelationshipRepository <|-- FatherSonRelationship
+interface FatherSonRelationshipRepository extends JpaRepository<FatherSonRelationship, Long> {
+    List<FatherSonRelationship> findByResponsible_IdOrStudent_Id(UUID responsibleId, UUID studentId);
+}
+
+FatherSonRelationshipServiceImplementation <|-- FatherSonRelationshipRepository
+FatherSonRelationshipServiceImplementation <|-- FatherSonRelationshipDto
+class FatherSonRelationshipServiceImplementation implements FatherSonRelationshipService {
+    - final FatherSonRelationshipRepository fatherSonRelationshipRepository;
+    - final UserRepository userRepository;
+
+    + FatherSonRelationshipServiceImplementation(FatherSonRelationshipRepository fatherSonRelationshipRepository, UserRepository userRepository);
+    + ResponseEntity<?> getAllFatherSonRelationship();
+    + ResponseEntity<?> findFatherSonRelationshipByUserId(FatherSonRelationshipDto fatherSonRelationshipDto);
+    + ResponseEntity<?> getFatherSonRelationshipById(Long fatherSonRelationshipId);
+    + ResponseEntity<?> deleteFatherSonRelationship(Long fatherSonRelationshipId);
+    + ResponseEntity<?> updateFatherSonRelationship(Long fatherSonRelationshipId, FatherSonRelationshipDto fatherSonRelationshipDto);
+    + ResponseEntity<?> createFatherSonRelationship(FatherSonRelationshipDto fatherSonRelationshipDto);
+}
+
+FatherSonRelationshipService <|-- FatherSonRelationshipDto
+interface FatherSonRelationshipService {
+    ResponseEntity<?> getAllFatherSonRelationship();
+    ResponseEntity<?> getFatherSonRelationshipById(Long fatherSonRelationshipId);
+    ResponseEntity<?> findFatherSonRelationshipByUserId(FatherSonRelationshipDto fatherSonRelationshipDto);
+    ResponseEntity<?> deleteFatherSonRelationship(Long fatherSonRelationshipId);
+    ResponseEntity<?> updateFatherSonRelationship(Long fatherSonRelationshipId, FatherSonRelationshipDto fatherSonRelationshipDto);
+    ResponseEntity<?> createFatherSonRelationship(FatherSonRelationshipDto fatherSonRelationship);
+}
+
+FatherSonRelationshipController <|-- fatherSonRelationshipService
+FatherSonRelationshipController <|-- FatherSonRelationshipDto
+class FatherSonRelationshipController {
+    - final FatherSonRelationshipService fatherSonRelationshipService;
+
+    + FatherSonRelationshipController(FatherSonRelationshipService fatherSonRelationshipService);
+    + ResponseEntity<?> fatherSonRelationshipDto(@RequestBody FatherSonRelationshipDto fatherSonRelationship);
+    + ResponseEntity<?> listFatherSonRelationship();
+    + ResponseEntity<?> getFatherSonRelationshipById(@PathVariable Long fatherSonRelationshipId);
+    + ResponseEntity<?> getFatherSonRelationshipByUserId(@Validated @RequestBody FatherSonRelationshipDto fatherSonRelationshipDto);
+    + ResponseEntity<?> deleteFatherSonRelationship(@PathVariable Long fatherSonRelationshipId);
+    + ResponseEntity<?> FatherSonRelationship(@PathVariable Long fatherSonRelationshipId, @Validated @RequestBody FatherSonRelationshipDto fatherSonRelationshipDto);
+}
+
+
+}
+
+@enduml

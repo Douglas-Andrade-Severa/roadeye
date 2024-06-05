@@ -51,5 +51,4 @@ public class AuthenticationController {
         authenticationManager.authenticate(userAuthenticationToken);
         return ResponseEntity.ok(new LoginResponse(authenticationService.getToken(loginRequest), userOptional.get().getId(), userOptional.get().getRole()));
     }
-
 }

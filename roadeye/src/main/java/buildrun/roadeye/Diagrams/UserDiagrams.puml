@@ -26,7 +26,6 @@ class User implements UserDetails {
     + boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder)
 }
 
-
 enum StatusEnum {
     ACTIVATE("activate"),
     DISABLED("disabled");
@@ -34,6 +33,7 @@ enum StatusEnum {
     StatusEnum(String status)
     + String getStatus()
 }
+
 class UserPasswordDto{
     String password;
 }
