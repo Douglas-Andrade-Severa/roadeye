@@ -23,14 +23,17 @@ import java.util.UUID;
 @Controller
 @Tag(name = "Driver location")
 @SecurityRequirement(name = "bearer-key")
-@RequiredArgsConstructor
 public class DriverController {
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public DriverController(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @MessageMapping("/location")
-    public void handleDriverLocation(@Payload MessageWebSocketDto webSocketDto) {
-        OutputMessageWebSocket messageWebSocket = new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
-        messagingTemplate.convertAndSend("/topic/location", messageWebSocket);
+    @SendTo("/topic/location")
+    public OutputMessageWebSocket handleDriverLocation(@Payload MessageWebSocketDto webSocketDto) {
+        return new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
     }
 }

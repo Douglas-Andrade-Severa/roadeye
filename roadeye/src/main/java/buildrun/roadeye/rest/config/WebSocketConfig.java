@@ -16,8 +16,6 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    private final WebSocketAuthInterceptor webSocketAuthInterceptor;
-
     @Value("${app.websocket.endpoint}")
     private String websocketEndpoint;
 
@@ -35,24 +33,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         return new WebSocketStompClient(new StandardWebSocketClient());
     }
 
-    public WebSocketConfig(WebSocketAuthInterceptor webSocketAuthInterceptor) {
-        this.webSocketAuthInterceptor = webSocketAuthInterceptor;
-    }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(websocketEndpoint)
-                .setAllowedOrigins(allowedOrigins);
+        registry.addEndpoint(websocketEndpoint).setAllowedOrigins(allowedOrigins);
+        registry.addEndpoint(websocketEndpoint).withSockJS();
     }
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes(destinationPrefix)
-                .enableSimpleBroker(messageBrokerPrefixes);
-    }
-
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(webSocketAuthInterceptor);
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.setApplicationDestinationPrefixes(destinationPrefix);
+        config.enableSimpleBroker(messageBrokerPrefixes);
     }
 }
