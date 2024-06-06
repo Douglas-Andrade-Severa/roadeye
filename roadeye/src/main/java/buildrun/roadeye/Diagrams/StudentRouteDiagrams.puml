@@ -1,0 +1,219 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+User <|-- StatusEnum
+class User implements UserDetails {
+    - UUID id;
+    - String name;
+    - String login;
+    - String password;
+    - RoleEnum role;
+    - String lastName;
+    - String email;
+    - String cpf;
+    - String phone;
+    - String photo;
+    - String tokenPush;
+    - StatusEnum statusEnum;
+    + User gets()
+    + void sets()
+    + Collection<? extends GrantedAuthority> getAuthorities()
+    + String getUsername()
+    + boolean isAccountNonExpired()
+    + boolean isAccountNonLocked()
+    + boolean isCredentialsNonExpired()
+    + boolean isEnabled()
+    + boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder)
+}
+
+enum StatusEnum {
+    ACTIVATE("activate"),
+    DISABLED("disabled");
+    + final String status;
+    StatusEnum(String status)
+    + String getStatus()
+}
+
+School <|-- StatusEnum
+class School {
+    - Long id;
+    - String name;
+    - StatusEnum statusEnum;
+
+    + School get();
+    + void set();
+}
+
+StudentStatusEnum <|-- StudentStatusEnum
+enum StudentStatusEnum {
+    IWONTGO("Não irei");
+    ONEWAYONLY("Somente ida");
+    ONLYAROUND("Somente a volta");
+    ROUNDTRIP("Ida e volta");
+    - String routeStatus;
+    StudentStatusEnum(String routeStatus);
+    + static boolean isStudentStatusValid(StudentStatusEnum studentStatusEnum);
+}
+StatusRouteEnum <|-- StatusRouteEnum
+enum StatusRouteEnum {
+    WAITINGTOSTART("Aguardando iniciar rota");
+    ROUTESTARTED("Rota inicializada");
+    ROUTEFINISHED("Rota finalizada");
+
+    - String routeStatus;
+    StatusRouteEnum(String routeStatus);
+    + static boolean isRouteStatusValid(StatusRouteEnum statusRouteEnum);
+}
+
+ConfimationStudentEnum <|-- ConfimationStudentEnum
+enum ConfimationStudentEnum {
+    CONFIRM( "Confirmado, entrou no onibus.");
+    CANCEL(  "Usuario, cancelou o transporte.");
+    ABSENT(  "Usuario aguardando onibus.");
+    NOTENTER("Usuario não entrou no onibus.");
+
+    - String confimationStudent;
+    ConfimationStudentEnum(String confimationStudent);
+}
+
+PeriodEnum <|-- PeriodEnum
+enum PeriodEnum {
+    MORNING("Matutino");
+    EVENING("Vespertino");
+    NIGHT("Noturno");
+    - String periodEnum;
+    PeriodEnum(String PeriodEnum);
+    + static boolean isPeriodValid(PeriodEnum periodEnum);
+}
+
+
+StudentRoute <|-- User
+StudentRoute <|-- School
+StudentRoute <|-- StudentStatusEnum
+StudentRoute <|-- StatusRouteEnum
+StudentRoute <|-- ConfimationStudentEnum
+StudentRoute <|-- PeriodEnum
+class StudentRoute {
+    - Long id;
+    - User user;
+    - School school;
+    - LocalDate localDate;
+    - StudentStatusEnum studentStatusEnum;
+    - StatusRouteEnum statusRouteEnum;
+    - ConfimationStudentEnum confimationStudentEnum;
+    - PeriodEnum periodEnum;
+    - byte[] imageData;
+
+    + StudentRoute get();
+    + void set();
+}
+
+UserRepository <|-- User
+interface UserRepository extends JpaRepository<User, UUID> {
+    Optional<User> findByLogin(String login);
+    Optional<User> findByCpf(String cpf);
+}
+
+SchoolRepository <|-- School
+interface SchoolRepository extends JpaRepository<School, Long> {
+    Optional<School> findByName(String name);
+}
+
+StudentRouteRepository <|-- StudentRoute
+StudentRouteRepository <|-- PeriodEnum
+StudentRouteRepository <|-- ConfirmationStudentEnum
+StudentRouteRepository <|-- StudentStatusEnum
+interface StudentRouteRepository extends JpaRepository<StudentRoute, Long> {
+    List<StudentRoute> findByUser_Id(UUID userId);
+    List<StudentRoute> findBySchool_Id(Long school);
+    List<StudentRoute> findByPeriodEnumAndLocalDate(PeriodEnum periodEnum, LocalDate localDate);
+    List<Object[]> findWithAddressesByPeriodEnumAndLocalDateAndConfimationStudentEnumAndStudentStatusEnumNot(
+            @Param("periodEnum") String periodEnum,
+            @Param("localDate") LocalDate localDate,
+            @Param("confirmationStudentEnum") String confirmationStudentEnum,
+            @Param("studentStatusEnum") String studentStatusEnum);
+}
+
+StudentRouteDto <|-- StudentStatusEnum
+StudentRouteDto <|-- PeriodEnum
+class StudentRouteDto {
+    Long school;
+    StudentStatusEnum studentStatusEnum;
+    PeriodEnum periodEnum;
+    LocalDate localDate;
+}
+
+
+StudentRouteServiceImplementation <|-- StudentRouteRepository
+StudentRouteServiceImplementation <|-- UserRepository
+StudentRouteServiceImplementation <|-- SchoolRepository
+StudentRouteServiceImplementation <|-- StudentRouteDto
+StudentRouteServiceImplementation <|-- PeriodEnum
+StudentRouteServiceImplementation <|-- StudentStatusEnum
+class StudentRouteServiceImplementation implements StudentRouteService {
+    - final StudentRouteRepository studentRouteRepository;
+    - final UserRepository userRepository;
+    - final SchoolRepository schoolRepository;
+
+    + StudentRouteServiceImplementation(StudentRouteRepository studentRouteRepository, UserRepository userRepository, SchoolRepository schoolRepository);
+    + ResponseEntity<?> getAllStudentRoute();
+    + ResponseEntity<?> createStudentRoute(StudentRouteDto routeDto, UUID userId);
+    + List<StudentRoute> findSchoolByUser_Id(UUID userId);
+    + ResponseEntity<?> deleteStudentRoute(Long studentSchoolId);
+    + ResponseEntity<?> updateStudentRoute(Long studentSchoolId, StudentRouteUpdateDto schoolDto);
+    + List<StudentRoute> findSchoolBySchool_Id(Long schoolId);
+    + ResponseEntity<?> updateStudentRouteImagem(byte[] imageBytes, Long routeId);
+    + List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate, StudentStatusEnum studentStatusEnum);
+    - StudentRoute mapToStudentRoute(Object[] result);
+    - Address mapToAddress(Object[] result, boolean user);
+    - User mapToUser(UUID userId);
+    - School mapToSchool(Long schoolId);
+}
+
+class StudentRouteUpdateDto {
+    UUID student;
+    Long school;
+}
+
+
+StudentRouteService <|-- StudentRouteDto
+StudentRouteService <|-- StudentRouteUpdateDto
+StudentRouteService <|-- PeriodEnum
+StudentRouteService <|-- StudentStatusEnum
+interface StudentRouteService {
+    ResponseEntity<?> getAllStudentRoute();
+    ResponseEntity<?> createStudentRoute(StudentRouteDto schoolDto, UUID userId);
+    List<StudentRoute> findSchoolByUser_Id(UUID userId);
+    ResponseEntity<?> deleteStudentRoute(Long studentSchoolId);
+    ResponseEntity<?> updateStudentRoute(Long studentSchoolId, StudentRouteUpdateDto schoolDto);
+    List<StudentRoute> findSchoolBySchool_Id(Long schoolId);
+    ResponseEntity<?> updateStudentRouteImagem(byte[] imageBytes, Long routeId);
+    List<StudentRouteWithAddresses> getStudentRoutesByPeriodAndDate(PeriodEnum periodEnum, LocalDate localDate, StudentStatusEnum studentStatusEnum);
+}
+
+class ImageUpdateRequestDto {
+    String imageUpdateRequest
+}
+
+
+StudentRouteController <|-- StudentRouteService
+StudentRouteController <|-- StudentRouteDto
+StudentRouteController <|-- StudentRouteUpdateDto
+StudentRouteController <|-- ImageUpdateRequestDto
+StudentRouteController <|-- PeriodEnum
+StudentRouteController <|-- StudentStatusEnum
+class StudentRouteController {
+    - final StudentRouteService studentRouteService;
+
+    + StudentRouteController(StudentRouteService studentRouteService);
+    + ResponseEntity<?> createStudentRoute(@RequestBody StudentRouteDto routeDtoDto, @PathVariable UUID userId);
+    + ResponseEntity<?> listStudentRoute();
+    + ResponseEntity<?> getUserAddressesByUserId(@PathVariable UUID userId);
+    + ResponseEntity<?> deleteAddress(@PathVariable Long studentRouteId);
+    + ResponseEntity<?> updateStudentRoute(@PathVariable Long studentRouteId, @RequestBody StudentRouteUpdateDto routeDto);
+    + ResponseEntity<?> getRouteBySchool(@PathVariable Long schoolId);
+    + ResponseEntity<?> updateImage(@RequestBody ImageUpdateRequestDto imageUpdateRequest, @PathVariable Long routeId);
+    + ResponseEntity<?> getRouteByPeriodAndDate(@RequestParam PeriodEnum periodEnum, @RequestParam StudentStatusEnum studentStatusEnum, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate);
+}
+
+@enduml
