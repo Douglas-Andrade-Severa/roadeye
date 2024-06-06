@@ -43,7 +43,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     public String extractsTokenHeader(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
-        System.out.println(authHeader);
+        System.out.println("Token: "+authHeader);
         if(authHeader == null){
             return null;
         }
