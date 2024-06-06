@@ -1,0 +1,88 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+    <script type="text/javascript">
+        let stompClient = null;
+        let privateStompClient = null;
+        let token = null; // Variável para armazenar o token JWT
+
+        // Função para obter o token da URL
+        function getTokenFromUrl() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            token = urlParams.get('token');
+            if (token) {
+                console.log('Token:', token);
+            } else {
+                console.error('Token not found in URL.');
+            }
+        }
+
+        // Função para estabelecer a conexão com o WebSocket
+        function connectWebSocket() {
+            let socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({'Authorization': 'Bearer ' + token}, function (frame) {
+                console.log(frame);
+                stompClient.subscribe('/common/messages', function (result) {
+                    show(JSON.parse(result.body));
+                });
+            });
+
+            socket = new SockJS('/ws');
+            privateStompClient = Stomp.over(socket);
+            privateStompClient.connect({'Authorization': 'Bearer ' + token}, function (frame) {
+                console.log(frame);
+                privateStompClient.subscribe('/user/specific', function (result) {
+                    console.log(result.body)
+                    show(JSON.parse(result.body));
+                });
+            });
+        }
+
+        // Função para enviar uma mensagem
+        function sendMessage() {
+            let text = document.getElementById('text').value;
+            let from = document.getElementById('nickname').value;
+            stompClient.send("/app/application", {},
+                JSON.stringify({'content': text, 'from': from}));
+        }
+
+        // Função para exibir uma mensagem
+        function show(message) {
+            let response = document.getElementById('messages');
+            let p = document.createElement('p');
+            p.innerHTML = message.from + ": " + message.content;
+            response.appendChild(p);
+        }
+
+        // Função principal
+        function main() {
+            getTokenFromUrl();
+            connectWebSocket();
+        }
+
+        // Chamada da função principal quando a página é carregada
+        window.onload = main;
+    </script>
+</head>
+<body>
+<div>
+    <div>
+        <input type="text" id="nickname" placeholder="nickname"/>
+    </div>
+    <br>
+    <div>
+        <button id="sendMessage" onclick="sendMessage();">Send common message</button>
+        <input type="text" id="text" placeholder="message"/>
+    </div>
+    <br/>
+
+    <h2>Messages:</h2>
+    <div id="messages"></div>
+
+</div>
+
+</body>
+</html>
