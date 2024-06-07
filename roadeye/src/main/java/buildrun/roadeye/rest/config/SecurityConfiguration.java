@@ -40,15 +40,6 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
                         .anyRequest().authenticated()
                 )
-//                .formLogin(form -> form
-//                        .loginPage("/login")
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                        .logoutSuccessUrl("/login?logout")
-//                        .permitAll()
-//                )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -69,6 +60,6 @@ public class SecurityConfiguration {
             "v3/api-docs.yaml",
             "/swagger-ui/**",
             "/swagger-ui.html",
-            "/ws/**"
+            "/message/**"
     };
 }

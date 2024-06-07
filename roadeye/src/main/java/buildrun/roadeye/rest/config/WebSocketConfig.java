@@ -28,20 +28,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${app.websocket.allowed.origins}")
     private String[] allowedOrigins;
 
-    @Bean
-    public WebSocketStompClient stompClient() {
-        return new WebSocketStompClient(new StandardWebSocketClient());
-    }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(websocketEndpoint).setAllowedOrigins(allowedOrigins);
+        registry.addEndpoint(websocketEndpoint).setAllowedOrigins("*");
         registry.addEndpoint(websocketEndpoint).withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.setApplicationDestinationPrefixes(destinationPrefix);
         config.enableSimpleBroker(messageBrokerPrefixes);
+        config.setApplicationDestinationPrefixes(destinationPrefix);
     }
 }

@@ -33,7 +33,13 @@ public class DriverController {
 
     @MessageMapping("/location")
     @SendTo("/topic/location")
-    public OutputMessageWebSocket handleDriverLocation(@Payload MessageWebSocketDto webSocketDto) {
-        return new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
+    public MessageWebSocketDto handleDriverLocation(final MessageWebSocketDto webSocketDto) {
+        return webSocketDto;
     }
+
+//    @MessageMapping("/location")
+//    @SendTo("/topic/location")
+//    public OutputMessageWebSocket handleDriverLocation(@Payload MessageWebSocketDto webSocketDto) {
+//        return new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
+//    }
 }
