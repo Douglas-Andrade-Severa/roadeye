@@ -43,11 +43,15 @@ public class SecurityConfiguration {
 
                 //.formLogin(Customizer.withDefaults()) // Use the default login form
 
+//                .formLogin(form -> form
+//                        .successHandler((request, response, authentication) -> {
+//                            String token = ((UserDetails) authentication.getPrincipal()).getUsername();
+//                            response.sendRedirect("/index.html?token=" + token);
+//                        })
+//                        .permitAll()
+//                )
                 .formLogin(form -> form
-                        .successHandler((request, response, authentication) -> {
-                            String token = ((UserDetails) authentication.getPrincipal()).getUsername();
-                            response.sendRedirect("/index.html?token=" + token);
-                        })
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .logout(logout -> logout
