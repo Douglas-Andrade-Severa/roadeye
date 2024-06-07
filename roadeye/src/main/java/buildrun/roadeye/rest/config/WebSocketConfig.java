@@ -16,27 +16,14 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    @Value("${app.websocket.endpoint}")
-    private String websocketEndpoint;
-
-    @Value("${app.websocket.destination.prefix}")
-    private String destinationPrefix;
-
-    @Value("${app.websocket.broker.prefixes}")
-    private String[] messageBrokerPrefixes;
-
-    @Value("${app.websocket.allowed.origins}")
-    private String[] allowedOrigins;
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(websocketEndpoint).setAllowedOrigins("*");
-        registry.addEndpoint(websocketEndpoint).withSockJS();
+        registry.addEndpoint("/message").setAllowedOrigins("*").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker(messageBrokerPrefixes);
-        config.setApplicationDestinationPrefixes(destinationPrefix);
+        config.enableSimpleBroker("/topic");
+        config.setApplicationDestinationPrefixes("/app");
     }
 }
