@@ -40,16 +40,6 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
                         .anyRequest().authenticated()
                 )
-
-                //.formLogin(Customizer.withDefaults()) // Use the default login form
-
-//                .formLogin(form -> form
-//                        .successHandler((request, response, authentication) -> {
-//                            String token = ((UserDetails) authentication.getPrincipal()).getUsername();
-//                            response.sendRedirect("/index.html?token=" + token);
-//                        })
-//                        .permitAll()
-//                )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()

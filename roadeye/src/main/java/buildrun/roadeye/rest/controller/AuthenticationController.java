@@ -49,10 +49,6 @@ public class AuthenticationController {
         }
         var userAuthenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.login(), loginRequest.password());
         authenticationManager.authenticate(userAuthenticationToken);
-
-        // Gere o token JWT
-        String token = authenticationService.getToken(loginRequest);
-        System.out.println("token AuthenticationController "+token);
-        return ResponseEntity.ok(new LoginResponse(token, userOptional.get().getId(), userOptional.get().getRole()));
+        return ResponseEntity.ok(new LoginResponse(authenticationService.getToken(loginRequest), userOptional.get().getId(), userOptional.get().getRole()));
     }
 }
