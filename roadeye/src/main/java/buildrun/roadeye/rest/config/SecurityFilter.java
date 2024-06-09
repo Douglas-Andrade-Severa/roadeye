@@ -17,7 +17,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class
+SecurityFilter extends OncePerRequestFilter {
     private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
 

@@ -27,21 +27,14 @@ public class DriverController {
     private SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/location")
-//    @SendTo("/topic/response")
-//    public OutputMessageWebSocket handleDriverLocation(@Payload MessageWebSocketDto webSocketDto) {
-//        // Repassar a informação sem alterações
-//        OutputMessageWebSocket outputMessage = new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
-//
-//        // Log indicando que a informação foi recebida e repassada
-//        logger.info("Received location update - Latitude: {}, Longitude: {}", webSocketDto.getLatitude(), webSocketDto.getLongitude());
-//
-//        return outputMessage;
-//    }
-    public void handleMessage(@Payload String message) {
-        // Processar a mensagem recebida...
+    @SendTo("/topic/location")
+    public OutputMessageWebSocket handleDriverLocation(@Payload MessageWebSocketDto webSocketDto) {
+        // Repassar a informação sem alterações
+        OutputMessageWebSocket outputMessage = new OutputMessageWebSocket(webSocketDto.getLatitude(), webSocketDto.getLongitude(), LocalDateTime.now());
 
-        // Enviar uma resposta de volta para o cliente
-        String resposta = "Resposta à mensagem: " + message;
-        messagingTemplate.convertAndSend("/topic/response", resposta);
+        // Log indicando que a informação foi recebida e repassada
+        logger.info("Received location update - Latitude: {}, Longitude: {}", webSocketDto.getLatitude(), webSocketDto.getLongitude());
+
+        return outputMessage;
     }
 }
