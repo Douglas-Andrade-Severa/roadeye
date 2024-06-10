@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 public class NotificationController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-    private static final Logger logger = LoggerFactory.getLogger(DriverController.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
     @MessageMapping("/notify")
     public void notifyClients(String message) {
         logger.info("Received WebSocket message: ", message);
