@@ -36,6 +36,7 @@ public class WebSocketController {
         return outputMessage;
     }
 
+    //Não implementado, só uma brincadeira
     @MessageMapping("/chatMessage")
     @SendTo("/chat")
     public Message sendMessage(Message message){
