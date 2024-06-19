@@ -1,7 +1,7 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.rest.dto.AddressCoordinatesDto;
-import buildrun.roadeye.service.CoordinatesService;
+import buildrun.roadeye.rest.dto.service.CoordinatesService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,10 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.enums.StatusEnum;
 import buildrun.roadeye.domain.repository.*;
 import buildrun.roadeye.rest.dto.*;
-import buildrun.roadeye.service.AddressService;
+import buildrun.roadeye.rest.dto.service.AddressService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;

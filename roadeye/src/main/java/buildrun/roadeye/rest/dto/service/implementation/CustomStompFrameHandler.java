@@ -1,4 +1,4 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.rest.dto.OutputMessageWebSocket;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;

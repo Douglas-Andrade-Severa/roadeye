@@ -1,4 +1,4 @@
-package buildrun.roadeye.service;
+package buildrun.roadeye.rest.dto.service;
 
 import buildrun.roadeye.domain.entity.FatherSonRelationship;
 import buildrun.roadeye.rest.dto.FatherSonRelationshipDto;

@@ -13,6 +13,7 @@ public enum RoleEnum {
     RoleEnum(String role) {
         this.role = role;
     }
+
     public static boolean contains(String role) {
         for (RoleEnum r : RoleEnum.values()) {
             if (r.getRole().equals(role)) {
@@ -20,5 +21,14 @@ public enum RoleEnum {
             }
         }
         return false;
+    }
+
+    public static boolean isRoleValid(RoleEnum roleEnum) {
+        try {
+            RoleEnum.valueOf(roleEnum.name());
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
     }
 }

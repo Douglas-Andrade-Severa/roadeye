@@ -1,4 +1,4 @@
-package buildrun.roadeye.service;
+package buildrun.roadeye.rest.dto.service;
 
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.rest.dto.UserDto;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    UserDto createUser(UserDto userDto);
+    ResponseEntity<?> createUser(UserDto userDto);
 
     ResponseEntity<?> getAllUsers();
 

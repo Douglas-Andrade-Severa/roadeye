@@ -7,8 +7,7 @@ import buildrun.roadeye.rest.dto.ImageUpdateRequestDto;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
 import buildrun.roadeye.rest.dto.StudentRouteWithAddresses;
-import buildrun.roadeye.service.CoordinatesService;
-import buildrun.roadeye.service.StudentRouteService;
+import buildrun.roadeye.rest.dto.service.StudentRouteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,7 +19,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.Base64;

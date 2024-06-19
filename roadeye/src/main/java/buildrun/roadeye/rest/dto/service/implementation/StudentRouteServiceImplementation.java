@@ -1,4 +1,4 @@
-package buildrun.roadeye.service.implementation;
+package buildrun.roadeye.rest.dto.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.enums.*;
@@ -8,16 +8,13 @@ import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.StudentRouteDto;
 import buildrun.roadeye.rest.dto.StudentRouteUpdateDto;
 import buildrun.roadeye.rest.dto.StudentRouteWithAddresses;
-import buildrun.roadeye.service.StudentRouteService;
+import buildrun.roadeye.rest.dto.service.StudentRouteService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.util.*;

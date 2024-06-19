@@ -1,4 +1,4 @@
-package buildrun.roadeye.service;
+package buildrun.roadeye.rest.dto.service;
 
 import buildrun.roadeye.domain.entity.StudentRoute;
 import buildrun.roadeye.domain.enums.PeriodEnum;
