@@ -2,7 +2,7 @@ package buildrun.roadeye.rest.config;
 
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.repository.UserRepository;
-import buildrun.roadeye.rest.dto.service.AuthenticationService;
+import buildrun.roadeye.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;

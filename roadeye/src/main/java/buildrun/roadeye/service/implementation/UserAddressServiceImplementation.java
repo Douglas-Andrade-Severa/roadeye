@@ -1,11 +1,11 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.*;
 import buildrun.roadeye.domain.repository.AddressRepository;
 import buildrun.roadeye.domain.repository.UserAddressRepository;
 import buildrun.roadeye.domain.repository.UserRepository;
 import buildrun.roadeye.rest.dto.UserAddressDto;
-import buildrun.roadeye.rest.dto.service.UserAddressService;
+import buildrun.roadeye.service.UserAddressService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

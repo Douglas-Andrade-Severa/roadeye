@@ -1,4 +1,4 @@
-package buildrun.roadeye.rest.dto.service.implementation;
+package buildrun.roadeye.service.implementation;
 
 import buildrun.roadeye.domain.entity.Address;
 import buildrun.roadeye.domain.entity.GeolocationResponse;

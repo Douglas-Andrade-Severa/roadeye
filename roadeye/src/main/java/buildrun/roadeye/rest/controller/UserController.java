@@ -4,7 +4,7 @@ import buildrun.roadeye.rest.dto.UserDto;
 import buildrun.roadeye.rest.dto.UserPasswordDto;
 import buildrun.roadeye.rest.dto.UserTokenPushDto;
 import buildrun.roadeye.rest.dto.UserUpdateDto;
-import buildrun.roadeye.rest.dto.service.UserService;
+import buildrun.roadeye.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
