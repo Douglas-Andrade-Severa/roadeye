@@ -1,6 +1,6 @@
 package buildrun.roadeye.service.implementation;
 
-import buildrun.roadeye.Uteis.Functions;
+import buildrun.roadeye.utils.Functions;
 import buildrun.roadeye.domain.entity.ErrorResponse;
 import buildrun.roadeye.domain.entity.User;
 import buildrun.roadeye.domain.enums.RoleEnum;

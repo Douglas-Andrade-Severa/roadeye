@@ -1,7 +1,6 @@
-package buildrun.roadeye.Uteis;
+package buildrun.roadeye.utils;
 
 import java.util.InputMismatchException;
-import java.util.regex.Matcher;
 
 public class Functions {
     public static boolean isCPF(String axCPF) {
