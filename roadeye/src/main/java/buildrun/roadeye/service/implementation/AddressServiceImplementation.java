@@ -63,6 +63,19 @@ public class AddressServiceImplementation implements AddressService {
         if (optionalAddress.isPresent()) {
             Address address = optionalAddress.get();
 
+            System.out.println("******** ANTES DE EXECUTAR LÓGICA UPDATE ********");
+            System.out.println("ID: "+addressId);
+            System.out.println("CEP: "+addressUpdateDto.postCode());
+            System.out.println("street: "+addressUpdateDto.street());
+            System.out.println("neighborhood: "+addressUpdateDto.neighborhood());
+            System.out.println("city: "+addressUpdateDto.city());
+            System.out.println("state: "+addressUpdateDto.state());
+            System.out.println("country: "+addressUpdateDto.country());
+            System.out.println("complement: "+addressUpdateDto.complement());
+            System.out.println("number: "+addressUpdateDto.number());
+            System.out.println("Status: "+addressUpdateDto.statusEnum().getStatus());
+
+
             if (addressUpdateDto.postCode() == null || addressUpdateDto.postCode().isEmpty()) {
                 ErrorResponse errorResponse = new ErrorResponse("Post code cannot be empty");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -92,16 +105,15 @@ public class AddressServiceImplementation implements AddressService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
 
-            if (addressUpdateDto.statusEnum() == null || addressUpdateDto.statusEnum().getStatus().isEmpty()) {
+            if (addressUpdateDto.statusEnum().getStatus() == null || addressUpdateDto.statusEnum().getStatus().isEmpty()) {
                 ErrorResponse errorResponse = new ErrorResponse("Status cannot be empty");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }else{
-                if(StatusEnum.isStatusValid(addressUpdateDto.statusEnum())){
+                if(StatusEnum.isStatusValid(addressUpdateDto.statusEnum()) == false){
                     ErrorResponse errorResponse = new ErrorResponse("Invalid Status");
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
                 }
             }
-
             setAddressDetailsUpdate(address, addressUpdateDto);
             Address updatedAddress = addressRepository.save(address);
             return ResponseEntity.ok(updatedAddress);
@@ -182,6 +194,18 @@ public class AddressServiceImplementation implements AddressService {
                 addressRepository.save(address);
             });
 
+            System.out.println("******** ANTES DE EXECUTAR LÓGICA CREATE ********");
+            System.out.println("ID user: "+userId);
+            System.out.println("CEP: "+addressDto.postCode());
+            System.out.println("street: "+addressDto.street());
+            System.out.println("neighborhood: "+addressDto.neighborhood());
+            System.out.println("city: "+addressDto.city());
+            System.out.println("state: "+addressDto.state());
+            System.out.println("country: "+addressDto.country());
+            System.out.println("complement: "+addressDto.complement());
+            System.out.println("number: "+addressDto.number());
+            System.out.println("Status: "+addressDto.statusEnum().getStatus());
+
             if (addressDto.postCode() == null || addressDto.postCode().isEmpty()) {
                 ErrorResponse errorResponse = new ErrorResponse("Post code cannot be empty");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -211,11 +235,11 @@ public class AddressServiceImplementation implements AddressService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
 
-            if (addressDto.statusEnum() == null || addressDto.statusEnum().getStatus().isEmpty()) {
+            if (addressDto.statusEnum().getStatus() == null || addressDto.statusEnum().getStatus().isEmpty()) {
                 ErrorResponse errorResponse = new ErrorResponse("Status cannot be empty");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }else{
-                if(StatusEnum.isStatusValid(addressDto.statusEnum())){
+                if(StatusEnum.isStatusValid(addressDto.statusEnum()) == false){
                     ErrorResponse errorResponse = new ErrorResponse("Invalid Status");
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
                 }
@@ -244,6 +268,10 @@ public class AddressServiceImplementation implements AddressService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
 
+            System.out.println("******** ANTES DE EXECUTAR LÓGICA updateActivateDisableAddressByUser ********");
+            System.out.println("ID user: "+userId);
+            System.out.println("ID address: "+activateDisable.idAddress());
+
             List<UserAddress> existingUserAddresses = userAddressRepository.findAllByUser(user);
             existingUserAddresses.forEach(userAddress -> {
                 Address address = userAddress.getAddress();
@@ -270,6 +298,12 @@ public class AddressServiceImplementation implements AddressService {
     @Override
     public ResponseEntity<?> createAddressByUserByCoordinates(AddressCoordinatesDto coordinatesDto, UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
+
+        System.out.println("******** ANTES DE EXECUTAR LÓGICA updateActivateDisableAddressByUser ********");
+        System.out.println("ID user: "+userId);
+        System.out.println("Latitude: "+coordinatesDto.latitude());
+        System.out.println("Longitude: "+coordinatesDto.longitude());
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             List<UserAddress> existingUserAddresses = userAddressRepository.findAllByUser(user);
