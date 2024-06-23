@@ -94,12 +94,14 @@ public class UserServiceImplementation implements UserService {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
                 }
             }
+            System.out.println(userDto.statusEnum());
+
             if (userDto.statusEnum() == null || userDto.statusEnum().getStatus().isEmpty()) {
                 ErrorResponse errorResponse = new ErrorResponse("Status cannot be empty");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }else{
-                if(StatusEnum.isStatusValid(userDto.statusEnum())){
-                    ErrorResponse errorResponse = new ErrorResponse("Invalid Status");
+                if(StatusEnum.isStatusValid(userDto.statusEnum()) == false){
+                    ErrorResponse errorResponse = new ErrorResponse("Invalid status");
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
                 }
             }
