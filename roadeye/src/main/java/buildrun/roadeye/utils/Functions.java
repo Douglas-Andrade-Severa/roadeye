@@ -176,4 +176,9 @@ public class Functions {
         //se passar por todas as validações acima, então está tudo certo
         return true;
     }
+
+    public static boolean isInvalidLatitudeLongitude(double latitude) {
+        final double INVALID_LATITUDE = 0.0;
+        return latitude == INVALID_LATITUDE;
+    }
 }

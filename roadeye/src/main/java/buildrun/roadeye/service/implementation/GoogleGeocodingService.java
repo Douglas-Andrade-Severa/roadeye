@@ -40,7 +40,6 @@ public class GoogleGeocodingService {
                 .queryParam("latlng", latitude + "," + longitude)
                 .queryParam("key", apiKey)
                 .toUriString();
-
         GeolocationResponse response = restTemplate.getForObject(url, GeolocationResponse.class);
         if (response != null && "OK".equals(response.getStatus())) {
             System.out.println("Response: " + response);
