@@ -299,7 +299,7 @@ public class AddressServiceImplementation implements AddressService {
     public ResponseEntity<?> createAddressByUserByCoordinates(AddressCoordinatesDto coordinatesDto, UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
-        System.out.println("******** ANTES DE EXECUTAR LÓGICA updateActivateDisableAddressByUser ********");
+        System.out.println("******** ANTES DE EXECUTAR LÓGICA createAddressByUserByCoordinates ********");
         System.out.println("ID user: "+userId);
         System.out.println("Latitude: "+coordinatesDto.latitude());
         System.out.println("Longitude: "+coordinatesDto.longitude());
