@@ -280,12 +280,12 @@ public class AddressServiceImplementation implements AddressService {
             });
             Address address = new Address();
             try {
-                if(!Functions.isInvalidLatitudeLongitude(coordinatesDto.latitude())){
+                if(Functions.isInvalidLatitudeLongitude(coordinatesDto.latitude())){
                     ErrorResponse errorResponse = new ErrorResponse("Latitude cannot be empty.");
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
                 }
 
-                if(!Functions.isInvalidLatitudeLongitude(coordinatesDto.longitude())){
+                if(Functions.isInvalidLatitudeLongitude(coordinatesDto.longitude())){
                     ErrorResponse errorResponse = new ErrorResponse("Longitude cannot be empty.");
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
                 }
