@@ -29,9 +29,9 @@
 			<properties>
 				<project.packaging>jar</project.packaging>
 				<tomcat.scope>compile</tomcat.scope>
-				<db.url>jdbc:mysql://database-roadeye.c70gcoy6kgyw.us-east-1.rds.amazonaws.com/roadeye</db.url>
+				<db.url>jdbc:mysql://localhost:3306/roadeye</db.url>
 				<db.username>root</db.username>
-				<db.password>GQ2LbyVod4OMO6J8R2YI</db.password>
+				<db.password>root</db.password>
 			</properties>
 		</profile>
 
@@ -40,9 +40,9 @@
 			<properties>
 				<project.packaging>war</project.packaging>
 				<tomcat.scope>provided</tomcat.scope>
-				<db.url>jdbc:mysql://database-roadeye.c70gcoy6kgyw.us-east-1.rds.amazonaws.com/roadeye</db.url>
+				<db.url>jdbc:mysql://localhost:3306/roadeye</db.url>
 				<db.username>root</db.username>
-				<db.password>GQ2LbyVod4OMO6J8R2YI</db.password>
+				<db.password>root</db.password>
 			</properties>
 		</profile>
 	</profiles>
