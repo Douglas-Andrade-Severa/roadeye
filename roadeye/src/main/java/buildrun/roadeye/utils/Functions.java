@@ -1,7 +1,6 @@
-package buildrun.roadeye.Uteis;
+package buildrun.roadeye.utils;
 
 import java.util.InputMismatchException;
-import java.util.regex.Matcher;
 
 public class Functions {
     public static boolean isCPF(String axCPF) {
@@ -176,5 +175,10 @@ public class Functions {
 
         //se passar por todas as validações acima, então está tudo certo
         return true;
+    }
+
+    public static boolean isInvalidLatitudeLongitude(double latitude) {
+        final double INVALID_LATITUDE = 0.0;
+        return latitude == INVALID_LATITUDE;
     }
 }

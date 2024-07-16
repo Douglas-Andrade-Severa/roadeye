@@ -5,6 +5,7 @@ import buildrun.roadeye.domain.enums.StatusEnum;
 import buildrun.roadeye.domain.repository.*;
 import buildrun.roadeye.rest.dto.*;
 import buildrun.roadeye.service.AddressService;
+import buildrun.roadeye.utils.Functions;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,58 @@ public class AddressServiceImplementation implements AddressService {
         Optional<Address> optionalAddress = addressRepository.findById(addressId);
         if (optionalAddress.isPresent()) {
             Address address = optionalAddress.get();
+
+            System.out.println("******** ANTES DE EXECUTAR LÓGICA UPDATE ********");
+            System.out.println("ID: "+addressId);
+            System.out.println("CEP: "+addressUpdateDto.postCode());
+            System.out.println("street: "+addressUpdateDto.street());
+            System.out.println("neighborhood: "+addressUpdateDto.neighborhood());
+            System.out.println("city: "+addressUpdateDto.city());
+            System.out.println("state: "+addressUpdateDto.state());
+            System.out.println("country: "+addressUpdateDto.country());
+            System.out.println("complement: "+addressUpdateDto.complement());
+            System.out.println("number: "+addressUpdateDto.number());
+            System.out.println("Status: "+addressUpdateDto.statusEnum().getStatus());
+
+
+            if (addressUpdateDto.postCode() == null || addressUpdateDto.postCode().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Post code cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressUpdateDto.street() == null || addressUpdateDto.street().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Street cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressUpdateDto.neighborhood() == null || addressUpdateDto.neighborhood().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Neighborhood cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressUpdateDto.city() == null || addressUpdateDto.city().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("City cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressUpdateDto.state() == null || addressUpdateDto.state().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("State cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressUpdateDto.country() == null || addressUpdateDto.country().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Country cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressUpdateDto.number() == null) {
+                ErrorResponse errorResponse = new ErrorResponse("Number cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+            if (addressUpdateDto.statusEnum().getStatus() == null || addressUpdateDto.statusEnum().getStatus().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Status cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }else{
+                if(StatusEnum.isStatusValid(addressUpdateDto.statusEnum()) == false){
+                    ErrorResponse errorResponse = new ErrorResponse("Invalid Status");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+                }
+            }
             setAddressDetailsUpdate(address, addressUpdateDto);
             Address updatedAddress = addressRepository.save(address);
             return ResponseEntity.ok(updatedAddress);
@@ -140,6 +193,58 @@ public class AddressServiceImplementation implements AddressService {
                 address.setStatusEnum(StatusEnum.DISABLED);
                 addressRepository.save(address);
             });
+
+            System.out.println("******** ANTES DE EXECUTAR LÓGICA CREATE ********");
+            System.out.println("ID user: "+userId);
+            System.out.println("CEP: "+addressDto.postCode());
+            System.out.println("street: "+addressDto.street());
+            System.out.println("neighborhood: "+addressDto.neighborhood());
+            System.out.println("city: "+addressDto.city());
+            System.out.println("state: "+addressDto.state());
+            System.out.println("country: "+addressDto.country());
+            System.out.println("complement: "+addressDto.complement());
+            System.out.println("number: "+addressDto.number());
+            System.out.println("Status: "+addressDto.statusEnum().getStatus());
+
+            if (addressDto.postCode() == null || addressDto.postCode().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Post code cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressDto.street() == null || addressDto.street().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Street cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressDto.neighborhood() == null || addressDto.neighborhood().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Neighborhood cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressDto.city() == null || addressDto.city().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("City cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressDto.state() == null || addressDto.state().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("State cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressDto.country() == null || addressDto.country().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Country cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            if (addressDto.number() == null) {
+                ErrorResponse errorResponse = new ErrorResponse("Number cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+            if (addressDto.statusEnum().getStatus() == null || addressDto.statusEnum().getStatus().isEmpty()) {
+                ErrorResponse errorResponse = new ErrorResponse("Status cannot be empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }else{
+                if(StatusEnum.isStatusValid(addressDto.statusEnum()) == false){
+                    ErrorResponse errorResponse = new ErrorResponse("Invalid Status");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+                }
+            }
+
             Address address = createAddress(addressDto);
             UserAddress userAddress = new UserAddress();
             userAddress.setUser(user);
@@ -163,13 +268,16 @@ public class AddressServiceImplementation implements AddressService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
 
+            System.out.println("******** ANTES DE EXECUTAR LÓGICA updateActivateDisableAddressByUser ********");
+            System.out.println("ID user: "+userId);
+            System.out.println("ID address: "+activateDisable.idAddress());
+
             List<UserAddress> existingUserAddresses = userAddressRepository.findAllByUser(user);
             existingUserAddresses.forEach(userAddress -> {
                 Address address = userAddress.getAddress();
                 address.setStatusEnum(StatusEnum.DISABLED);
                 addressRepository.save(address);
             });
-
 
             Optional<Address> optionalAddress = addressRepository.findById(activateDisable.idAddress());
             if (optionalAddress.isPresent()) {
@@ -190,6 +298,12 @@ public class AddressServiceImplementation implements AddressService {
     @Override
     public ResponseEntity<?> createAddressByUserByCoordinates(AddressCoordinatesDto coordinatesDto, UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
+
+        System.out.println("******** ANTES DE EXECUTAR LÓGICA createAddressByUserByCoordinates ********");
+        System.out.println("ID user: "+userId);
+        System.out.println("Latitude: "+coordinatesDto.latitude());
+        System.out.println("Longitude: "+coordinatesDto.longitude());
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             List<UserAddress> existingUserAddresses = userAddressRepository.findAllByUser(user);
@@ -200,9 +314,19 @@ public class AddressServiceImplementation implements AddressService {
             });
             Address address = new Address();
             try {
+                if(Functions.isInvalidLatitudeLongitude(coordinatesDto.latitude())){
+                    ErrorResponse errorResponse = new ErrorResponse("Latitude cannot be empty.");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+                }
+
+                if(Functions.isInvalidLatitudeLongitude(coordinatesDto.longitude())){
+                    ErrorResponse errorResponse = new ErrorResponse("Longitude cannot be empty.");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+                }
+
                 address = geocodingService.getAddressFromCoordinates(coordinatesDto.latitude(), coordinatesDto.longitude());
             } catch (Exception e) {
-                return new ResponseEntity<>("Não foi possível obter o endereço.", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("Unable to obtain address.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             addressRepository.save(address);
             UserAddress userAddress = new UserAddress();

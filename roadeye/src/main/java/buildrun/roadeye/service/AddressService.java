@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface AddressService {
     ResponseEntity<?> createAddressByUser(AddressDto addressDto, UUID userId);
 
-    ResponseEntity<?>  getAllAddress();
+    ResponseEntity<?> getAllAddress();
 
     ResponseEntity<?> deleteAddress(Long addressId);
 
